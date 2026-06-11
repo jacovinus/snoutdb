@@ -47,5 +47,7 @@ SnoutDB turns messy raw data into valuable local metrics.
 | [ARCHITECTURE.md](../ARCHITECTURE.md) | Package structure, data flow, key data structures, design constraints |
 | [docs/USE-CASES.md](USE-CASES.md) | 10 real-world workflows: log analysis, anomaly detection, SLA reports, API embedding |
 | [examples/README.md](../examples/README.md) | Python and Go FFI examples |
+| [benchmarks/README.md](../benchmarks/README.md) | Reproducible performance methodology and current baseline |
+| [ROADMAP.md](../ROADMAP.md) | Current priorities, path to v1.0, and explicit non-goals |
 | [CHANGELOG.md](../CHANGELOG.md) | Versioned snapshot contents and compatibility notes |
 | [CLAUDE.md](../CLAUDE.md) | Build commands, test commands, architecture notes for AI assistants |
