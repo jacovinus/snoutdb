@@ -1,0 +1,501 @@
+call_id,timestamp,direction,region,carrier,codec,duration_seconds,mos,jitter_ms,rtt_ms,packet_loss_pct,bitrate_kbps,setup_time_ms,concealed_packets,result,network_tag,roaming,customer_tier,sip_code,diagnostic
+CALL-00001,2026-06-08T10:00:00Z,outbound,eu-central,Transit-X,G722,57,4.41,2.91,42,0.13,64,99,17,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00002,2026-06-08T10:00:17Z,outbound,us-east,Telco-B,G711,94,4.38,3.32,59,0.26,64,128,44,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00003,2026-06-08T10:00:34Z,inbound,us-west,FiberVoice,OPUS,131,4.35,3.73,76,0.39,32,157,84,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00004,2026-06-08T10:00:51Z,outbound,latam-south,Telco-C,AMR-WB,168,4.32,4.14,93,0.52,23.85,186,136,completed,backup,false,free,200,handover completed
+CALL-00005,2026-06-08T10:01:08Z,outbound,ap-south,Telco-A,G722,205,4.29,4.55,110,0.65,64,215,200,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00006,2026-06-08T10:01:25Z,inbound,eu-west,Transit-X,G711,242,4.27,4.96,127,0.78,64,244,276,completed,primary,false,business,200,normal call
+CALL-00007,2026-06-08T10:01:42Z,outbound,eu-central,Telco-B,OPUS,279,4.24,5.37,144,0.91,32,273,365,completed,primary,true,standard,200,minor jitter detected
+CALL-00008,2026-06-08T10:01:59Z,outbound,us-east,FiberVoice,AMR-WB,316,4.18,5.78,161,1.04,23.85,302,467,completed,backup,false,free,200,"packet loss, recovered"
+CALL-00009,2026-06-08T10:02:16Z,inbound,us-west,Telco-C,G722,353,4.11,6.19,178,1.17,64,331,580,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00010,2026-06-08T10:02:33Z,outbound,latam-south,Telco-A,G711,390,4.04,6.6,195,1.3,64,360,706,completed,primary,false,business,200,handover completed
+CALL-00011,2026-06-08T10:02:50Z,outbound,ap-south,Transit-X,OPUS,427,3.97,7.01,212,1.43,32,389,845,completed,,false,standard,200,"high latency, investigate"
+CALL-00012,2026-06-08T10:03:07Z,inbound,eu-west,Telco-B,AMR-WB,464,3.9,7.42,229,1.56,23.85,418,996,completed,backup,false,free,200,normal call
+CALL-00013,2026-06-08T10:03:24Z,outbound,eu-central,Telco-A,G722,501,3.83,7.83,246,1.69,64,447,1159,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00014,2026-06-08T10:03:41Z,outbound,us-east,Transit-X,G711,538,3.76,8.24,263,1.82,64,476,1334,completed,primary,true,business,200,"packet loss, recovered"
+CALL-00015,2026-06-08T10:03:58Z,inbound,us-west,Telco-B,OPUS,575,3.69,8.65,280,1.95,32,505,1522,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00016,2026-06-08T10:04:15Z,outbound,latam-south,FiberVoice,AMR-WB,612,3.62,9.06,297,2.08,23.85,534,1722,completed,backup,false,free,200,handover completed
+CALL-00017,2026-06-08T10:04:32Z,outbound,latam-south,Telco-C,G722,649,3.55,9.47,314,2.21,64,563,1935,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00018,2026-06-08T10:04:49Z,inbound,ap-south,Telco-A,G711,686,3.48,9.88,331,2.34,64,592,2160,completed,primary,false,business,200,normal call
+CALL-00019,2026-06-08T10:05:06Z,outbound,eu-west,Transit-X,AMR-WB,723,3.9,10.29,38,2.47,23.85,621,2398,completed,primary,false,standard,200,minor jitter detected
+CALL-00020,2026-06-08T10:05:23Z,outbound,eu-central,Telco-B,G722,760,3.87,10.7,55,2.6,64,650,2647,completed,backup,false,free,200,"packet loss, recovered"
+CALL-00021,2026-06-08T10:05:40Z,inbound,us-east,FiberVoice,G711,797,3.84,11.11,72,2.73,64,679,2909,completed,primary,true,enterprise,200,"caller said ""hello"""
+CALL-00022,2026-06-08T10:05:57Z,outbound,us-west,Telco-C,OPUS,834,3.82,11.52,89,2.86,32,708,3184,completed,,false,business,200,handover completed
+CALL-00023,2026-06-08T10:06:14Z,outbound,latam-south,Telco-A,AMR-WB,871,3.79,11.93,106,2.99,23.85,737,3471,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00024,2026-06-08T10:06:31Z,inbound,ap-south,Transit-X,G722,908,3.76,12.34,123,3.12,64,766,3770,completed,backup,false,free,200,normal call
+CALL-00025,2026-06-08T10:06:48Z,outbound,eu-west,Telco-B,G711,945,3.73,12.75,140,3.25,64,795,4082,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00026,2026-06-08T10:07:05Z,outbound,eu-central,Telco-A,OPUS,982,3.68,13.16,157,3.38,32,824,4406,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00027,2026-06-08T10:07:22Z,inbound,us-east,Transit-X,AMR-WB,1019,3.61,13.57,174,3.51,23.85,853,4742,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00028,2026-06-08T10:07:39Z,outbound,us-west,Telco-B,G722,1056,3.54,13.98,191,3.64,64,882,5091,completed,backup,true,free,200,handover completed
+CALL-00029,2026-06-08T10:07:56Z,outbound,latam-south,FiberVoice,G711,1093,3.47,14.39,208,3.77,64,911,5452,completed,primary,false,,200,"high latency, investigate"
+CALL-00030,2026-06-08T10:08:13Z,inbound,ap-south,Telco-C,OPUS,1130,3.4,14.8,225,3.9,32,90,5826,degraded,primary,false,business,200,normal call
+CALL-00031,2026-06-08T10:08:30Z,outbound,eu-west,Telco-A,AMR-WB,1167,3.33,15.21,242,4.03,23.85,119,6212,degraded,primary,false,standard,200,minor jitter detected
+CALL-00032,2026-06-08T10:08:47Z,outbound,eu-central,Transit-X,G722,1204,3.26,15.62,259,4.16,64,148,6610,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00033,2026-06-08T10:09:04Z,inbound,us-east,Telco-B,G711,1241,3.19,16.03,276,4.29,64,177,7021,degraded,,false,enterprise,200,"caller said ""hello"""
+CALL-00034,2026-06-08T10:09:21Z,outbound,us-east,FiberVoice,OPUS,1278,3.12,16.44,293,4.42,32,206,7444,degraded,primary,false,business,200,handover completed
+CALL-00035,2026-06-08T10:09:38Z,outbound,us-west,Telco-C,AMR-WB,1315,3.05,16.85,310,4.55,23.85,235,7879,degraded,primary,true,standard,200,"high latency, investigate"
+CALL-00036,2026-06-08T10:09:55Z,inbound,latam-south,Telco-A,G722,1352,2.98,17.26,327,4.68,64,264,8327,degraded,backup,false,free,200,normal call
+CALL-00037,2026-06-08T10:10:12Z,outbound,ap-south,Transit-X,G711,1389,3.39,,34,4.81,64,293,8787,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00038,2026-06-08T10:10:29Z,outbound,eu-west,Telco-B,AMR-WB,1426,3.36,18.08,51,4.94,23.85,322,9259,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00039,2026-06-08T10:10:46Z,inbound,eu-central,Telco-A,G722,1463,3.34,18.49,68,5.07,64,351,9744,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00040,2026-06-08T10:11:03Z,outbound,us-east,Transit-X,G711,1500,3.31,18.9,85,5.2,64,380,10242,degraded,backup,false,free,200,handover completed
+CALL-00041,2026-06-08T10:11:20Z,outbound,us-west,Telco-B,OPUS,1537,3.28,19.31,102,5.33,32,409,10751,failed,primary,false,enterprise,408,
+CALL-00042,2026-06-08T10:11:37Z,inbound,latam-south,FiberVoice,AMR-WB,1574,3.25,19.72,119,5.46,23.85,438,11273,failed,primary,true,business,503,normal call
+CALL-00043,2026-06-08T10:11:54Z,outbound,ap-south,Telco-C,G722,1611,,20.13,136,5.59,64,467,11808,failed,primary,false,standard,408,minor jitter detected
+CALL-00044,2026-06-08T10:12:11Z,outbound,eu-west,Telco-A,G711,1648,3.19,20.54,153,5.72,64,496,12355,failed,,false,free,503,"packet loss, recovered"
+CALL-00045,2026-06-08T10:12:28Z,inbound,eu-central,Transit-X,OPUS,1685,3.12,20.95,170,5.85,32,525,12914,failed,primary,false,enterprise,408,"caller said ""hello"""
+CALL-00046,2026-06-08T10:12:45Z,outbound,us-east,Telco-B,AMR-WB,1722,3.05,21.36,187,5.98,23.85,554,13485,failed,primary,false,business,503,handover completed
+CALL-00047,2026-06-08T10:13:02Z,outbound,us-west,FiberVoice,G722,1759,2.98,21.77,204,6.11,64,583,14069,failed,primary,,standard,408,"high latency, investigate"
+CALL-00048,2026-06-08T10:13:19Z,inbound,latam-south,Telco-C,G711,1796,3.9,22.18,221,0.04,64,612,2293,completed,backup,false,free,200,normal call
+CALL-00049,2026-06-08T10:13:36Z,outbound,ap-south,Telco-A,OPUS,52,3.83,22.59,238,0.17,32,641,75,completed,primary,true,enterprise,200,minor jitter detected
+CALL-00050,2026-06-08T10:13:53Z,outbound,eu-west,Transit-X,AMR-WB,89,3.76,23,255,0.3,23.85,670,143,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00051,2026-06-08T10:14:10Z,inbound,eu-west,Telco-B,G722,126,3.68,23.41,272,0.43,64,699,224,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00052,2026-06-08T10:14:27Z,outbound,eu-central,Telco-A,G711,163,3.61,23.82,289,0.56,64,728,317,completed,backup,false,free,200,handover completed
+CALL-00053,2026-06-08T10:14:44Z,outbound,us-east,Transit-X,OPUS,200,3.54,24.23,306,,32,757,423,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00054,2026-06-08T10:15:01Z,inbound,us-west,Telco-B,AMR-WB,237,3.47,24.64,323,0.82,23.85,786,540,completed,primary,false,business,200,normal call
+CALL-00055,2026-06-08T10:15:18Z,outbound,latam-south,FiberVoice,G722,274,3.88,25.05,30,0.95,64,815,671,completed,,false,standard,200,minor jitter detected
+CALL-00056,2026-06-08T10:15:35Z,outbound,ap-south,Telco-C,G711,311,3.85,25.46,47,1.08,64,844,813,completed,backup,true,free,200,"packet loss, recovered"
+CALL-00057,2026-06-08T10:15:52Z,inbound,eu-west,Telco-A,AMR-WB,348,3.82,25.87,64,1.21,23.85,873,968,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00058,2026-06-08T10:16:09Z,outbound,eu-central,Transit-X,G722,385,3.79,26.28,81,1.34,64,902,1135,completed,primary,false,,200,handover completed
+CALL-00059,2026-06-08T10:16:26Z,outbound,us-east,Telco-B,G711,422,3.76,26.69,98,1.47,64,81,1315,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00060,2026-06-08T10:16:43Z,inbound,us-west,FiberVoice,OPUS,459,3.74,27.1,115,1.6,32,110,1507,completed,backup,false,free,200,normal call
+CALL-00061,2026-06-08T10:17:00Z,outbound,latam-south,Telco-C,AMR-WB,496,3.71,27.51,132,1.73,23.85,,1711,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00062,2026-06-08T10:17:17Z,outbound,ap-south,Telco-A,G722,533,3.68,27.92,149,1.86,64,168,1928,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00063,2026-06-08T10:17:34Z,inbound,eu-west,Transit-X,G711,570,3.61,28.33,166,1.99,64,197,2157,completed,primary,true,standard,200,"caller said ""hello"""
+CALL-00064,2026-06-08T10:17:51Z,outbound,eu-central,Telco-B,OPUS,607,3.54,28.74,183,2.12,32,226,2399,completed,backup,false,free,200,handover completed
+CALL-00065,2026-06-08T10:18:08Z,outbound,us-east,Telco-A,AMR-WB,644,3.47,29.15,200,2.25,23.85,255,2653,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00066,2026-06-08T10:18:25Z,inbound,us-west,Transit-X,G722,681,3.4,29.56,217,2.38,64,284,2919,degraded,,false,business,200,normal call
+CALL-00067,2026-06-08T10:18:42Z,outbound,latam-south,Telco-B,G711,718,3.33,29.97,234,2.51,64,313,3198,degraded,primary,false,standard,200,minor jitter detected
+CALL-00068,2026-06-08T10:18:59Z,outbound,latam-south,FiberVoice,OPUS,755,3.26,30.38,251,2.64,32,342,3489,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00069,2026-06-08T10:19:16Z,inbound,ap-south,Telco-C,AMR-WB,792,3.19,30.79,268,2.77,23.85,371,3792,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00070,2026-06-08T10:19:33Z,outbound,eu-west,Telco-A,G722,829,3.12,31.2,285,2.9,64,400,4108,degraded,primary,true,business,200,handover completed
+CALL-00071,2026-06-08T10:19:50Z,outbound,eu-central,Transit-X,G711,866,3.05,31.61,302,3.03,64,429,4436,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00072,2026-06-08T10:20:07Z,inbound,us-east,Telco-B,OPUS,903,2.98,32.02,319,3.16,32,458,4777,degraded,backup,false,free,200,normal call
+CALL-00073,2026-06-08T10:20:24Z,outbound,us-west,FiberVoice,AMR-WB,940,3.37,32.43,26,3.29,23.85,487,5130,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00074,2026-06-08T10:20:41Z,outbound,latam-south,Telco-C,G722,977,3.34,,43,3.42,64,516,5495,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00075,2026-06-08T10:20:58Z,inbound,ap-south,Telco-A,G711,1014,3.31,33.25,60,3.55,64,545,5873,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00076,2026-06-08T10:21:15Z,outbound,eu-west,Transit-X,AMR-WB,1051,3.29,33.66,77,3.68,23.85,574,6263,degraded,backup,false,free,200,handover completed
+CALL-00077,2026-06-08T10:21:32Z,outbound,eu-central,Telco-B,G722,1088,3.26,34.07,94,3.81,64,603,6665,degraded,,true,enterprise,200,"high latency, investigate"
+CALL-00078,2026-06-08T10:21:49Z,inbound,us-east,Telco-A,G711,1125,3.23,34.48,111,3.94,64,632,7080,degraded,primary,false,business,200,normal call
+CALL-00079,2026-06-08T10:22:06Z,outbound,us-west,Transit-X,OPUS,1162,3.2,34.89,128,4.07,32,661,7507,degraded,primary,false,standard,200,minor jitter detected
+CALL-00080,2026-06-08T10:22:23Z,outbound,latam-south,Telco-B,AMR-WB,1199,3.17,35.3,145,4.2,23.85,690,7947,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00081,2026-06-08T10:22:40Z,inbound,ap-south,FiberVoice,G722,1236,3.11,35.71,162,4.33,64,719,8399,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00082,2026-06-08T10:22:57Z,outbound,eu-west,Telco-C,G711,1273,3.04,36.12,179,4.46,64,748,8863,degraded,primary,false,business,200,
+CALL-00083,2026-06-08T10:23:14Z,outbound,eu-central,Telco-A,OPUS,1310,2.97,36.53,196,4.59,32,777,9340,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00084,2026-06-08T10:23:31Z,inbound,us-east,Transit-X,AMR-WB,1347,2.9,36.94,213,4.72,23.85,806,9829,degraded,backup,true,free,200,normal call
+CALL-00085,2026-06-08T10:23:48Z,outbound,us-east,Telco-B,G722,1384,2.83,37.35,230,4.85,64,835,10330,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00086,2026-06-08T10:24:05Z,outbound,us-west,FiberVoice,G711,1421,,37.76,247,4.98,64,864,10844,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00087,2026-06-08T10:24:22Z,inbound,latam-south,Telco-C,OPUS,1458,2.69,38.17,264,5.11,32,893,11370,degraded,primary,false,,200,"caller said ""hello"""
+CALL-00088,2026-06-08T10:24:39Z,outbound,ap-south,Telco-A,AMR-WB,1495,2.62,38.58,281,5.24,23.85,72,11909,degraded,,false,free,200,handover completed
+CALL-00089,2026-06-08T10:24:56Z,outbound,eu-west,Transit-X,G722,1532,2.55,38.99,298,5.37,64,101,12459,failed,primary,false,enterprise,408,"high latency, investigate"
+CALL-00090,2026-06-08T10:25:13Z,inbound,eu-central,Telco-B,G711,1569,2.48,39.4,315,5.5,64,130,13023,failed,primary,false,business,503,normal call
+CALL-00091,2026-06-08T10:25:30Z,outbound,us-east,Telco-A,OPUS,1606,2.41,39.81,332,5.63,32,159,13598,failed,primary,true,standard,408,minor jitter detected
+CALL-00092,2026-06-08T10:25:47Z,outbound,us-west,Transit-X,AMR-WB,1643,2.83,40.22,39,5.76,23.85,188,14186,failed,backup,false,free,503,"packet loss, recovered"
+CALL-00093,2026-06-08T10:26:04Z,inbound,latam-south,Telco-B,G722,1680,2.81,40.63,56,5.89,64,217,14787,failed,primary,false,enterprise,408,"caller said ""hello"""
+CALL-00094,2026-06-08T10:26:21Z,outbound,ap-south,FiberVoice,G711,1717,2.78,41.04,73,6.02,64,246,15400,failed,primary,,business,503,handover completed
+CALL-00095,2026-06-08T10:26:38Z,outbound,eu-west,Telco-C,AMR-WB,1754,2.75,41.45,90,6.15,23.85,275,16025,failed,primary,false,standard,408,"high latency, investigate"
+CALL-00096,2026-06-08T10:26:55Z,inbound,eu-central,Telco-A,G722,1791,3.71,41.86,107,0.08,64,304,4324,completed,backup,false,free,200,normal call
+CALL-00097,2026-06-08T10:27:12Z,outbound,us-east,Transit-X,G711,47,3.69,42.27,124,0.21,64,333,121,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00098,2026-06-08T10:27:29Z,outbound,us-west,Telco-B,OPUS,84,3.66,42.68,141,0.34,32,362,231,completed,primary,true,business,200,"packet loss, recovered"
+CALL-00099,2026-06-08T10:27:46Z,inbound,latam-south,FiberVoice,AMR-WB,121,3.61,43.09,158,0.47,23.85,391,353,completed,,false,standard,200,"caller said ""hello"""
+CALL-00100,2026-06-08T10:28:03Z,outbound,ap-south,Telco-C,G722,158,3.54,43.5,175,0.6,64,420,487,completed,backup,false,free,200,handover completed
+CALL-00101,2026-06-08T10:28:20Z,outbound,eu-west,Telco-A,G711,195,3.47,43.91,192,0.73,64,449,634,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00102,2026-06-08T10:28:37Z,inbound,eu-west,Transit-X,OPUS,232,3.4,44.32,209,0.86,32,478,793,degraded,primary,false,business,200,normal call
+CALL-00103,2026-06-08T10:28:54Z,outbound,eu-central,Telco-B,AMR-WB,269,3.33,44.73,226,0.99,23.85,507,964,degraded,primary,false,standard,200,minor jitter detected
+CALL-00104,2026-06-08T10:29:11Z,outbound,us-east,Telco-A,G722,306,3.26,45.14,243,1.12,64,536,1148,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00105,2026-06-08T10:29:28Z,inbound,us-west,Transit-X,G711,343,3.19,45.55,260,1.25,64,565,1344,degraded,primary,true,enterprise,200,"caller said ""hello"""
+CALL-00106,2026-06-08T10:29:45Z,outbound,latam-south,Telco-B,OPUS,380,3.11,45.96,277,,32,594,1553,degraded,primary,false,business,200,handover completed
+CALL-00107,2026-06-08T10:30:02Z,outbound,ap-south,FiberVoice,AMR-WB,417,3.04,46.37,294,1.51,23.85,623,1774,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00108,2026-06-08T10:30:19Z,inbound,eu-west,Telco-C,G722,454,2.97,46.78,311,1.64,64,652,2007,degraded,backup,false,free,200,normal call
+CALL-00109,2026-06-08T10:30:36Z,outbound,eu-central,Telco-A,G711,491,2.9,47.19,328,1.77,64,681,2253,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00110,2026-06-08T10:30:53Z,outbound,us-east,Transit-X,OPUS,528,3.32,47.6,35,1.9,32,710,2511,degraded,,false,business,200,"packet loss, recovered"
+CALL-00111,2026-06-08T10:31:10Z,inbound,us-west,Telco-B,AMR-WB,565,3.29,,52,2.03,23.85,739,2781,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00112,2026-06-08T10:31:27Z,outbound,latam-south,FiberVoice,G722,602,3.26,48.42,69,2.16,64,768,3064,degraded,backup,true,free,200,handover completed
+CALL-00113,2026-06-08T10:31:44Z,outbound,ap-south,Telco-C,G711,639,3.23,48.83,86,2.29,64,797,3359,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00114,2026-06-08T10:32:01Z,inbound,eu-west,Telco-A,AMR-WB,676,3.21,49.24,103,2.42,23.85,826,3667,degraded,primary,false,business,200,normal call
+CALL-00115,2026-06-08T10:32:18Z,outbound,eu-central,Transit-X,G722,713,3.18,49.65,120,2.55,64,855,3987,degraded,primary,false,standard,200,minor jitter detected
+CALL-00116,2026-06-08T10:32:35Z,outbound,us-east,Telco-B,G711,750,3.15,50.06,137,2.68,64,884,4319,degraded,backup,false,,200,"packet loss, recovered"
+CALL-00117,2026-06-08T10:32:52Z,inbound,us-west,Telco-A,OPUS,787,3.11,50.47,154,2.81,32,913,4664,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00118,2026-06-08T10:33:09Z,outbound,latam-south,Transit-X,AMR-WB,824,3.04,50.88,171,2.94,23.85,92,5021,degraded,primary,false,business,200,handover completed
+CALL-00119,2026-06-08T10:33:26Z,outbound,latam-south,Telco-B,G722,861,2.97,51.29,188,3.07,64,121,5390,degraded,primary,true,standard,200,"high latency, investigate"
+CALL-00120,2026-06-08T10:33:43Z,inbound,ap-south,FiberVoice,G711,898,2.9,51.7,205,3.2,64,150,5772,degraded,backup,false,free,200,normal call
+CALL-00121,2026-06-08T10:34:00Z,outbound,eu-west,Telco-C,OPUS,935,2.83,52.11,222,3.33,32,179,6166,degraded,,false,enterprise,200,minor jitter detected
+CALL-00122,2026-06-08T10:34:17Z,outbound,eu-central,Telco-A,AMR-WB,972,2.76,52.52,239,3.46,23.85,,6573,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00123,2026-06-08T10:34:34Z,inbound,us-east,Transit-X,G722,1009,2.69,52.93,256,3.59,64,237,6992,degraded,primary,false,standard,200,
+CALL-00124,2026-06-08T10:34:51Z,outbound,us-west,Telco-B,G711,1046,2.62,53.34,273,3.72,64,266,7423,degraded,backup,false,free,200,handover completed
+CALL-00125,2026-06-08T10:35:08Z,outbound,latam-south,FiberVoice,OPUS,1083,2.55,53.75,290,3.85,32,295,7867,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00126,2026-06-08T10:35:25Z,inbound,ap-south,Telco-C,AMR-WB,1120,2.48,54.16,307,3.98,23.85,324,8323,degraded,primary,true,business,200,normal call
+CALL-00127,2026-06-08T10:35:42Z,outbound,eu-west,Telco-A,G722,1157,2.41,54.57,324,4.11,64,353,8791,degraded,primary,false,standard,200,minor jitter detected
+CALL-00128,2026-06-08T10:35:59Z,outbound,eu-central,Transit-X,G711,1194,2.81,54.98,31,4.24,64,382,9272,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00129,2026-06-08T10:36:16Z,inbound,us-east,Telco-B,OPUS,1231,,55.39,48,4.37,32,411,9765,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00130,2026-06-08T10:36:33Z,outbound,us-west,Telco-A,AMR-WB,1268,2.76,55.8,65,4.5,23.85,440,10271,degraded,primary,false,business,200,handover completed
+CALL-00131,2026-06-08T10:36:50Z,outbound,latam-south,Transit-X,G722,1305,2.73,56.21,82,4.63,64,469,10789,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00132,2026-06-08T10:37:07Z,inbound,ap-south,Telco-B,G711,1342,2.7,56.62,99,4.76,64,498,11319,degraded,,false,free,200,normal call
+CALL-00133,2026-06-08T10:37:24Z,outbound,eu-west,FiberVoice,AMR-WB,1379,2.67,57.03,116,4.89,23.85,527,11862,degraded,primary,true,enterprise,200,minor jitter detected
+CALL-00134,2026-06-08T10:37:41Z,outbound,eu-central,Telco-C,G722,1416,2.64,57.44,133,5.02,64,556,12417,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00135,2026-06-08T10:37:58Z,inbound,us-east,Telco-A,G711,1453,2.61,57.85,150,5.15,64,585,12984,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00136,2026-06-08T10:38:15Z,outbound,us-east,Transit-X,OPUS,1490,2.54,58.26,167,5.28,32,614,13564,degraded,backup,false,free,200,handover completed
+CALL-00137,2026-06-08T10:38:32Z,outbound,us-west,Telco-B,AMR-WB,1527,2.47,58.67,184,5.41,23.85,643,14156,failed,primary,false,enterprise,408,"high latency, investigate"
+CALL-00138,2026-06-08T10:38:49Z,inbound,latam-south,FiberVoice,G722,1564,2.4,59.08,201,5.54,64,672,14761,failed,primary,false,business,503,normal call
+CALL-00139,2026-06-08T10:39:06Z,outbound,ap-south,Telco-C,G711,1601,2.33,59.49,218,5.67,64,701,15378,failed,primary,false,standard,408,minor jitter detected
+CALL-00140,2026-06-08T10:39:23Z,outbound,eu-west,Telco-A,OPUS,1638,2.26,59.9,235,5.8,32,730,16007,failed,backup,true,free,503,"packet loss, recovered"
+CALL-00141,2026-06-08T10:39:40Z,inbound,eu-central,Transit-X,AMR-WB,1675,2.19,60.31,252,5.93,23.85,759,16649,failed,primary,,enterprise,408,"caller said ""hello"""
+CALL-00142,2026-06-08T10:39:57Z,outbound,us-east,Telco-B,G722,1712,2.12,60.72,269,6.06,64,788,17303,failed,primary,false,business,503,handover completed
+CALL-00143,2026-06-08T10:40:14Z,outbound,us-west,Telco-A,G711,1749,2.05,61.13,286,6.19,64,817,17969,failed,,false,standard,408,"high latency, investigate"
+CALL-00144,2026-06-08T10:40:31Z,inbound,latam-south,Transit-X,OPUS,1786,2.97,61.54,303,0.12,32,846,6344,degraded,backup,false,free,200,normal call
+CALL-00145,2026-06-08T10:40:48Z,outbound,ap-south,Telco-B,AMR-WB,42,2.9,61.95,320,0.25,23.85,875,156,degraded,primary,false,,200,minor jitter detected
+CALL-00146,2026-06-08T10:41:05Z,outbound,eu-west,FiberVoice,G722,79,3.3,62.36,27,0.38,64,904,307,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00147,2026-06-08T10:41:22Z,inbound,eu-central,Telco-C,G711,116,3.27,62.77,44,0.51,64,83,470,degraded,primary,true,standard,200,"caller said ""hello"""
+CALL-00148,2026-06-08T10:41:39Z,outbound,us-east,Telco-A,OPUS,153,3.24,,61,0.64,32,112,646,degraded,backup,false,free,200,handover completed
+CALL-00149,2026-06-08T10:41:56Z,outbound,us-west,Transit-X,AMR-WB,190,3.21,63.59,78,0.77,23.85,141,834,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00150,2026-06-08T10:42:13Z,inbound,latam-south,Telco-B,G722,227,3.18,64,95,0.9,64,170,1034,degraded,primary,false,business,200,normal call
+CALL-00151,2026-06-08T10:42:30Z,outbound,ap-south,FiberVoice,G711,264,3.16,64.41,112,1.03,64,199,1247,degraded,primary,false,standard,200,minor jitter detected
+CALL-00152,2026-06-08T10:42:47Z,outbound,eu-west,Telco-C,AMR-WB,301,3.13,64.82,129,1.16,23.85,228,1472,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00153,2026-06-08T10:43:04Z,inbound,eu-west,Telco-A,G722,338,3.1,65.23,146,1.29,64,257,1709,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00154,2026-06-08T10:43:21Z,outbound,eu-central,Transit-X,G711,375,3.04,65.64,163,1.42,64,286,1959,degraded,,true,business,200,handover completed
+CALL-00155,2026-06-08T10:43:38Z,outbound,us-east,Telco-B,OPUS,412,2.97,66.05,180,1.55,32,315,2221,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00156,2026-06-08T10:43:55Z,inbound,us-west,Telco-A,AMR-WB,449,2.9,66.46,197,1.68,23.85,344,2496,degraded,backup,false,free,200,normal call
+CALL-00157,2026-06-08T10:44:12Z,outbound,latam-south,Transit-X,G722,486,2.83,66.87,214,1.81,64,373,2783,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00158,2026-06-08T10:44:29Z,outbound,ap-south,Telco-B,G711,523,2.76,67.28,231,1.94,64,402,3082,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00159,2026-06-08T10:44:46Z,inbound,eu-west,FiberVoice,OPUS,560,2.69,67.69,248,,32,431,3394,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00160,2026-06-08T10:45:03Z,outbound,eu-central,Telco-C,AMR-WB,597,2.61,68.1,265,2.2,23.85,460,3718,degraded,backup,false,free,200,handover completed
+CALL-00161,2026-06-08T10:45:20Z,outbound,us-east,Telco-A,G722,634,2.54,68.51,282,2.33,64,489,4054,degraded,primary,true,enterprise,200,"high latency, investigate"
+CALL-00162,2026-06-08T10:45:37Z,inbound,us-west,Transit-X,G711,671,2.47,68.92,299,2.46,64,518,4403,degraded,primary,false,business,200,normal call
+CALL-00163,2026-06-08T10:45:54Z,outbound,latam-south,Telco-B,OPUS,708,2.4,69.33,316,2.59,32,547,4764,degraded,primary,false,standard,200,minor jitter detected
+CALL-00164,2026-06-08T10:46:11Z,outbound,ap-south,FiberVoice,AMR-WB,745,2.33,69.74,333,2.72,23.85,576,5138,failed,backup,false,free,503,
+CALL-00165,2026-06-08T10:46:28Z,inbound,eu-west,Telco-C,G722,782,2.76,70.15,40,2.85,64,605,5524,degraded,,false,enterprise,200,"caller said ""hello"""
+CALL-00166,2026-06-08T10:46:45Z,outbound,eu-central,Telco-A,G711,819,2.73,70.56,57,2.98,64,634,5922,degraded,primary,false,business,200,handover completed
+CALL-00167,2026-06-08T10:47:02Z,outbound,us-east,Transit-X,OPUS,856,2.7,70.97,74,3.11,32,663,6333,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00168,2026-06-08T10:47:19Z,inbound,us-west,Telco-B,AMR-WB,893,2.68,71.38,91,3.24,23.85,692,6756,degraded,backup,true,free,200,normal call
+CALL-00169,2026-06-08T10:47:36Z,outbound,latam-south,Telco-A,G722,930,2.65,71.79,108,3.37,64,721,7191,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00170,2026-06-08T10:47:53Z,outbound,latam-south,Transit-X,G711,967,2.62,72.2,125,3.5,64,750,7639,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00171,2026-06-08T10:48:10Z,inbound,ap-south,Telco-B,AMR-WB,1004,2.59,72.61,142,3.63,23.85,779,8099,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00172,2026-06-08T10:48:27Z,outbound,eu-west,FiberVoice,G722,1041,,73.02,159,3.76,64,808,8572,degraded,backup,false,free,200,handover completed
+CALL-00173,2026-06-08T10:48:44Z,outbound,eu-central,Telco-C,G711,1078,2.47,73.43,176,3.89,64,837,9057,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00174,2026-06-08T10:49:01Z,inbound,us-east,Telco-A,OPUS,1115,2.4,73.84,193,4.02,32,866,9554,degraded,primary,false,,200,normal call
+CALL-00175,2026-06-08T10:49:18Z,outbound,us-west,Transit-X,AMR-WB,1152,2.33,74.25,210,4.15,23.85,895,10064,failed,primary,true,standard,408,minor jitter detected
+CALL-00176,2026-06-08T10:49:35Z,outbound,latam-south,Telco-B,G722,1189,2.26,74.66,227,4.28,64,74,10586,failed,,false,free,503,"packet loss, recovered"
+CALL-00177,2026-06-08T10:49:52Z,inbound,ap-south,FiberVoice,G711,1226,2.19,75.07,244,4.41,64,103,11121,failed,primary,false,enterprise,408,"caller said ""hello"""
+CALL-00178,2026-06-08T10:50:09Z,outbound,eu-west,Telco-C,OPUS,1263,2.12,75.48,261,4.54,32,132,11667,failed,primary,false,business,503,handover completed
+CALL-00179,2026-06-08T10:50:26Z,outbound,eu-central,Telco-A,AMR-WB,1300,2.05,75.89,278,4.67,23.85,161,12227,failed,primary,false,standard,408,"high latency, investigate"
+CALL-00180,2026-06-08T10:50:43Z,inbound,us-east,Transit-X,G722,1337,1.98,76.3,295,4.8,64,190,12798,failed,backup,false,free,503,normal call
+CALL-00181,2026-06-08T10:51:00Z,outbound,us-west,Telco-B,G711,1374,1.91,76.71,312,4.93,64,219,13382,failed,primary,false,enterprise,408,minor jitter detected
+CALL-00182,2026-06-08T10:51:17Z,outbound,latam-south,Telco-A,OPUS,1411,1.83,77.12,329,5.06,32,248,13978,failed,primary,true,business,503,"packet loss, recovered"
+CALL-00183,2026-06-08T10:51:34Z,inbound,ap-south,Transit-X,AMR-WB,1448,2.25,77.53,36,5.19,23.85,,14587,failed,primary,false,standard,408,"caller said ""hello"""
+CALL-00184,2026-06-08T10:51:51Z,outbound,eu-west,Telco-B,G722,1485,2.23,77.94,53,5.32,64,306,15208,failed,backup,false,free,503,handover completed
+CALL-00185,2026-06-08T10:52:08Z,outbound,eu-central,FiberVoice,G711,1522,2.2,,70,5.45,64,335,15841,failed,primary,false,enterprise,408,"high latency, investigate"
+CALL-00186,2026-06-08T10:52:25Z,inbound,us-east,Telco-C,OPUS,1559,3.54,2.76,87,5.58,32,364,9905,failed,primary,false,business,503,normal call
+CALL-00187,2026-06-08T10:52:42Z,outbound,us-east,Telco-A,AMR-WB,1596,3.51,3.17,104,5.71,23.85,393,10407,failed,,false,standard,408,minor jitter detected
+CALL-00188,2026-06-08T10:52:59Z,outbound,us-west,Transit-X,G722,1633,3.48,3.58,121,5.84,64,422,10921,failed,backup,,free,503,"packet loss, recovered"
+CALL-00189,2026-06-08T10:53:16Z,inbound,latam-south,Telco-B,G711,1670,3.45,3.99,138,5.97,64,451,11448,failed,primary,true,enterprise,408,"caller said ""hello"""
+CALL-00190,2026-06-08T10:53:33Z,outbound,ap-south,FiberVoice,AMR-WB,1707,3.41,4.4,155,6.1,23.85,480,11987,failed,primary,false,business,503,handover completed
+CALL-00191,2026-06-08T10:53:50Z,outbound,eu-west,Telco-C,G722,1744,4.33,4.81,172,0.03,64,509,524,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00192,2026-06-08T10:54:07Z,inbound,eu-central,Telco-A,G711,1781,4.26,5.22,189,0.16,64,538,833,completed,backup,false,free,200,normal call
+CALL-00193,2026-06-08T10:54:24Z,outbound,us-east,Transit-X,OPUS,37,4.19,5.63,206,0.29,32,567,23,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00194,2026-06-08T10:54:41Z,outbound,us-west,Telco-B,AMR-WB,74,4.12,6.04,223,0.42,23.85,596,59,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00195,2026-06-08T10:54:58Z,inbound,latam-south,Telco-A,G722,111,4.05,6.45,240,0.55,64,625,108,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00196,2026-06-08T10:55:15Z,outbound,ap-south,Transit-X,G711,148,3.98,6.86,257,0.68,64,654,168,completed,backup,true,free,200,handover completed
+CALL-00197,2026-06-08T10:55:32Z,outbound,eu-west,Telco-B,OPUS,185,3.91,7.27,274,0.81,32,683,241,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00198,2026-06-08T10:55:49Z,inbound,eu-central,FiberVoice,AMR-WB,222,3.84,7.68,291,0.94,23.85,712,327,completed,,false,business,200,normal call
+CALL-00199,2026-06-08T10:56:06Z,outbound,us-east,Telco-C,G722,259,3.77,8.09,308,1.07,64,741,424,completed,primary,false,standard,200,minor jitter detected
+CALL-00200,2026-06-08T10:56:23Z,outbound,us-west,Telco-A,G711,296,3.7,8.5,325,1.2,64,770,534,completed,backup,false,free,200,"packet loss, recovered"
+CALL-00201,2026-06-08T10:56:40Z,inbound,latam-south,Transit-X,OPUS,333,4.11,8.91,32,1.33,32,799,657,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00202,2026-06-08T10:56:57Z,outbound,ap-south,Telco-B,AMR-WB,370,4.08,9.32,49,1.46,23.85,828,792,completed,primary,false,business,200,handover completed
+CALL-00203,2026-06-08T10:57:14Z,outbound,eu-west,FiberVoice,G722,407,4.05,9.73,66,1.59,64,857,939,completed,primary,true,,200,"high latency, investigate"
+CALL-00204,2026-06-08T10:57:31Z,inbound,eu-west,Telco-C,G711,444,4.02,10.14,83,1.72,64,886,1099,completed,backup,false,free,200,normal call
+CALL-00205,2026-06-08T10:57:48Z,outbound,eu-central,Telco-A,OPUS,481,3.99,10.55,100,1.85,32,915,1271,completed,primary,false,enterprise,200,
+CALL-00206,2026-06-08T10:58:05Z,outbound,us-east,Transit-X,AMR-WB,518,3.97,10.96,117,1.98,23.85,94,1455,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00207,2026-06-08T10:58:22Z,inbound,us-west,Telco-B,G722,555,3.94,11.37,134,2.11,64,123,1652,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00208,2026-06-08T10:58:39Z,outbound,latam-south,Telco-A,G711,592,3.91,11.78,151,2.24,64,152,1861,completed,backup,false,free,200,handover completed
+CALL-00209,2026-06-08T10:58:56Z,outbound,ap-south,Transit-X,AMR-WB,629,3.84,12.19,168,2.37,23.85,181,2082,completed,,false,enterprise,200,"high latency, investigate"
+CALL-00210,2026-06-08T10:59:13Z,inbound,eu-west,Telco-B,G722,666,3.77,12.6,185,2.5,64,210,2316,completed,primary,true,business,200,normal call
+CALL-00211,2026-06-08T10:59:30Z,outbound,eu-central,FiberVoice,G711,703,3.7,13.01,202,2.63,64,239,2562,completed,primary,false,standard,200,minor jitter detected
+CALL-00212,2026-06-08T10:59:47Z,outbound,us-east,Telco-C,OPUS,740,3.62,13.42,219,,32,268,2821,completed,backup,false,free,200,"packet loss, recovered"
+CALL-00213,2026-06-08T11:00:04Z,inbound,us-west,Telco-A,AMR-WB,777,3.55,13.83,236,2.89,23.85,297,3092,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00214,2026-06-08T11:00:21Z,outbound,latam-south,Transit-X,G722,814,3.48,14.24,253,3.02,64,326,3375,completed,primary,false,business,200,handover completed
+CALL-00215,2026-06-08T11:00:38Z,outbound,ap-south,Telco-B,G711,851,,14.65,270,3.15,64,355,3671,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00216,2026-06-08T11:00:55Z,inbound,eu-west,FiberVoice,OPUS,888,3.34,15.06,287,3.28,32,384,3979,degraded,backup,false,free,200,normal call
+CALL-00217,2026-06-08T11:01:12Z,outbound,eu-central,Telco-C,AMR-WB,925,3.27,15.47,304,3.41,23.85,413,4300,degraded,primary,true,enterprise,200,minor jitter detected
+CALL-00218,2026-06-08T11:01:29Z,outbound,us-east,Telco-A,G722,962,3.2,15.88,321,3.54,64,442,4633,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00219,2026-06-08T11:01:46Z,inbound,us-west,Transit-X,G711,999,3.6,16.29,28,3.67,64,471,4978,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00220,2026-06-08T11:02:03Z,outbound,latam-south,Telco-B,OPUS,1036,3.57,16.7,45,3.8,32,500,5335,completed,,false,free,200,handover completed
+CALL-00221,2026-06-08T11:02:20Z,outbound,latam-south,Telco-A,AMR-WB,1073,3.54,17.11,62,3.93,23.85,529,5705,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00222,2026-06-08T11:02:37Z,inbound,ap-south,Transit-X,G722,1110,3.52,,79,4.06,64,558,6088,completed,primary,false,business,200,normal call
+CALL-00223,2026-06-08T11:02:54Z,outbound,eu-west,Telco-B,G711,1147,3.49,17.93,96,4.19,64,587,6482,completed,primary,false,standard,200,minor jitter detected
+CALL-00224,2026-06-08T11:03:11Z,outbound,eu-central,FiberVoice,OPUS,1184,3.46,18.34,113,4.32,32,616,6890,completed,backup,true,free,200,"packet loss, recovered"
+CALL-00225,2026-06-08T11:03:28Z,inbound,us-east,Telco-C,AMR-WB,1221,3.43,18.75,130,4.45,23.85,645,7309,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00226,2026-06-08T11:03:45Z,outbound,us-west,Telco-A,G722,1258,3.4,19.16,147,4.58,64,674,7741,degraded,primary,false,business,200,handover completed
+CALL-00227,2026-06-08T11:04:02Z,outbound,latam-south,Transit-X,G711,1295,3.34,19.57,164,4.71,64,703,8185,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00228,2026-06-08T11:04:19Z,inbound,ap-south,Telco-B,AMR-WB,1332,3.27,19.98,181,4.84,23.85,732,8642,degraded,backup,false,free,200,normal call
+CALL-00229,2026-06-08T11:04:36Z,outbound,eu-west,FiberVoice,G722,1369,3.2,20.39,198,4.97,64,761,9111,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00230,2026-06-08T11:04:53Z,outbound,eu-central,Telco-C,G711,1406,3.13,20.8,215,5.1,64,790,9592,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00231,2026-06-08T11:05:10Z,inbound,us-east,Telco-A,OPUS,1443,3.06,21.21,232,5.23,32,819,10086,degraded,,true,standard,200,"caller said ""hello"""
+CALL-00232,2026-06-08T11:05:27Z,outbound,us-west,Transit-X,AMR-WB,1480,2.99,21.62,249,5.36,23.85,848,10592,failed,backup,false,,503,handover completed
+CALL-00233,2026-06-08T11:05:44Z,outbound,latam-south,Telco-B,G722,1517,2.92,22.03,266,5.49,64,877,11110,failed,primary,false,enterprise,408,"high latency, investigate"
+CALL-00234,2026-06-08T11:06:01Z,inbound,ap-south,Telco-A,G711,1554,2.84,22.44,283,5.62,64,906,11641,failed,primary,false,business,503,normal call
+CALL-00235,2026-06-08T11:06:18Z,outbound,eu-west,Transit-X,OPUS,1591,2.77,22.85,300,5.75,32,85,12184,failed,primary,,standard,408,minor jitter detected
+CALL-00236,2026-06-08T11:06:35Z,outbound,eu-central,Telco-B,AMR-WB,1628,2.7,23.26,317,5.88,23.85,114,12740,failed,backup,false,free,503,"packet loss, recovered"
+CALL-00237,2026-06-08T11:06:52Z,inbound,us-east,FiberVoice,G722,1665,2.63,23.67,334,6.01,64,143,13308,failed,primary,false,enterprise,408,"caller said ""hello"""
+CALL-00238,2026-06-08T11:07:09Z,outbound,us-east,Telco-C,G711,1702,3.06,24.08,41,6.14,64,172,13888,failed,primary,true,business,503,handover completed
+CALL-00239,2026-06-08T11:07:26Z,outbound,us-west,Telco-A,OPUS,1739,4.03,24.49,58,0.07,32,201,2501,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00240,2026-06-08T11:07:43Z,inbound,latam-south,Transit-X,AMR-WB,1776,4,24.9,75,0.2,23.85,230,2851,completed,backup,false,free,200,normal call
+CALL-00241,2026-06-08T11:08:00Z,outbound,ap-south,Telco-B,G722,32,3.97,25.31,92,0.33,64,259,57,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00242,2026-06-08T11:08:17Z,outbound,eu-west,FiberVoice,G711,69,3.94,25.72,109,0.46,64,288,134,completed,,false,business,200,"packet loss, recovered"
+CALL-00243,2026-06-08T11:08:34Z,inbound,eu-central,Telco-C,OPUS,106,3.92,26.13,126,0.59,32,317,223,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00244,2026-06-08T11:08:51Z,outbound,us-east,Telco-A,AMR-WB,143,3.89,26.54,143,0.72,23.85,,325,completed,backup,false,free,200,handover completed
+CALL-00245,2026-06-08T11:09:08Z,outbound,us-west,Transit-X,G722,180,3.83,26.95,160,0.85,64,375,440,completed,primary,true,enterprise,200,"high latency, investigate"
+CALL-00246,2026-06-08T11:09:25Z,inbound,latam-south,Telco-B,G711,217,3.76,27.36,177,0.98,64,404,566,completed,primary,false,business,200,
+CALL-00247,2026-06-08T11:09:42Z,outbound,ap-south,Telco-A,AMR-WB,254,3.69,27.77,194,1.11,23.85,433,705,completed,primary,false,standard,200,minor jitter detected
+CALL-00248,2026-06-08T11:09:59Z,outbound,eu-west,Transit-X,G722,291,3.62,28.18,211,1.24,64,462,857,completed,backup,false,free,200,"packet loss, recovered"
+CALL-00249,2026-06-08T11:10:16Z,inbound,eu-central,Telco-B,G711,328,3.55,28.59,228,1.37,64,491,1020,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00250,2026-06-08T11:10:33Z,outbound,us-east,FiberVoice,OPUS,365,3.48,29,245,1.5,32,520,1196,completed,primary,false,business,200,handover completed
+CALL-00251,2026-06-08T11:10:50Z,outbound,us-west,Telco-C,AMR-WB,402,3.41,29.41,262,1.63,23.85,549,1385,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00252,2026-06-08T11:11:07Z,inbound,latam-south,Telco-A,G722,439,3.34,29.82,279,1.76,64,578,1586,degraded,backup,true,free,200,normal call
+CALL-00253,2026-06-08T11:11:24Z,outbound,ap-south,Transit-X,G711,476,3.27,30.23,296,1.89,64,607,1799,degraded,,false,enterprise,200,minor jitter detected
+CALL-00254,2026-06-08T11:11:41Z,outbound,eu-west,Telco-B,OPUS,513,3.2,30.64,313,2.02,32,636,2025,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00255,2026-06-08T11:11:58Z,inbound,eu-west,FiberVoice,AMR-WB,550,3.13,31.05,330,2.15,23.85,665,2263,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00256,2026-06-08T11:12:15Z,outbound,eu-central,Telco-C,G722,587,3.55,31.46,37,2.28,64,694,2513,completed,backup,false,free,200,handover completed
+CALL-00257,2026-06-08T11:12:32Z,outbound,us-east,Telco-A,G711,624,3.52,31.87,54,2.41,64,723,2776,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00258,2026-06-08T11:12:49Z,inbound,us-west,Transit-X,OPUS,661,,32.28,71,2.54,32,752,3051,completed,primary,false,business,200,normal call
+CALL-00259,2026-06-08T11:13:06Z,outbound,latam-south,Telco-B,AMR-WB,698,3.46,,88,2.67,23.85,781,3338,completed,primary,true,standard,200,minor jitter detected
+CALL-00260,2026-06-08T11:13:23Z,outbound,ap-south,Telco-A,G722,735,3.44,33.1,105,2.8,64,810,3638,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00261,2026-06-08T11:13:40Z,inbound,eu-west,Transit-X,G711,772,3.41,33.51,122,2.93,64,839,3950,degraded,primary,false,,200,"caller said ""hello"""
+CALL-00262,2026-06-08T11:13:57Z,outbound,eu-central,Telco-B,OPUS,809,3.38,33.92,139,3.06,32,868,4275,degraded,primary,false,business,200,handover completed
+CALL-00263,2026-06-08T11:14:14Z,outbound,us-east,FiberVoice,AMR-WB,846,3.34,34.33,156,3.19,23.85,897,4612,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00264,2026-06-08T11:14:31Z,inbound,us-west,Telco-C,G722,883,3.27,34.74,173,3.32,64,76,4961,degraded,,false,free,200,normal call
+CALL-00265,2026-06-08T11:14:48Z,outbound,latam-south,Telco-A,G711,920,3.2,35.15,190,,64,105,5323,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00266,2026-06-08T11:15:05Z,outbound,ap-south,Transit-X,AMR-WB,957,3.12,35.56,207,3.58,23.85,134,5697,degraded,primary,true,business,200,"packet loss, recovered"
+CALL-00267,2026-06-08T11:15:22Z,inbound,eu-west,Telco-B,G722,994,3.05,35.97,224,3.71,64,163,6084,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00268,2026-06-08T11:15:39Z,outbound,eu-central,FiberVoice,G711,1031,2.98,36.38,241,3.84,64,192,6483,degraded,backup,false,free,200,handover completed
+CALL-00269,2026-06-08T11:15:56Z,outbound,us-east,Telco-C,OPUS,1068,2.91,36.79,258,3.97,32,221,6894,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00270,2026-06-08T11:16:13Z,inbound,us-west,Telco-A,AMR-WB,1105,2.84,37.2,275,4.1,23.85,250,7318,degraded,primary,false,business,200,normal call
+CALL-00271,2026-06-08T11:16:30Z,outbound,latam-south,Transit-X,G722,1142,2.77,37.61,292,4.23,64,279,7754,degraded,primary,false,standard,200,minor jitter detected
+CALL-00272,2026-06-08T11:16:47Z,outbound,latam-south,Telco-B,G711,1179,2.7,38.02,309,4.36,64,308,8202,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00273,2026-06-08T11:17:04Z,inbound,ap-south,Telco-A,OPUS,1216,2.63,38.43,326,4.49,32,337,8663,degraded,primary,true,enterprise,200,"caller said ""hello"""
+CALL-00274,2026-06-08T11:17:21Z,outbound,eu-west,Transit-X,AMR-WB,1253,3.04,38.84,33,4.62,23.85,366,9136,degraded,primary,false,business,200,handover completed
+CALL-00275,2026-06-08T11:17:38Z,outbound,eu-central,Telco-B,G722,1290,3.01,39.25,50,4.75,64,395,9621,degraded,,false,standard,200,"high latency, investigate"
+CALL-00276,2026-06-08T11:17:55Z,inbound,us-east,FiberVoice,G711,1327,2.99,39.66,67,4.88,64,424,10119,degraded,backup,false,free,200,normal call
+CALL-00277,2026-06-08T11:18:12Z,outbound,us-west,Telco-C,OPUS,1364,2.96,40.07,84,5.01,32,453,10629,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00278,2026-06-08T11:18:29Z,outbound,latam-south,Telco-A,AMR-WB,1401,2.93,40.48,101,5.14,23.85,482,11152,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00279,2026-06-08T11:18:46Z,inbound,ap-south,Transit-X,G722,1438,2.9,40.89,118,5.27,64,511,11687,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00280,2026-06-08T11:19:03Z,outbound,eu-west,Telco-B,G711,1475,2.87,41.3,135,5.4,64,540,12234,failed,backup,true,free,503,handover completed
+CALL-00281,2026-06-08T11:19:20Z,outbound,eu-central,FiberVoice,OPUS,1512,2.84,41.71,152,5.53,32,569,12794,failed,primary,false,enterprise,408,"high latency, investigate"
+CALL-00282,2026-06-08T11:19:37Z,inbound,us-east,Telco-C,AMR-WB,1549,2.77,42.12,169,5.66,23.85,598,13366,failed,primary,,business,503,normal call
+CALL-00283,2026-06-08T11:19:54Z,outbound,us-west,Telco-A,G722,1586,2.7,42.53,186,5.79,64,627,13951,failed,primary,false,standard,408,minor jitter detected
+CALL-00284,2026-06-08T11:20:11Z,outbound,latam-south,Transit-X,G711,1623,2.63,42.94,203,5.92,64,656,14547,failed,backup,false,free,503,"packet loss, recovered"
+CALL-00285,2026-06-08T11:20:28Z,inbound,ap-south,Telco-B,AMR-WB,1660,2.56,43.35,220,6.05,23.85,685,15157,failed,primary,false,enterprise,408,"caller said ""hello"""
+CALL-00286,2026-06-08T11:20:45Z,outbound,eu-west,Telco-A,G722,1697,2.49,43.76,237,6.18,64,714,15778,failed,,false,business,503,handover completed
+CALL-00287,2026-06-08T11:21:02Z,outbound,eu-central,Transit-X,G711,1734,3.41,44.17,254,0.11,64,743,4467,degraded,primary,true,standard,200,
+CALL-00288,2026-06-08T11:21:19Z,inbound,us-east,Telco-B,OPUS,1771,3.34,44.58,271,0.24,32,772,4858,degraded,backup,false,free,200,normal call
+CALL-00289,2026-06-08T11:21:36Z,outbound,us-east,FiberVoice,AMR-WB,27,3.27,44.99,288,0.37,23.85,801,79,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00290,2026-06-08T11:21:53Z,outbound,us-west,Telco-C,G722,64,3.2,45.4,305,0.5,64,830,197,degraded,primary,false,,200,"packet loss, recovered"
+CALL-00291,2026-06-08T11:22:10Z,inbound,latam-south,Telco-A,G711,101,3.12,45.81,322,0.63,64,859,328,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00292,2026-06-08T11:22:27Z,outbound,ap-south,Transit-X,OPUS,138,3.53,46.22,29,0.76,32,888,471,completed,backup,false,free,200,handover completed
+CALL-00293,2026-06-08T11:22:44Z,outbound,eu-west,Telco-B,AMR-WB,175,3.5,46.63,46,0.89,23.85,917,626,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00294,2026-06-08T11:23:01Z,inbound,eu-central,FiberVoice,G722,212,3.47,47.04,63,1.02,64,96,794,completed,primary,true,business,200,normal call
+CALL-00295,2026-06-08T11:23:18Z,outbound,us-east,Telco-C,G711,249,3.44,47.45,80,1.15,64,125,975,degraded,primary,false,standard,200,minor jitter detected
+CALL-00296,2026-06-08T11:23:35Z,outbound,us-west,Telco-A,OPUS,286,3.41,,97,1.28,32,154,1167,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00297,2026-06-08T11:23:52Z,inbound,latam-south,Transit-X,AMR-WB,323,3.39,48.27,114,1.41,23.85,183,1372,degraded,,false,enterprise,200,"caller said ""hello"""
+CALL-00298,2026-06-08T11:24:09Z,outbound,ap-south,Telco-B,G722,360,3.36,48.68,131,1.54,64,212,1590,degraded,primary,false,business,200,handover completed
+CALL-00299,2026-06-08T11:24:26Z,outbound,eu-west,Telco-A,G711,397,3.33,49.09,148,1.67,64,241,1819,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00300,2026-06-08T11:24:43Z,inbound,eu-central,Transit-X,OPUS,434,3.26,49.5,165,1.8,32,270,2062,degraded,backup,false,free,200,normal call
+CALL-00301,2026-06-08T11:25:00Z,outbound,us-east,Telco-B,AMR-WB,471,,49.91,182,1.93,23.85,299,2316,degraded,primary,true,enterprise,200,minor jitter detected
+CALL-00302,2026-06-08T11:25:17Z,outbound,us-west,FiberVoice,G722,508,3.12,50.32,199,2.06,64,328,2583,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00303,2026-06-08T11:25:34Z,inbound,latam-south,Telco-C,G711,545,3.05,50.73,216,2.19,64,357,2862,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00304,2026-06-08T11:25:51Z,outbound,ap-south,Telco-A,AMR-WB,582,2.98,51.14,233,2.32,23.85,386,3154,degraded,backup,false,free,200,handover completed
+CALL-00305,2026-06-08T11:26:08Z,outbound,eu-west,Transit-X,G722,619,2.91,51.55,250,2.45,64,,3458,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00306,2026-06-08T11:26:25Z,inbound,eu-west,Telco-B,G711,656,2.84,51.96,267,2.58,64,444,3774,degraded,primary,false,business,200,normal call
+CALL-00307,2026-06-08T11:26:42Z,outbound,eu-central,FiberVoice,OPUS,693,2.77,52.37,284,2.71,32,473,4103,degraded,primary,false,standard,200,minor jitter detected
+CALL-00308,2026-06-08T11:26:59Z,outbound,us-east,Telco-C,AMR-WB,730,2.7,52.78,301,2.84,23.85,502,4444,degraded,,true,free,200,"packet loss, recovered"
+CALL-00309,2026-06-08T11:27:16Z,inbound,us-west,Telco-A,G722,767,2.63,53.19,318,2.97,64,531,4798,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00310,2026-06-08T11:27:33Z,outbound,latam-south,Transit-X,G711,804,3.02,53.6,25,3.1,64,560,5163,degraded,primary,false,business,200,handover completed
+CALL-00311,2026-06-08T11:27:50Z,outbound,ap-south,Telco-B,OPUS,841,2.99,54.01,42,3.23,32,589,5542,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00312,2026-06-08T11:28:07Z,inbound,eu-west,Telco-A,AMR-WB,878,2.96,54.42,59,3.36,23.85,618,5932,degraded,backup,false,free,200,normal call
+CALL-00313,2026-06-08T11:28:24Z,outbound,eu-central,Transit-X,G722,915,2.93,54.83,76,3.49,64,647,6335,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00314,2026-06-08T11:28:41Z,outbound,us-east,Telco-B,G711,952,2.91,55.24,93,3.62,64,676,6751,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00315,2026-06-08T11:28:58Z,inbound,us-west,FiberVoice,OPUS,989,2.88,55.65,110,3.75,32,705,7178,degraded,primary,true,standard,200,"caller said ""hello"""
+CALL-00316,2026-06-08T11:29:15Z,outbound,latam-south,Telco-C,AMR-WB,1026,2.85,56.06,127,3.88,23.85,734,7619,degraded,backup,false,free,200,handover completed
+CALL-00317,2026-06-08T11:29:32Z,outbound,ap-south,Telco-A,G722,1063,2.82,56.47,144,4.01,64,763,8071,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00318,2026-06-08T11:29:49Z,inbound,eu-west,Transit-X,G711,1100,2.77,56.88,161,,64,792,8536,degraded,primary,false,business,200,normal call
+CALL-00319,2026-06-08T11:30:06Z,outbound,eu-central,Telco-B,OPUS,1137,2.7,57.29,178,4.27,32,821,9013,degraded,,false,,200,minor jitter detected
+CALL-00320,2026-06-08T11:30:23Z,outbound,us-east,FiberVoice,AMR-WB,1174,2.62,57.7,195,4.4,23.85,850,9503,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00321,2026-06-08T11:30:40Z,inbound,us-west,Telco-C,G722,1211,2.55,58.11,212,4.53,64,879,10005,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00322,2026-06-08T11:30:57Z,outbound,latam-south,Telco-A,G711,1248,2.48,58.52,229,4.66,64,908,10519,degraded,primary,true,business,200,handover completed
+CALL-00323,2026-06-08T11:31:14Z,outbound,latam-south,Transit-X,AMR-WB,1285,2.41,58.93,246,4.79,23.85,87,11046,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00324,2026-06-08T11:31:31Z,inbound,ap-south,Telco-B,G722,1322,2.34,59.34,263,4.92,64,116,11585,failed,backup,false,free,503,normal call
+CALL-00325,2026-06-08T11:31:48Z,outbound,eu-west,Telco-A,G711,1359,2.27,59.75,280,5.05,64,145,12137,failed,primary,false,enterprise,408,minor jitter detected
+CALL-00326,2026-06-08T11:32:05Z,outbound,eu-central,Transit-X,OPUS,1396,2.2,60.16,297,5.18,32,174,12700,failed,primary,false,business,503,"packet loss, recovered"
+CALL-00327,2026-06-08T11:32:22Z,inbound,us-east,Telco-B,AMR-WB,1433,2.13,60.57,314,5.31,23.85,203,13277,failed,primary,false,standard,408,"caller said ""hello"""
+CALL-00328,2026-06-08T11:32:39Z,outbound,us-west,FiberVoice,G722,1470,2.06,60.98,331,5.44,64,232,13865,failed,backup,false,free,503,
+CALL-00329,2026-06-08T11:32:56Z,outbound,latam-south,Telco-C,G711,1507,2.48,61.39,38,5.57,64,261,14466,failed,primary,,enterprise,408,"high latency, investigate"
+CALL-00330,2026-06-08T11:33:13Z,inbound,ap-south,Telco-A,OPUS,1544,2.46,61.8,55,5.7,32,290,15080,failed,,false,business,503,normal call
+CALL-00331,2026-06-08T11:33:30Z,outbound,eu-west,Transit-X,AMR-WB,1581,2.43,62.21,72,5.83,23.85,319,15705,failed,primary,false,standard,408,minor jitter detected
+CALL-00332,2026-06-08T11:33:47Z,outbound,eu-central,Telco-B,G722,1618,2.4,62.62,89,5.96,64,348,16344,failed,backup,false,free,503,"packet loss, recovered"
+CALL-00333,2026-06-08T11:34:04Z,inbound,us-east,FiberVoice,G711,1655,2.37,,106,6.09,64,377,16994,failed,primary,false,enterprise,408,"caller said ""hello"""
+CALL-00334,2026-06-08T11:34:21Z,outbound,us-west,Telco-C,OPUS,1692,3.33,63.44,123,0.02,32,406,6001,degraded,primary,false,business,200,handover completed
+CALL-00335,2026-06-08T11:34:38Z,outbound,latam-south,Telco-A,AMR-WB,1729,3.31,63.85,140,0.15,23.85,435,6421,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00336,2026-06-08T11:34:55Z,inbound,ap-south,Transit-X,G722,1766,3.26,64.26,157,0.28,64,464,6854,degraded,backup,true,free,200,normal call
+CALL-00337,2026-06-08T11:35:12Z,outbound,eu-west,Telco-B,G711,22,3.19,64.67,174,0.41,64,493,89,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00338,2026-06-08T11:35:29Z,outbound,eu-central,Telco-A,OPUS,59,3.12,65.08,191,0.54,32,522,249,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00339,2026-06-08T11:35:46Z,inbound,us-east,Transit-X,AMR-WB,96,3.05,65.49,208,0.67,23.85,551,421,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00340,2026-06-08T11:36:03Z,outbound,us-east,Telco-B,G722,133,2.98,65.9,225,0.8,64,580,605,degraded,backup,false,free,200,handover completed
+CALL-00341,2026-06-08T11:36:20Z,outbound,us-west,FiberVoice,G711,170,2.91,66.31,242,0.93,64,609,802,degraded,,false,enterprise,200,"high latency, investigate"
+CALL-00342,2026-06-08T11:36:37Z,inbound,latam-south,Telco-C,AMR-WB,207,2.84,66.72,259,1.06,23.85,638,1011,degraded,primary,false,business,200,normal call
+CALL-00343,2026-06-08T11:36:54Z,outbound,ap-south,Telco-A,G722,244,2.77,67.13,276,1.19,64,667,1233,degraded,primary,true,standard,200,minor jitter detected
+CALL-00344,2026-06-08T11:37:11Z,outbound,eu-west,Transit-X,G711,281,,67.54,293,1.32,64,696,1467,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00345,2026-06-08T11:37:28Z,inbound,eu-central,Telco-B,OPUS,318,2.62,67.95,310,1.45,32,725,1713,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00346,2026-06-08T11:37:45Z,outbound,us-east,FiberVoice,AMR-WB,355,2.55,68.36,327,1.58,23.85,754,1971,degraded,primary,false,business,200,handover completed
+CALL-00347,2026-06-08T11:38:02Z,outbound,us-west,Telco-C,G722,392,2.97,68.77,34,1.71,64,783,2242,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00348,2026-06-08T11:38:19Z,inbound,latam-south,Telco-A,G711,429,2.94,69.18,51,1.84,64,812,2526,degraded,backup,false,,200,normal call
+CALL-00349,2026-06-08T11:38:36Z,outbound,ap-south,Transit-X,OPUS,466,2.91,69.59,68,1.97,32,841,2822,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00350,2026-06-08T11:38:53Z,outbound,eu-west,Telco-B,AMR-WB,503,2.88,70,85,2.1,23.85,870,3130,degraded,primary,true,business,200,"packet loss, recovered"
+CALL-00351,2026-06-08T11:39:10Z,inbound,eu-central,Telco-A,G722,540,2.86,70.41,102,2.23,64,899,3450,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00352,2026-06-08T11:39:27Z,outbound,us-east,Transit-X,G711,577,2.83,70.82,119,2.36,64,78,3783,degraded,,false,free,200,handover completed
+CALL-00353,2026-06-08T11:39:44Z,outbound,us-west,Telco-B,OPUS,614,2.8,71.23,136,2.49,32,107,4128,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00354,2026-06-08T11:40:01Z,inbound,latam-south,FiberVoice,AMR-WB,651,2.76,71.64,153,2.62,23.85,136,4486,degraded,primary,false,business,200,normal call
+CALL-00355,2026-06-08T11:40:18Z,outbound,ap-south,Telco-C,G722,688,2.69,72.05,170,2.75,64,165,4856,degraded,primary,false,standard,200,minor jitter detected
+CALL-00356,2026-06-08T11:40:35Z,outbound,eu-west,Telco-A,G711,725,2.62,72.46,187,2.88,64,194,5239,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00357,2026-06-08T11:40:52Z,inbound,eu-west,Transit-X,OPUS,762,2.55,72.87,204,3.01,32,223,5633,degraded,primary,true,enterprise,200,"caller said ""hello"""
+CALL-00358,2026-06-08T11:41:09Z,outbound,eu-central,Telco-B,AMR-WB,799,2.48,73.28,221,3.14,23.85,252,6040,degraded,primary,false,business,200,handover completed
+CALL-00359,2026-06-08T11:41:26Z,outbound,us-east,FiberVoice,G722,836,2.41,73.69,238,3.27,64,281,6460,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00360,2026-06-08T11:41:43Z,inbound,us-west,Telco-C,G711,873,2.34,74.1,255,3.4,64,310,6892,failed,backup,false,free,503,normal call
+CALL-00361,2026-06-08T11:42:00Z,outbound,latam-south,Telco-A,AMR-WB,910,2.27,74.51,272,3.53,23.85,339,7336,failed,primary,false,enterprise,408,minor jitter detected
+CALL-00362,2026-06-08T11:42:17Z,outbound,ap-south,Transit-X,G722,947,2.2,74.92,289,3.66,64,368,7793,failed,primary,false,business,503,"packet loss, recovered"
+CALL-00363,2026-06-08T11:42:34Z,inbound,eu-west,Telco-B,G711,984,2.13,75.33,306,3.79,64,397,8262,failed,,false,standard,408,"caller said ""hello"""
+CALL-00364,2026-06-08T11:42:51Z,outbound,eu-central,Telco-A,OPUS,1021,2.06,75.74,323,3.92,32,426,8743,failed,backup,true,free,503,handover completed
+CALL-00365,2026-06-08T11:43:08Z,outbound,us-east,Transit-X,AMR-WB,1058,2.46,76.15,30,4.05,23.85,455,9237,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00366,2026-06-08T11:43:25Z,inbound,us-west,Telco-B,G722,1095,2.43,76.56,47,4.18,64,,9743,degraded,primary,false,business,200,normal call
+CALL-00367,2026-06-08T11:43:42Z,outbound,latam-south,FiberVoice,G711,1132,2.4,76.97,64,4.31,64,513,10262,degraded,primary,false,standard,200,minor jitter detected
+CALL-00368,2026-06-08T11:43:59Z,outbound,ap-south,Telco-C,OPUS,1169,2.38,77.38,81,4.44,32,542,10792,failed,backup,false,free,503,"packet loss, recovered"
+CALL-00369,2026-06-08T11:44:16Z,inbound,eu-west,Telco-A,AMR-WB,1206,2.35,77.79,98,4.57,23.85,571,11336,failed,primary,false,enterprise,408,
+CALL-00370,2026-06-08T11:44:33Z,outbound,eu-central,Transit-X,G722,1243,2.32,,115,4.7,64,600,11891,failed,primary,false,business,503,handover completed
+CALL-00371,2026-06-08T11:44:50Z,outbound,us-east,Telco-B,G711,1280,3.66,2.61,132,,64,629,7055,completed,primary,true,standard,200,"high latency, investigate"
+CALL-00372,2026-06-08T11:45:07Z,inbound,us-west,FiberVoice,OPUS,1317,3.63,3.02,149,4.96,32,658,7479,completed,backup,false,free,200,normal call
+CALL-00373,2026-06-08T11:45:24Z,outbound,latam-south,Telco-C,AMR-WB,1354,3.56,3.43,166,5.09,23.85,687,7916,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00374,2026-06-08T11:45:41Z,outbound,latam-south,Telco-A,G722,1391,3.49,3.84,183,5.22,64,716,8365,completed,,false,business,200,"packet loss, recovered"
+CALL-00375,2026-06-08T11:45:58Z,inbound,ap-south,Transit-X,G711,1428,3.42,4.25,200,5.35,64,745,8826,failed,primary,false,standard,408,"caller said ""hello"""
+CALL-00376,2026-06-08T11:46:15Z,outbound,eu-west,Telco-B,OPUS,1465,3.35,4.66,217,5.48,32,774,9299,failed,backup,,free,503,handover completed
+CALL-00377,2026-06-08T11:46:32Z,outbound,eu-central,Telco-A,AMR-WB,1502,3.28,5.07,234,5.61,23.85,803,9786,failed,primary,false,,408,"high latency, investigate"
+CALL-00378,2026-06-08T11:46:49Z,inbound,us-east,Transit-X,G722,1539,3.21,5.48,251,5.74,64,832,10284,failed,primary,true,business,503,normal call
+CALL-00379,2026-06-08T11:47:06Z,outbound,us-west,Telco-B,G711,1576,3.14,5.89,268,5.87,64,861,10795,failed,primary,false,standard,408,minor jitter detected
+CALL-00380,2026-06-08T11:47:23Z,outbound,latam-south,FiberVoice,AMR-WB,1613,3.07,6.3,285,6,23.85,890,11318,failed,backup,false,free,503,"packet loss, recovered"
+CALL-00381,2026-06-08T11:47:40Z,inbound,ap-south,Telco-C,G722,1650,3,6.71,302,6.13,64,919,11853,failed,primary,false,enterprise,408,"caller said ""hello"""
+CALL-00382,2026-06-08T11:47:57Z,outbound,eu-west,Telco-A,G711,1687,3.92,7.12,319,0.06,64,98,780,completed,primary,false,business,200,handover completed
+CALL-00383,2026-06-08T11:48:14Z,outbound,eu-central,Transit-X,OPUS,1724,4.31,7.53,26,0.19,32,127,1085,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00384,2026-06-08T11:48:31Z,inbound,us-east,Telco-B,AMR-WB,1761,4.29,7.94,43,0.32,23.85,156,1403,completed,backup,false,free,200,normal call
+CALL-00385,2026-06-08T11:48:48Z,outbound,us-west,FiberVoice,G722,1798,4.26,8.35,60,0.45,64,185,1733,completed,,true,enterprise,200,minor jitter detected
+CALL-00386,2026-06-08T11:49:05Z,outbound,latam-south,Telco-C,G711,54,4.23,8.76,77,0.58,64,214,61,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00387,2026-06-08T11:49:22Z,inbound,ap-south,Telco-A,OPUS,91,,9.17,94,0.71,32,243,118,completed,primary,false,standard,200,"caller said ""hello"""
+CALL-00388,2026-06-08T11:49:39Z,outbound,eu-west,Transit-X,AMR-WB,128,4.17,9.58,111,0.84,23.85,272,188,completed,backup,false,free,200,handover completed
+CALL-00389,2026-06-08T11:49:56Z,outbound,eu-central,Telco-B,G722,165,4.14,9.99,128,0.97,64,301,269,completed,primary,false,enterprise,200,"high latency, investigate"
+CALL-00390,2026-06-08T11:50:13Z,inbound,us-east,Telco-A,G711,202,4.12,10.4,145,1.1,64,330,364,completed,primary,false,business,200,normal call
+CALL-00391,2026-06-08T11:50:30Z,outbound,us-east,Transit-X,OPUS,239,4.06,10.81,162,1.23,32,359,470,completed,primary,false,standard,200,minor jitter detected
+CALL-00392,2026-06-08T11:50:47Z,outbound,us-west,Telco-B,AMR-WB,276,3.99,11.22,179,1.36,23.85,388,589,completed,backup,true,free,200,"packet loss, recovered"
+CALL-00393,2026-06-08T11:51:04Z,inbound,latam-south,FiberVoice,G722,313,3.92,11.63,196,1.49,64,417,720,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00394,2026-06-08T11:51:21Z,outbound,ap-south,Telco-C,G711,350,3.85,12.04,213,1.62,64,446,864,completed,primary,false,business,200,handover completed
+CALL-00395,2026-06-08T11:51:38Z,outbound,eu-west,Telco-A,OPUS,387,3.78,12.45,230,1.75,32,475,1020,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00396,2026-06-08T11:51:55Z,inbound,eu-central,Transit-X,AMR-WB,424,3.71,12.86,247,1.88,23.85,504,1189,completed,,false,free,200,normal call
+CALL-00397,2026-06-08T11:52:12Z,outbound,us-east,Telco-B,G722,461,3.63,13.27,264,2.01,64,533,1369,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00398,2026-06-08T11:52:29Z,outbound,us-west,FiberVoice,G711,498,3.56,13.68,281,2.14,64,562,1563,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00399,2026-06-08T11:52:46Z,inbound,latam-south,Telco-C,AMR-WB,535,3.49,14.09,298,2.27,23.85,591,1768,completed,primary,true,standard,200,"caller said ""hello"""
+CALL-00400,2026-06-08T11:53:03Z,outbound,ap-south,Telco-A,G722,572,3.42,14.5,315,2.4,64,620,1986,degraded,backup,false,free,200,handover completed
+CALL-00401,2026-06-08T11:53:20Z,outbound,eu-west,Transit-X,G711,609,3.35,14.91,332,2.53,64,649,2216,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00402,2026-06-08T11:53:37Z,inbound,eu-central,Telco-B,OPUS,646,3.78,15.32,39,2.66,32,678,2459,completed,primary,false,business,200,normal call
+CALL-00403,2026-06-08T11:53:54Z,outbound,us-east,Telco-A,AMR-WB,683,3.75,15.73,56,2.79,23.85,707,2714,completed,primary,false,standard,200,minor jitter detected
+CALL-00404,2026-06-08T11:54:11Z,outbound,us-west,Transit-X,G722,720,3.72,16.14,73,2.92,64,736,2982,completed,backup,false,free,200,"packet loss, recovered"
+CALL-00405,2026-06-08T11:54:28Z,inbound,latam-south,Telco-B,G711,757,3.69,16.55,90,3.05,64,765,3261,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00406,2026-06-08T11:54:45Z,outbound,ap-south,FiberVoice,OPUS,794,3.67,16.96,107,3.18,32,794,3554,completed,primary,true,,200,handover completed
+CALL-00407,2026-06-08T11:55:02Z,outbound,eu-west,Telco-C,AMR-WB,831,3.64,,124,3.31,23.85,823,3858,completed,,false,standard,200,"high latency, investigate"
+CALL-00408,2026-06-08T11:55:19Z,inbound,eu-west,Telco-A,G722,868,3.61,17.78,141,3.44,64,852,4175,completed,backup,false,free,200,normal call
+CALL-00409,2026-06-08T11:55:36Z,outbound,eu-central,Transit-X,G711,905,3.56,18.19,158,3.57,64,881,4504,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00410,2026-06-08T11:55:53Z,outbound,us-east,Telco-B,OPUS,942,3.49,18.6,175,3.7,32,910,4846,completed,primary,false,business,200,
+CALL-00411,2026-06-08T11:56:10Z,inbound,us-west,FiberVoice,AMR-WB,979,3.42,19.01,192,3.83,23.85,89,5200,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00412,2026-06-08T11:56:27Z,outbound,latam-south,Telco-C,G722,1016,3.35,19.42,209,3.96,64,118,5567,degraded,backup,false,free,200,handover completed
+CALL-00413,2026-06-08T11:56:44Z,outbound,ap-south,Telco-A,G711,1053,3.28,19.83,226,4.09,64,147,5945,degraded,primary,true,enterprise,200,"high latency, investigate"
+CALL-00414,2026-06-08T11:57:01Z,inbound,eu-west,Transit-X,OPUS,1090,3.21,20.24,243,4.22,32,176,6337,degraded,primary,false,business,200,normal call
+CALL-00415,2026-06-08T11:57:18Z,outbound,eu-central,Telco-B,AMR-WB,1127,3.14,20.65,260,4.35,23.85,205,6740,degraded,primary,false,standard,200,minor jitter detected
+CALL-00416,2026-06-08T11:57:35Z,outbound,us-east,Telco-A,G722,1164,3.07,21.06,277,4.48,64,234,7156,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00417,2026-06-08T11:57:52Z,inbound,us-west,Transit-X,G711,1201,3,21.47,294,4.61,64,263,7584,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00418,2026-06-08T11:58:09Z,outbound,latam-south,Telco-B,AMR-WB,1238,2.93,21.88,311,4.74,23.85,292,8025,degraded,,false,business,200,handover completed
+CALL-00419,2026-06-08T11:58:26Z,outbound,ap-south,FiberVoice,G722,1275,2.85,22.29,328,4.87,64,321,8478,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00420,2026-06-08T11:58:43Z,inbound,eu-west,Telco-C,G711,1312,3.27,22.7,35,5,64,350,8943,degraded,backup,true,free,200,normal call
+CALL-00421,2026-06-08T11:59:00Z,outbound,eu-central,Telco-A,OPUS,1349,3.24,23.11,52,5.13,32,379,9421,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00422,2026-06-08T11:59:17Z,outbound,us-east,Transit-X,AMR-WB,1386,3.22,23.52,69,5.26,23.85,408,9911,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00423,2026-06-08T11:59:34Z,inbound,us-west,Telco-B,G722,1423,3.19,23.93,86,5.39,64,437,10414,failed,primary,,standard,408,"caller said ""hello"""
+CALL-00424,2026-06-08T11:59:51Z,outbound,latam-south,FiberVoice,G711,1460,3.16,24.34,103,,64,466,10929,failed,backup,false,free,503,handover completed
+CALL-00425,2026-06-08T12:00:08Z,outbound,latam-south,Telco-C,OPUS,1497,3.13,24.75,120,5.65,32,495,11456,failed,primary,false,enterprise,408,"high latency, investigate"
+CALL-00426,2026-06-08T12:00:25Z,inbound,ap-south,Telco-A,AMR-WB,1534,3.1,25.16,137,5.78,23.85,524,11996,failed,primary,false,business,503,normal call
+CALL-00427,2026-06-08T12:00:42Z,outbound,eu-west,Transit-X,G722,1571,3.06,25.57,154,5.91,64,,12548,failed,primary,true,standard,408,minor jitter detected
+CALL-00428,2026-06-08T12:00:59Z,outbound,eu-central,Telco-B,G711,1608,2.99,25.98,171,6.04,64,582,13112,failed,backup,false,free,503,"packet loss, recovered"
+CALL-00429,2026-06-08T12:01:16Z,inbound,us-east,Telco-A,OPUS,1645,2.92,26.39,188,6.17,32,611,13689,failed,,false,enterprise,408,"caller said ""hello"""
+CALL-00430,2026-06-08T12:01:33Z,outbound,us-west,Transit-X,AMR-WB,1682,,26.8,205,0.1,23.85,640,2691,completed,primary,false,business,200,handover completed
+CALL-00431,2026-06-08T12:01:50Z,outbound,latam-south,Telco-B,G722,1719,3.77,27.21,222,0.23,64,669,3038,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00432,2026-06-08T12:02:07Z,inbound,ap-south,FiberVoice,G711,1756,3.7,27.62,239,0.36,64,698,3397,completed,backup,false,free,200,normal call
+CALL-00433,2026-06-08T12:02:24Z,outbound,eu-west,Telco-C,OPUS,1793,3.63,28.03,256,0.49,32,727,3768,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00434,2026-06-08T12:02:41Z,outbound,eu-central,Telco-A,AMR-WB,49,3.56,28.44,273,0.62,23.85,756,111,completed,primary,true,business,200,"packet loss, recovered"
+CALL-00435,2026-06-08T12:02:58Z,inbound,us-east,Transit-X,G722,86,3.49,28.85,290,0.75,64,785,210,completed,primary,false,,200,"caller said ""hello"""
+CALL-00436,2026-06-08T12:03:15Z,outbound,us-west,Telco-B,G711,123,3.42,29.26,307,0.88,64,814,320,degraded,backup,false,free,200,handover completed
+CALL-00437,2026-06-08T12:03:32Z,outbound,latam-south,FiberVoice,AMR-WB,160,3.35,29.67,324,1.01,23.85,843,443,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00438,2026-06-08T12:03:49Z,inbound,ap-south,Telco-C,G722,197,3.76,30.08,31,1.14,64,872,579,completed,primary,false,business,200,normal call
+CALL-00439,2026-06-08T12:04:06Z,outbound,eu-west,Telco-A,G711,234,3.73,30.49,48,1.27,64,901,727,completed,primary,false,standard,200,minor jitter detected
+CALL-00440,2026-06-08T12:04:23Z,outbound,eu-central,Transit-X,OPUS,271,3.7,30.9,65,1.4,32,80,887,completed,,false,free,200,"packet loss, recovered"
+CALL-00441,2026-06-08T12:04:40Z,inbound,us-east,Telco-B,AMR-WB,308,3.67,31.31,82,1.53,23.85,109,1059,completed,primary,true,enterprise,200,"caller said ""hello"""
+CALL-00442,2026-06-08T12:04:57Z,outbound,us-east,Telco-A,G722,345,3.64,31.72,99,1.66,64,138,1244,completed,primary,false,business,200,handover completed
+CALL-00443,2026-06-08T12:05:14Z,outbound,us-west,Transit-X,G711,382,3.62,32.13,116,1.79,64,167,1442,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00444,2026-06-08T12:05:31Z,inbound,latam-south,Telco-B,OPUS,419,3.59,,133,1.92,32,196,1651,completed,backup,false,free,200,normal call
+CALL-00445,2026-06-08T12:05:48Z,outbound,ap-south,FiberVoice,AMR-WB,456,3.56,32.95,150,2.05,23.85,225,1873,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00446,2026-06-08T12:06:05Z,outbound,eu-west,Telco-C,G722,493,3.49,33.36,167,2.18,64,254,2108,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00447,2026-06-08T12:06:22Z,inbound,eu-central,Telco-A,G711,530,3.42,33.77,184,2.31,64,283,2355,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00448,2026-06-08T12:06:39Z,outbound,us-east,Transit-X,OPUS,567,3.35,34.18,201,2.44,32,312,2614,degraded,backup,true,free,200,handover completed
+CALL-00449,2026-06-08T12:06:56Z,outbound,us-west,Telco-B,AMR-WB,604,3.28,34.59,218,2.57,23.85,341,2885,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00450,2026-06-08T12:07:13Z,inbound,latam-south,FiberVoice,G722,641,3.21,35,235,2.7,64,370,3169,degraded,primary,false,business,200,normal call
+CALL-00451,2026-06-08T12:07:30Z,outbound,ap-south,Telco-C,G711,678,3.13,35.41,252,2.83,64,399,3466,degraded,,false,standard,200,
+CALL-00452,2026-06-08T12:07:47Z,outbound,eu-west,Telco-A,OPUS,715,3.06,35.82,269,2.96,32,428,3774,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00453,2026-06-08T12:08:04Z,inbound,eu-central,Transit-X,AMR-WB,752,2.99,36.23,286,3.09,23.85,457,4095,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00454,2026-06-08T12:08:21Z,outbound,us-east,Telco-B,G722,789,2.92,36.64,303,3.22,64,486,4429,degraded,primary,false,business,200,handover completed
+CALL-00455,2026-06-08T12:08:38Z,outbound,us-west,Telco-A,G711,826,2.85,37.05,320,3.35,64,515,4775,degraded,primary,true,standard,200,"high latency, investigate"
+CALL-00456,2026-06-08T12:08:55Z,inbound,latam-south,Transit-X,AMR-WB,863,3.25,37.46,27,3.48,23.85,544,5133,degraded,backup,false,free,200,normal call
+CALL-00457,2026-06-08T12:09:12Z,outbound,ap-south,Telco-B,G722,900,3.22,37.87,44,3.61,64,573,5504,degraded,primary,false,enterprise,200,minor jitter detected
+CALL-00458,2026-06-08T12:09:29Z,outbound,eu-west,FiberVoice,G711,937,3.19,38.28,61,3.74,64,602,5886,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00459,2026-06-08T12:09:46Z,inbound,eu-west,Telco-C,OPUS,974,3.16,38.69,78,3.87,32,631,6282,degraded,primary,false,standard,200,"caller said ""hello"""
+CALL-00460,2026-06-08T12:10:03Z,outbound,eu-central,Telco-A,AMR-WB,1011,3.14,39.1,95,4,23.85,660,6689,degraded,backup,false,free,200,handover completed
+CALL-00461,2026-06-08T12:10:20Z,outbound,us-east,Transit-X,G722,1048,3.11,39.51,112,4.13,64,689,7110,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00462,2026-06-08T12:10:37Z,inbound,us-west,Telco-B,G711,1085,3.08,39.92,129,4.26,64,718,7542,degraded,,true,business,200,normal call
+CALL-00463,2026-06-08T12:10:54Z,outbound,latam-south,FiberVoice,OPUS,1122,3.05,40.33,146,4.39,32,747,7987,degraded,primary,false,standard,200,minor jitter detected
+CALL-00464,2026-06-08T12:11:11Z,outbound,ap-south,Telco-C,AMR-WB,1159,2.99,40.74,163,4.52,23.85,776,8444,degraded,backup,false,,200,"packet loss, recovered"
+CALL-00465,2026-06-08T12:11:28Z,inbound,eu-west,Telco-A,G722,1196,2.92,41.15,180,4.65,64,805,8914,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00466,2026-06-08T12:11:45Z,outbound,eu-central,Transit-X,G711,1233,2.85,41.56,197,4.78,64,834,9395,degraded,primary,false,business,200,handover completed
+CALL-00467,2026-06-08T12:12:02Z,outbound,us-east,Telco-B,OPUS,1270,2.78,41.97,214,4.91,32,863,9890,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00468,2026-06-08T12:12:19Z,inbound,us-west,Telco-A,AMR-WB,1307,2.71,42.38,231,5.04,23.85,892,10396,degraded,backup,false,free,200,normal call
+CALL-00469,2026-06-08T12:12:36Z,outbound,latam-south,Transit-X,G722,1344,2.64,42.79,248,5.17,64,71,10916,degraded,primary,true,enterprise,200,minor jitter detected
+CALL-00470,2026-06-08T12:12:53Z,outbound,ap-south,Telco-B,G711,1381,2.57,43.2,265,5.3,64,100,11447,degraded,primary,,business,200,"packet loss, recovered"
+CALL-00471,2026-06-08T12:13:10Z,inbound,eu-west,FiberVoice,OPUS,1418,2.5,43.61,282,5.43,32,129,11991,failed,primary,false,standard,408,"caller said ""hello"""
+CALL-00472,2026-06-08T12:13:27Z,outbound,eu-central,Telco-C,AMR-WB,1455,2.43,44.02,299,5.56,23.85,158,12547,failed,backup,false,free,503,handover completed
+CALL-00473,2026-06-08T12:13:44Z,outbound,us-east,Telco-A,G722,1492,,44.43,316,5.69,64,187,13116,failed,,false,enterprise,408,"high latency, investigate"
+CALL-00474,2026-06-08T12:14:01Z,inbound,us-west,Transit-X,G711,1529,2.28,44.84,333,5.82,64,216,13696,failed,primary,false,business,503,normal call
+CALL-00475,2026-06-08T12:14:18Z,outbound,latam-south,Telco-B,AMR-WB,1566,2.71,45.25,40,5.95,23.85,245,14290,failed,primary,false,standard,408,minor jitter detected
+CALL-00476,2026-06-08T12:14:35Z,outbound,latam-south,FiberVoice,G722,1603,2.69,45.66,57,6.08,64,274,14895,failed,backup,true,free,503,"packet loss, recovered"
+CALL-00477,2026-06-08T12:14:52Z,inbound,ap-south,Telco-C,G711,1640,3.65,46.07,74,,64,303,4216,completed,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00478,2026-06-08T12:15:09Z,outbound,eu-west,Telco-A,OPUS,1677,3.62,46.48,91,0.14,32,332,4591,completed,primary,false,business,200,handover completed
+CALL-00479,2026-06-08T12:15:26Z,outbound,eu-central,Transit-X,AMR-WB,1714,3.59,46.89,108,0.27,23.85,361,4979,completed,primary,false,standard,200,"high latency, investigate"
+CALL-00480,2026-06-08T12:15:43Z,inbound,us-east,Telco-B,G722,1751,3.56,47.3,125,0.4,64,390,5379,completed,backup,false,free,200,normal call
+CALL-00481,2026-06-08T12:16:00Z,outbound,us-west,Telco-A,G711,1788,3.54,,142,0.53,64,419,5792,completed,primary,false,enterprise,200,minor jitter detected
+CALL-00482,2026-06-08T12:16:17Z,outbound,latam-south,Transit-X,OPUS,44,3.49,48.12,159,0.66,32,448,150,completed,primary,false,business,200,"packet loss, recovered"
+CALL-00483,2026-06-08T12:16:34Z,inbound,ap-south,Telco-B,AMR-WB,81,3.42,48.53,176,0.79,23.85,477,289,degraded,primary,true,standard,200,"caller said ""hello"""
+CALL-00484,2026-06-08T12:16:51Z,outbound,eu-west,FiberVoice,G722,118,3.34,48.94,193,0.92,64,506,441,degraded,,false,free,200,handover completed
+CALL-00485,2026-06-08T12:17:08Z,outbound,eu-central,Telco-C,G711,155,3.27,49.35,210,1.05,64,535,606,degraded,primary,false,enterprise,200,"high latency, investigate"
+CALL-00486,2026-06-08T12:17:25Z,inbound,us-east,Telco-A,OPUS,192,3.2,49.76,227,1.18,32,564,783,degraded,primary,false,business,200,normal call
+CALL-00487,2026-06-08T12:17:42Z,outbound,us-west,Transit-X,AMR-WB,229,3.13,50.17,244,1.31,23.85,593,972,degraded,primary,false,standard,200,minor jitter detected
+CALL-00488,2026-06-08T12:17:59Z,outbound,latam-south,Telco-B,G722,266,3.06,50.58,261,1.44,64,,1173,degraded,backup,false,free,200,"packet loss, recovered"
+CALL-00489,2026-06-08T12:18:16Z,inbound,ap-south,FiberVoice,G711,303,2.99,50.99,278,1.57,64,651,1387,degraded,primary,false,enterprise,200,"caller said ""hello"""
+CALL-00490,2026-06-08T12:18:33Z,outbound,eu-west,Telco-C,OPUS,340,2.92,51.4,295,1.7,32,680,1613,degraded,primary,true,business,200,handover completed
+CALL-00491,2026-06-08T12:18:50Z,outbound,eu-central,Telco-A,AMR-WB,377,2.85,51.81,312,1.83,23.85,709,1852,degraded,primary,false,standard,200,"high latency, investigate"
+CALL-00492,2026-06-08T12:19:07Z,inbound,us-east,Transit-X,G722,414,2.78,52.22,329,1.96,64,738,2103,degraded,backup,false,free,200,
+CALL-00493,2026-06-08T12:19:24Z,outbound,us-east,Telco-B,G711,451,3.2,52.63,36,2.09,64,767,2366,degraded,primary,false,,200,minor jitter detected
+CALL-00494,2026-06-08T12:19:41Z,outbound,us-west,Telco-A,AMR-WB,488,3.17,53.04,53,2.22,23.85,796,2642,degraded,primary,false,business,200,"packet loss, recovered"
+CALL-00495,2026-06-08T12:19:58Z,inbound,latam-south,Transit-X,G722,525,3.14,53.45,70,2.35,64,825,2930,degraded,,false,standard,200,"caller said ""hello"""
+CALL-00496,2026-06-08T12:20:15Z,outbound,ap-south,Telco-B,G711,562,3.11,53.86,87,2.48,64,854,3230,degraded,backup,false,free,200,handover completed
+CALL-00497,2026-06-08T12:20:32Z,outbound,eu-west,FiberVoice,OPUS,599,3.09,54.27,104,2.61,32,883,3543,degraded,primary,true,enterprise,200,"high latency, investigate"
+CALL-00498,2026-06-08T12:20:49Z,inbound,eu-central,Telco-C,AMR-WB,636,3.06,54.68,121,2.74,23.85,912,3868,degraded,primary,false,business,200,normal call
+CALL-00499,2026-06-08T12:21:06Z,outbound,us-east,Telco-A,G722,673,3.03,55.09,138,2.87,64,91,4206,degraded,primary,false,standard,200,minor jitter detected
+CALL-00500,2026-06-08T12:21:23Z,outbound,us-west,Transit-X,G711,710,2.99,55.5,155,3,64,120,4556,degraded,backup,false,free,200,"packet loss, recovered"

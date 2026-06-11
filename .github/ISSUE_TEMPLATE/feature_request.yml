@@ -1,0 +1,59 @@
+name: Feature request
+description: Propose a focused improvement to SnoutDB.
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the workflow or limitation, not only the proposed solution.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example
+      description: Show representative input, command, and desired output.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Explain why existing commands or composition are insufficient.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CLI
+        - CSV ingestion
+        - JSONL ingestion
+        - Log ingestion
+        - Sniff
+        - Query and aggregates
+        - Transform
+        - Merge and rollup
+        - .snout storage
+        - C ABI
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility impact
+      description: Note any CLI, output, file-format, or C ABI changes.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and documentation.
+          required: true
+        - label: This request stays within SnoutDB's local analytics scope.
+          required: true

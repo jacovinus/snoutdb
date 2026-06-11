@@ -1,0 +1,49 @@
+# Build outputs
+snout
+snout.exe
+libsnout.dylib
+libsnout.dylib.dSYM/
+libsnout.so
+libsnout.dll
+*.dSYM/
+tests/snout_tests
+
+# Local dependencies
+node_modules/
+
+# Compiled benchmark binaries
+benchmarks/csv_ingest_bench
+benchmarks/jsonl_ingest_bench
+benchmarks/merge_bench
+benchmarks/sniff_file_bench
+benchmarks/sniff_jsonl_bench
+
+# .snout files at repo root (test artifacts)
+/*.snout
+
+# Generated large CSV/JSONL fixtures (regenerate with: node tools/generate_complex_metrics_500.mjs <rows>)
+tests/fixtures/complex_metrics_50000.csv
+tests/fixtures/complex_metrics_50000.jsonl
+tests/fixtures/complex_metrics_500000.csv
+tests/fixtures/complex_metrics_500000.jsonl
+tests/fixtures/complex_metrics_5000000.csv
+tests/fixtures/complex_metrics_5000000.jsonl
+
+# Generated log fixtures (regenerate with: node tools/generate_logs.mjs)
+# Matches access_log_N.log, app_log_N.log, combined_log_N.log, syslog_N.log
+# Does NOT match the small manual fixtures (access.log, syslog_pri.log, etc.)
+tests/fixtures/*_[0-9]*.log
+
+# Temp files created by tests
+tests/fixtures/.tmp_*
+
+# macOS metadata
+.DS_Store
+
+# Claude Code local settings (user-specific)
+.claude/
+
+# Internal task tracking
+tasks
+
+codex

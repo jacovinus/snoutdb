@@ -1,0 +1,4 @@
+ts=2026-06-11T10:00:01Z level=info msg="server started" port=8080 pid=1234
+ts=2026-06-11T10:00:05Z level=error msg="connection refused" latency_ms=1240 retries=3 ok=false
+ts=2026-06-11T10:00:10Z level=warn msg="slow query" latency_ms=850 retries=1 ok=true
+ts=2026-06-11T10:00:15Z level=info msg="request complete" latency_ms=42 retries=0 ok=true

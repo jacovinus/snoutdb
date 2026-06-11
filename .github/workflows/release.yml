@@ -1,0 +1,161 @@
+name: Release
+
+"on":
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release version
+        id: version
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          version="$(tr -d '[:space:]' < VERSION)"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid VERSION: $version" >&2
+            exit 1
+          fi
+
+          tag="v${version}"
+          if git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null 2>&1; then
+            if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              echo "Release ${tag} already exists; this merge is not a release."
+              echo "publish=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            git fetch --force origin "refs/tags/${tag}:refs/tags/${tag}"
+            target_sha="$(git rev-list -n 1 "$tag")"
+            echo "Tag ${tag} exists without a release; resuming publication."
+            echo "create_tag=false" >> "$GITHUB_OUTPUT"
+          else
+            target_sha="$GITHUB_SHA"
+            echo "create_tag=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "target_sha=${target_sha}" >> "$GITHUB_OUTPUT"
+
+      - name: Check out release commit
+        if: steps.version.outputs.publish == 'true'
+        env:
+          TARGET_SHA: ${{ steps.version.outputs.target_sha }}
+        run: git checkout --detach "$TARGET_SHA"
+
+      - uses: actions/setup-node@v4
+        if: steps.version.outputs.publish == 'true'
+        with:
+          node-version: 22
+
+      - name: Install Odin
+        if: steps.version.outputs.publish == 'true'
+        run: brew install odin
+
+      - name: Install Node.js example dependency
+        if: steps.version.outputs.publish == 'true'
+        run: |
+          corepack enable
+          pnpm install --dir examples/nodejs --frozen-lockfile
+
+      - name: Validate release
+        if: steps.version.outputs.publish == 'true'
+        run: ./scripts/validate-release.sh
+
+      - name: Generate release changelog
+        if: steps.version.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          TARGET_SHA: ${{ steps.version.outputs.target_sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          gh api \
+            --method POST \
+            "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
+            -f "tag_name=${TAG}" \
+            -f "target_commitish=${TARGET_SHA}" \
+            --jq .body > "dist/CHANGELOG-${TAG}.md"
+
+      - name: Create source archives
+        if: steps.version.outputs.publish == 'true'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          TARGET_SHA: ${{ steps.version.outputs.target_sha }}
+        run: |
+          set -euo pipefail
+          prefix="snoutdb-${TAG}/"
+          git archive \
+            --format=tar.gz \
+            --prefix="$prefix" \
+            --output="dist/snoutdb-${TAG}.tar.gz" \
+            "$TARGET_SHA"
+          git archive \
+            --format=zip \
+            --prefix="$prefix" \
+            --output="dist/snoutdb-${TAG}.zip" \
+            "$TARGET_SHA"
+
+          if tar -tzf "dist/snoutdb-${TAG}.tar.gz" |
+            grep -Eq '/tests/fixtures/|/tests/cabi_smoke\.py$|/\.DS_Store$'; then
+            echo "Release tarball contains excluded test or local files." >&2
+            exit 1
+          fi
+          if unzip -Z1 "dist/snoutdb-${TAG}.zip" |
+            grep -Eq '/tests/fixtures/|/tests/cabi_smoke\.py$|/\.DS_Store$'; then
+            echo "Release zip contains excluded test or local files." >&2
+            exit 1
+          fi
+
+          shasum -a 256 \
+            "dist/snoutdb-${TAG}.tar.gz" \
+            "dist/snoutdb-${TAG}.zip" \
+            > "dist/SHA256SUMS-${TAG}.txt"
+
+      - name: Create and push tag
+        if: steps.version.outputs.publish == 'true' && steps.version.outputs.create_tag == 'true'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          TARGET_SHA: ${{ steps.version.outputs.target_sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag --annotate "$TAG" "$TARGET_SHA" --message "SnoutDB ${TAG}"
+          git push origin "$TAG"
+
+      - name: Publish GitHub release
+        if: steps.version.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+          gh release create "$TAG" \
+            "dist/snoutdb-${TAG}.tar.gz" \
+            "dist/snoutdb-${TAG}.zip" \
+            "dist/SHA256SUMS-${TAG}.txt" \
+            "dist/CHANGELOG-${TAG}.md" \
+            --title "SnoutDB ${TAG}" \
+            --notes-file "dist/CHANGELOG-${TAG}.md" \
+            --verify-tag

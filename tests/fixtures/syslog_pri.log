@@ -1,0 +1,4 @@
+<134>Jun 11 10:00:01 myhost myapp[1234]: error connecting to database
+<30>Jun 11 10:00:02 myhost myapp[1234]: retrying connection attempt 1
+<13>Jun 11 10:00:03 myhost nginx[5678]: worker process started
+<6>Jun 11 10:00:04 myhost myapp: connection established

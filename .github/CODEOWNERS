@@ -1,0 +1,21 @@
+# Default owner for all repository changes.
+* @jacovinus
+
+# Repository governance and automation.
+/.github/ @jacovinus
+/CONTRIBUTING.md @jacovinus
+/CODE_OF_CONDUCT.md @jacovinus
+/SECURITY.md @jacovinus
+/SUPPORT.md @jacovinus
+
+# Architecture, persistence, and public interfaces.
+/ARCHITECTURE.md @jacovinus
+/docs/ @jacovinus
+/storage/ @jacovinus
+/cabi/ @jacovinus
+/include/ @jacovinus
+
+# Release-sensitive files.
+/VERSION @jacovinus
+/CHANGELOG.md @jacovinus
+/scripts/validate-release.sh @jacovinus

@@ -1,0 +1,9 @@
+# Test inputs are required in the repository and CI, but not in source releases.
+/tests/fixtures export-ignore
+/tests/cabi_smoke.py export-ignore
+
+# Local and internal repository metadata must not enter release archives.
+**/.DS_Store export-ignore
+/.claude export-ignore
+/.vscode export-ignore
+/tasks export-ignore

@@ -1,0 +1,74 @@
+name: Bug report
+description: Report reproducible incorrect behavior in SnoutDB.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include secrets or private datasets. For vulnerabilities, use the Security tab instead.
+  - type: input
+    id: version
+    attributes:
+      label: SnoutDB version
+      description: Output of `snout version`, or the commit SHA.
+      placeholder: SnoutDB 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: odin
+    attributes:
+      label: Odin version
+      description: Output of `odin version`.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, version, and architecture.
+      placeholder: macOS 15, arm64
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: The exact command that reproduces the problem.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Minimal input
+      description: Provide a small safe fixture or explain how to generate it.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Logs, timing, memory usage, or related issues.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: This report does not disclose a security vulnerability.
+          required: true

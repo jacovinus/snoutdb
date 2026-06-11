@@ -1,0 +1,38 @@
+name: Usage question
+description: Ask about installation, commands, .snout files, or integration.
+title: "question: "
+labels:
+  - question
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+      description: Describe the input and desired result.
+    validations:
+      required: true
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What have you tried?
+      description: Include commands and output where useful.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: SnoutDB version
+      description: Output of `snout version`, if applicable.
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, architecture, and Odin version.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I checked the README and existing issues.
+          required: true
