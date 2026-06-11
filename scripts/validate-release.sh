@@ -78,4 +78,7 @@ if command -v go >/dev/null 2>&1; then
 	(cd examples/go && go run main.go >/dev/null)
 fi
 
+step "Run public quickstart"
+./scripts/quickstart.sh >/dev/null 2>&1
+
 printf '\nSnoutDB v%s pre-release validation passed.\n' "$VERSION"

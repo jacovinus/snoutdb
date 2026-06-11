@@ -1,23 +1,122 @@
 # SnoutDB
 
+[![CI](https://github.com/jacovinus/snoutdb/actions/workflows/ci.yml/badge.svg)](https://github.com/jacovinus/snoutdb/actions/workflows/ci.yml)
 ![Version: v0.1.0](https://img.shields.io/badge/version-v0.1.0-4c6ef5)
 ![Tests: 329 passing](https://img.shields.io/badge/tests-329_passing-2f9e44)
 ![License: AGPL v3](https://img.shields.io/badge/license-AGPL_v3-blue)
 ![Language: Odin](https://img.shields.io/badge/language-Odin-3882d2)
 
-SnoutDB is a command-line tool for exploring and analyzing data files — CSV, JSONL, log files, or its own `.snout` format. You point it at a file, ask questions, and get answers. No database server to install, no SQL to learn.
+> **From an unfamiliar file to a useful query in one command.**
 
-Think of it as a fast, local calculator for your data.
+Most data tools are excellent once you know the schema and the question.
+SnoutDB targets the step before that.
+
+Point it at an unfamiliar CSV, JSONL, or log file. `sniff` infers types,
+classifies columns as timestamps, identifiers, dimensions, or metrics, profiles
+their values, and prints valid SnoutDB commands to investigate next.
 
 ```bash
-./snout sniff -f access.log
-./snout -f access.log group=status -- count=rows --sort count=rows desc
+./snout sniff -f requests.csv
 ```
 
----
+```text
+roles
+-----
+timestamps:  1
+dimensions:  2
+metrics:     3
+
+column      type       role       distinct  details
+----------  ---------  ---------  --------  ---------------------------------
+region      String     Dimension         2  top: eu-west (3), us-east (3)
+latency_ms  Int64      Metric            6  min=27 mean=169.83 max=441
+
+suggested queries
+-----------------
+1. compare latency_ms across region
+   ./snout -f requests.csv group=region -- avg=latency_ms count=rows \
+     --sort avg=latency_ms desc --limit 10
+```
+
+This is not a claim that SnoutDB replaces DuckDB, Miller, qsv, VisiData, or
+`jq`. It is a focused reconnaissance tool for the moment when a file lands in
+front of you and you do not yet know what matters inside it.
+
+## The Specific Advantage
+
+- **It proposes the first useful questions.** Type inference alone tells you
+  that a column is numeric. SnoutDB also decides whether it looks like a metric,
+  dimension, identifier, or timestamp and uses that role to generate queries.
+- **The result is executable, not just descriptive.** Suggestions are ordinary
+  CLI commands that can be inspected, changed, scripted, and rerun.
+- **Operational files are first-class inputs.** It reads CSV, JSONL, stdin,
+  CLF, Combined, logfmt, syslog, and custom regex logs without a server or
+  import step for discovery.
+- **Discovery and repeated analysis stay in one workflow.** Once a file is
+  understood, it can be queried directly or saved as a typed `.snout` snapshot
+  for repeated local work.
+- **It is deliberately narrow.** There is no service, account, notebook, or SQL
+  dialect between the file and the first answer.
+
+## Choose the Right Tool
+
+| Situation | Better fit |
+|---|---|
+| “I received this file and do not know its schema or what to investigate.” | **SnoutDB** |
+| “I know the question and want SQL, joins, extensions, or broad analytical power.” | **DuckDB** |
+| “I need mature record transformations in a Unix pipeline.” | **Miller or qsv** |
+| “I want to explore the data interactively in a terminal UI.” | **VisiData** |
+| “I primarily need to select or transform JSON documents.” | **jq** |
+
+SnoutDB should earn its place by shortening **unknown file → useful
+investigation**. If you already know the schema and query, a more mature tool
+will often be the better choice.
+
+## Try It in One Minute
+
+Requirements: [Odin](https://odin-lang.org/docs/install/) and a shell.
+
+```bash
+git clone https://github.com/jacovinus/snoutdb.git
+cd snoutdb
+./scripts/quickstart.sh
+```
+
+The script builds SnoutDB, creates a temporary six-row dataset, runs `sniff`,
+executes a filtered percentile query, and creates a `.snout` snapshot. It uses
+no downloaded dataset or package-manager dependency.
+
+```text
+column      type       role       nulls  distinct  details
+----------  ---------  ---------  -----  --------  ----------------------------
+service     String     Dimension      0         3  top: checkout (3), users (2)
+latency_ms  Int64      Metric         0         6  min=27 mean=169.83 max=441
+
+suggested queries
+-----------------
+1. compare latency_ms across region
+```
+
+## Current Limits
+
+- SnoutDB is pre-`v1.0.0`; the CLI, C ABI, and `.snout` format may evolve.
+- Automated CI currently runs on macOS; other platforms should be considered
+  experimental until they have dedicated runners.
+- Grouped queries and some transforms materialize typed tables in memory.
+- Percentiles are exact and retain values for each aggregate group.
+- `.snout` stores chunk statistics, but query-time chunk skipping is not yet
+  implemented.
+
+See [benchmarks/README.md](benchmarks/README.md) for reproducible measurements.
+The current development baseline profiles a generated 5-million-row, 751 MiB
+CSV in approximately 6.8 seconds on an Apple M4 Pro.
 
 ## Contents
 
+- [The specific advantage](#the-specific-advantage)
+- [Choose the right tool](#choose-the-right-tool)
+- [Try it in one minute](#try-it-in-one-minute)
+- [Current limits](#current-limits)
 - [Version](#version)
 - [How it works](#how-it-works)
 - [What is a `.snout` file?](#what-is-a-snout-file)
@@ -36,6 +135,8 @@ Think of it as a fast, local calculator for your data.
 - [Timing](#timing)
 - [Quick reference](#quick-reference)
 - [Real-world use cases](docs/USE-CASES.md)
+- [Benchmarks](benchmarks/README.md)
+- [Roadmap](ROADMAP.md)
 
 ---
 
@@ -274,6 +375,8 @@ Contributions and focused technical discussion are welcome.
 | [Security Policy](SECURITY.md) | Private vulnerability reporting and supported versions |
 | [Support Guide](SUPPORT.md) | Usage questions, bugs, and feature requests |
 | [Repository Guide](docs/REPOSITORY-GUIDE.md) | Branch protection, merge strategy, labels, and releases |
+| [Benchmarks](benchmarks/README.md) | Reproducible performance methodology and current baseline |
+| [Roadmap](ROADMAP.md) | Near-term priorities, path to v1.0, and non-goals |
 
 The project uses short-lived branches, Conventional Commits, focused pull
 requests, strict Odin checks, and squash merges. Every behavior change should
@@ -285,116 +388,18 @@ include tests; hot-path changes should include benchmark evidence.
 
 ### 1. Install Odin
 
-Odin requires LLVM 18. Click your platform to expand the instructions.
+Install a current Odin release using the
+[official installation guide](https://odin-lang.org/docs/install/).
 
----
-
-<details>
-<summary><strong>macOS</strong></summary>
+On macOS, Homebrew provides the shortest setup:
 
 ```bash
 brew install odin
-```
-
-Verify:
-
-```bash
 odin version
-# Odin dev-2025-06:...
 ```
 
-</details>
-
----
-
-<details>
-<summary><strong>Linux (Ubuntu / Debian)</strong></summary>
-
-**Requirements:** `apt`, `curl`, `unzip`.
-
-```bash
-# 1. Install LLVM 18, Clang, and required libs
-sudo apt update
-sudo apt install -y llvm-18 clang-18 libllvm18 libc6-dev curl unzip
-
-# 2. (Optional) set clang-18 as default clang
-sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100
-```
-
-**Install Odin** — choose one:
-
-```bash
-# Option A: download a pre-built binary (fastest)
-curl -L https://github.com/odin-lang/Odin/releases/latest/download/odin-ubuntu-amd64-latest.zip \
-  -o odin.zip
-unzip odin.zip
-sudo mv odin /usr/local/bin/odin
-sudo chmod +x /usr/local/bin/odin
-```
-
-```bash
-# Option B: build from source
-git clone https://github.com/odin-lang/Odin
-cd Odin
-./build_odin.sh release
-sudo cp odin /usr/local/bin/odin
-```
-
-> **ARM64 (Graviton / Raspberry Pi)?** Replace `amd64` with `arm64` in the download URL.
-> **Fedora / Arch?** Install `llvm18` via `dnf` / `pacman` instead of `apt`.
-
-Verify:
-
-```bash
-odin version
-# Odin dev-2025-06:...
-```
-
-</details>
-
----
-
-<details>
-<summary><strong>Windows</strong></summary>
-
-**Requirements:** Visual Studio Build Tools (for the MSVC linker).
-
-**Step 1 — Install Visual Studio Build Tools**
-
-Download and run [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022). During setup, select:
-- **Desktop development with C++** workload
-
-You don't need the full Visual Studio IDE.
-
-**Step 2 — Install Odin**
-
-Download the latest pre-built binary from the [Odin releases page](https://github.com/odin-lang/Odin/releases):
-
-- File: `odin-windows-amd64-latest.zip`
-
-Extract it and add the folder to your `PATH`:
-
-```powershell
-# In PowerShell (run as Administrator)
-$dest = "C:\odin"
-Expand-Archive -Path odin-windows-amd64-latest.zip -DestinationPath $dest
-[Environment]::SetEnvironmentVariable(
-  "PATH", "$env:PATH;$dest", [EnvironmentVariableTarget]::Machine
-)
-```
-
-Restart your terminal, then verify:
-
-```cmd
-odin version
-:: Odin dev-2025-06:...
-```
-
-> **Note:** Always build from a Developer Command Prompt or PowerShell with the MSVC environment loaded. The regular Command Prompt may not find `link.exe`.
-
-</details>
-
----
+Odin publishes builds for macOS, Linux, Windows, and several BSD targets.
+SnoutDB's automated validation currently runs on macOS.
 
 ### 2. Build SnoutDB
 
@@ -1583,15 +1588,20 @@ The full header is in [`include/snoutdb.h`](include/snoutdb.h).
 
 ## Large files
 
-SnoutDB streams large files without loading them all into memory. A 5-million-row CSV (750 MB) can be profiled with `sniff` using about 70 MB of RAM. Log files are streamed the same way — a month of access logs with millions of entries stays within a flat memory budget.
+SnoutDB profiles large CSV, JSONL, and log files through streaming readers
+without first materializing a complete `core.Table`. Exact cardinality tracking
+is bounded by the `--max-distinct` setting.
 
 ```bash
-# Profile a big file — memory stays flat regardless of row count
+# Profile a large file
 ./snout sniff -f bigfile.csv
 ./snout sniff -f bigfile.jsonl
 ./snout sniff -f bigfile.snout
 ./snout sniff -f bigfile.log      # log files stream too
 ```
+
+See [benchmarks/README.md](benchmarks/README.md) for the current environment,
+methodology, commands, and results.
 
 ---
 

@@ -23,7 +23,9 @@ Maintainers should also follow the
 
 ## Development Setup
 
-SnoutDB requires Odin and LLVM 18. Build and test from the repository root:
+SnoutDB requires a current Odin toolchain. Follow the
+[official Odin installation guide](https://odin-lang.org/docs/install/), then
+build and test from the repository root:
 
 ```bash
 odin build ./cmd/snout -out:snout

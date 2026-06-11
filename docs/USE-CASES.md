@@ -4,9 +4,12 @@ Practical workflows showing how SnoutDB solves common data problems. Each case s
 
 ---
 
-## 1. Diagnose a slow API
+## 1. Find oversized responses and error-heavy endpoints
 
-**Situation:** Users are reporting that your API is slow. You have Nginx access logs. You don't know which endpoints are the problem.
+**Situation:** Your API is transferring more data than expected and returning
+errors. You have Nginx access logs and do not know which endpoints are
+responsible. Standard access logs contain response size, not request latency,
+so this workflow does not claim to diagnose slowness.
 
 ```bash
 # Step 1 — import the log
@@ -20,7 +23,7 @@ columns: 8
 ```
 
 ```bash
-# Step 2 — find the slowest endpoints at p95
+# Step 2 — find endpoints with the largest p95 response size
 ./snout -f api.snout group=path -- p95=bytes p50=bytes count=rows \
   --sort p95=bytes desc \
   --limit 10

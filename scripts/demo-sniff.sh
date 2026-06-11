@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/snoutdb-sniff-demo.XXXXXX")"
 SNOUT_BIN="$TMP_DIR/snout"
-INPUT_PATH="${1:-tests/fixtures/complex_metrics_500.csv}"
+INPUT_PATH="${1:-$TMP_DIR/demo.csv}"
 
 cleanup() {
 	rm -rf "$TMP_DIR"
@@ -18,6 +18,17 @@ if ! command -v odin >/dev/null 2>&1; then
 fi
 
 cd "$ROOT_DIR"
+if [[ "$INPUT_PATH" == "$TMP_DIR/demo.csv" ]]; then
+	cat >"$INPUT_PATH" <<'CSV'
+timestamp,endpoint,region,status,latency_ms,bytes
+2026-06-11T10:00:00Z,/checkout,eu-west,200,48,912
+2026-06-11T10:00:01Z,/checkout,eu-west,500,380,311
+2026-06-11T10:00:02Z,/users,us-east,200,27,1402
+2026-06-11T10:00:03Z,/checkout,us-east,502,441,288
+2026-06-11T10:00:04Z,/users,eu-west,200,31,1320
+2026-06-11T10:00:05Z,/search,us-east,200,92,2048
+CSV
+fi
 odin build ./cmd/snout -out:"$SNOUT_BIN" -o:speed
 
 printf '\n==> Default table report\n\n'
