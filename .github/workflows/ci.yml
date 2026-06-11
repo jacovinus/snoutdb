@@ -9,14 +9,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
       - name: Install Odin
         run: brew install odin
-      - name: Install Node.js example dependency
-        run: |
-          corepack enable
-          pnpm install --dir examples/nodejs --frozen-lockfile
       - name: Validate release
         run: ./scripts/validate-release.sh

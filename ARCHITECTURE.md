@@ -17,7 +17,7 @@ transform/          — column operations: rename, drop, cast, derive, bucket, d
 output/             — render results as table/csv/json/jsonl; sniff reports
 cabi/               — shared library (libsnout) with experimental C ABI
 tests/              — all tests; import by relative path (../core, ../ingest, etc.)
-examples/           — ready-to-run demos: Python (ctypes), Go (cgo), Node.js (koffi)
+examples/           — ready-to-run demos: Python (ctypes) and Go (cgo)
 ```
 
 ---
@@ -167,6 +167,5 @@ before v1.0.0. Build with:
 ```
 
 The header is `include/snoutdb.h`. Ready-to-run examples are in `examples/` for
-Python (ctypes), Go (cgo), and Node.js (koffi). The ABI imports CSV, JSONL, and
+Python (ctypes) and Go (cgo). The ABI imports CSV, JSONL, and
 `.snout` files; log ingestion remains a CLI operation in v0.1.0.
-

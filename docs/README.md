@@ -16,7 +16,7 @@ SnoutDB turns messy raw data into valuable local metrics.
 - Sniff reports — column roles, top-N values, outlier detection (σ / 3σ rule), query suggestions
 - `count_distinct` aggregate
 - Transforms: rename, cast, derive, bucket, date_trunc, regex_extract, json_extract
-- Embedded C ABI (Python, Go, Node.js examples)
+- Embedded C ABI (Python and Go examples)
 
 ---
 
@@ -30,7 +30,7 @@ SnoutDB turns messy raw data into valuable local metrics.
 | RFC-0004 | Sniff Engine | ✅ Implemented — TASK-0006 (roles, top-N, query suggestions) + outlier detection (σ, outlier_count) |
 | RFC-0005 | Transformations | ✅ Implemented — TASK-0014 (rename/drop/cast/derive/bucket/date_trunc/regex_extract/json_extract) |
 | RFC-0006 | Merge & Consolidation | ✅ Implemented — TASK-0009 (append/consolidate/compact) + TASK-0013 (rollup) |
-| RFC-0007 | C ABI | ✅ Implemented — TASK-0016 (25-function C ABI, Python/Go/Node.js examples) |
+| RFC-0007 | C ABI | ✅ Implemented — TASK-0016 (25-function C ABI, Python and Go examples) |
 | RFC-0008 | Odin Style Guide | ✅ Reference |
 | RFC-0009 | Storage Engine v2 | ✅ Implemented — TASK-0011 (v2 format) + TASK-0012 (dictionary encoding) |
 | RFC-0010 | Roadmap | ✅ Up to date |
@@ -46,6 +46,6 @@ SnoutDB turns messy raw data into valuable local metrics.
 |---|---|
 | [ARCHITECTURE.md](../ARCHITECTURE.md) | Package structure, data flow, key data structures, design constraints |
 | [docs/USE-CASES.md](USE-CASES.md) | 10 real-world workflows: log analysis, anomaly detection, SLA reports, API embedding |
-| [examples/README.md](../examples/README.md) | Python, Go, and Node.js FFI examples |
+| [examples/README.md](../examples/README.md) | Python and Go FFI examples |
 | [CHANGELOG.md](../CHANGELOG.md) | Versioned snapshot contents and compatibility notes |
 | [CLAUDE.md](../CLAUDE.md) | Build commands, test commands, architecture notes for AI assistants |

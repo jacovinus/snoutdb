@@ -687,4 +687,4 @@ out, _ := exec.Command("./snout", "sniff", "-f", uploadedFilePath, "--format", "
 }
 ```
 
-Full cgo and koffi examples: [`examples/`](../examples/README.md).
+Full ctypes and cgo examples: [`examples/`](../examples/README.md).

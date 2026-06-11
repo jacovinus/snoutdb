@@ -77,9 +77,5 @@ python3 examples/python/snout_example.py >/dev/null
 if command -v go >/dev/null 2>&1; then
 	(cd examples/go && go run main.go >/dev/null)
 fi
-if command -v node >/dev/null 2>&1 &&
-   test -d examples/nodejs/node_modules/koffi; then
-	(cd examples/nodejs && node snout_example.mjs >/dev/null)
-fi
 
 printf '\nSnoutDB v%s pre-release validation passed.\n' "$VERSION"

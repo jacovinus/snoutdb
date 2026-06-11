@@ -86,7 +86,7 @@ flowchart LR
         TERMINAL["Terminal table"]
         DATA["CSV / JSON / JSONL"]
         FILE[".snout file"]
-        ABI["C ABI<br/>Python, Go, Node.js"]
+        ABI["C ABI<br/>Python, Go"]
     end
 
     CSV --> INGEST
@@ -1552,7 +1552,8 @@ snout_close(t);
 Log ingestion is currently exposed through the CLI. Convert a log to `.snout`
 with `snout log-import`, then open it from the C API with `snout_open`.
 
-The same API works from Python (`ctypes`), Go (`cgo`), Node.js (`koffi`), and any other language with C FFI. See [`examples/`](examples/README.md) for ready-to-run demos in all three.
+The same API works from Python (`ctypes`), Go (`cgo`), and any other language
+with C FFI. See [`examples/`](examples/README.md) for ready-to-run demos.
 
 **API overview:**
 
@@ -1670,4 +1671,3 @@ You can safely redirect stdout to a file or pipe without capturing the timing li
 | Build the C shared library | `./scripts/build-cabi.sh` |
 | Run Python example | `python3 examples/python/snout_example.py` |
 | Run Go example | `cd examples/go && go run main.go` |
-| Run Node.js example | `cd examples/nodejs && pnpm install && node snout_example.mjs` |

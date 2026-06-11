@@ -1,20 +1,22 @@
 # SnoutDB — Language Examples
 
-SnoutDB exposes a C shared library (`libsnout`) so you can query data files from any language with C FFI. These examples load the same CSV fixture, inspect its schema, read individual rows, and run two group-by queries — one plain, one with a filter — using the identical C API in each language.
+SnoutDB exposes a C shared library (`libsnout`) so you can query data files
+from any language with C FFI. These dependency-free examples load the same CSV
+fixture, inspect its schema, read individual rows, and run two group-by queries
+using the identical C API in each language.
 
 ## Contents
 
 - [Build the library](#build-the-library)
 - [Python](#python)
 - [Go](#go)
-- [Node.js](#nodejs)
 - [API concepts](#api-concepts)
 
 ---
 
 ## Build the library
 
-All three examples load the platform library from the repo root:
+Both examples load the platform library from the repo root:
 `libsnout.dylib` on macOS, `libsnout.so` on Linux, or `libsnout.dll` on
 Windows. Build it once before running any example:
 
@@ -108,53 +110,9 @@ r := C.snout_query(t, C.CString("region"), C.CString("p95=jitter_ms count=rows")
 defer C.snout_result_free(r)
 ```
 
----
-
-## Node.js
-
-**File:** [`nodejs/snout_example.mjs`](nodejs/snout_example.mjs)  
-**Binding:** [`koffi`](https://koffi.dev) — modern FFI for Node.js
-
-```bash
-cd examples/nodejs && pnpm install && node snout_example.mjs
-```
-
-Declares each function with `koffi`'s string-based type DSL, which keeps the binding code concise. Uses `koffi.opaque()` for the two handle types (`SnoutTable`, `SnoutResult`).
-
-The example covers the same four operations as the other two:
-
-1. Schema
-2. First 3 rows
-3. `avg(mos) + avg(jitter_ms) + count(*)` by `carrier`
-4. `p95(jitter_ms) + count(*)` by `region` where `result = 'failed'`
-
-**Key patterns:**
-
-```js
-import koffi from "koffi";
-
-const lib = koffi.load(process.platform === "darwin" ? "libsnout.dylib" : "libsnout.so");
-const SnoutTable  = koffi.opaque("SnoutTable");
-const SnoutResult = koffi.opaque("SnoutResult");
-
-const snout_import_csv = lib.func("SnoutTable* snout_import_csv(const char* path)");
-const snout_query      = lib.func(
-  "SnoutResult* snout_query(SnoutTable* t, const char* groups, const char* aggregates," +
-  " const char** where_exprs, int filter_count, const char* sort, int limit)"
-);
-
-const t = snout_import_csv(csvPath);
-// WHERE filter: plain JS array of strings
-const where = ["result", "eq", "failed"];
-const r = snout_query(t, "region", "p95=jitter_ms count=rows",
-                      where, where.length, "p95=jitter_ms desc", 0);
-```
-
----
-
 ## API concepts
 
-All three examples use the same three-step pattern:
+Both examples use the same three-step pattern:
 
 **1. Open a table**
 

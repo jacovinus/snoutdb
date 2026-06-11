@@ -62,20 +62,9 @@ jobs:
           TARGET_SHA: ${{ steps.version.outputs.target_sha }}
         run: git checkout --detach "$TARGET_SHA"
 
-      - uses: actions/setup-node@v4
-        if: steps.version.outputs.publish == 'true'
-        with:
-          node-version: 22
-
       - name: Install Odin
         if: steps.version.outputs.publish == 'true'
         run: brew install odin
-
-      - name: Install Node.js example dependency
-        if: steps.version.outputs.publish == 'true'
-        run: |
-          corepack enable
-          pnpm install --dir examples/nodejs --frozen-lockfile
 
       - name: Validate release
         if: steps.version.outputs.publish == 'true'
