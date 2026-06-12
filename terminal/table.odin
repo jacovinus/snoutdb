@@ -4,7 +4,7 @@ import "base:runtime"
 import "core:strings"
 import "core:unicode/utf8"
 
-MAX_WORDS_PER_LINE :: 12
+MAX_CELL_WIDTH :: 64
 
 Alignment :: enum {
 	Left,
@@ -132,7 +132,7 @@ wrap_values :: proc(
 		return nil, false
 	}
 	for value, index in values {
-		wrapped, ok := wrap_words(value, MAX_WORDS_PER_LINE, allocator)
+		wrapped, ok := wrap_words(value, MAX_CELL_WIDTH, allocator)
 		if !ok {
 			return nil, false
 		}
@@ -143,17 +143,17 @@ wrap_values :: proc(
 
 wrap_words :: proc(
 	value: string,
-	max_words: int,
+	max_width: int,
 	allocator: runtime.Allocator,
 ) -> (string, bool) {
-	if max_words < 1 {
+	if max_width < 1 {
 		return "", false
 	}
 	words, fields_error := strings.fields(value, context.temp_allocator)
 	if fields_error != nil {
 		return "", false
 	}
-	if len(words) <= max_words {
+	if display_width(value) <= max_width {
 		return value, true
 	}
 
@@ -163,15 +163,31 @@ wrap_words :: proc(
 	}
 	defer strings.builder_destroy(&builder)
 
-	for word, index in words {
-		if index > 0 {
-			if index%max_words == 0 {
-				strings.write_byte(&builder, '\n')
-			} else {
-				strings.write_byte(&builder, ' ')
-			}
+	line_width := 0
+	for word in words {
+		word_width := display_width(word)
+		if line_width > 0 && line_width+1+word_width <= max_width {
+			strings.write_byte(&builder, ' ')
+			line_width += 1
+		} else if line_width > 0 {
+			strings.write_byte(&builder, '\n')
+			line_width = 0
 		}
-		strings.write_string(&builder, word)
+
+		if word_width <= max_width {
+			strings.write_string(&builder, word)
+			line_width += word_width
+			continue
+		}
+
+		for ch in word {
+			if line_width >= max_width {
+				strings.write_byte(&builder, '\n')
+				line_width = 0
+			}
+			strings.write_rune(&builder, ch)
+			line_width += 1
+		}
 	}
 	wrapped, clone_error := strings.clone(strings.to_string(builder), allocator)
 	if clone_error != nil {

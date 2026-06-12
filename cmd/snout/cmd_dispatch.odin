@@ -358,7 +358,7 @@ run_rollup :: proc() {
 
 run_log_info :: proc() {
 	if len(os.args) < 3 {
-		fmt.eprintln("usage: snout log-info <file.log> [--format clf|combined|logfmt|syslog|regex] [--pattern \"...\"] [--strict]")
+		fmt.eprintln("usage: snout log-info <file.log> [--format clf|combined|logfmt|syslog|app|regex] [--pattern \"...\"] [--strict]")
 		os.exit(1)
 	}
 	path   := os.args[2]
@@ -382,7 +382,7 @@ run_log_info :: proc() {
 
 run_log_import :: proc() {
 	if len(os.args) < 4 {
-		fmt.eprintln("usage: snout log-import <file.log> <out.snout> [--format clf|combined|logfmt|syslog|regex] [--pattern \"...\"] [--strict]")
+		fmt.eprintln("usage: snout log-import <file.log> <out.snout> [--format clf|combined|logfmt|syslog|app|regex] [--pattern \"...\"] [--strict]")
 		os.exit(1)
 	}
 	path := os.args[2]

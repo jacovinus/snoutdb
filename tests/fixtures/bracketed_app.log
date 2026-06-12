@@ -1,0 +1,5 @@
+2026-06-12 00:50:00 [info] Running onQuitCleanup: local-session-pty-cleanup
+2026-06-12 00:50:00 [info] [CCD] Killing 1 PTY process tree(s) on quit
+2026-06-12 00:50:01 [warn] Shell PTY exited unexpectedly
+2026-06-12 00:50:02 [error] Failed to flush event queue
+2026-06-12T07:24:47Z [WARN] Error checking for new version

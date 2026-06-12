@@ -5,6 +5,7 @@ import "core:io"
 import "core:os"
 import "core:strings"
 import snout_core "../../core"
+import ingest "../../ingest"
 import result_output "../../output"
 import query "../../query"
 
@@ -41,7 +42,8 @@ run_group_command :: proc(args: []string) {
 		os.exit(1)
 	}
 	group_text := group_expression[len("group="):]
-	group_columns := strings.split(group_text, ",", context.temp_allocator)
+	group_columns := strings.split(group_text, ",", context.allocator)
+	defer delete(group_columns, context.allocator)
 	if len(group_columns) == 0 || len(group_columns) > query.MAX_GROUP_COLUMNS {
 		fmt.eprintln("error: invalid group column list")
 		os.exit(1)
@@ -57,7 +59,59 @@ run_group_command :: proc(args: []string) {
 		os.exit(1)
 	}
 
-	table := load_table_or_exit(input_path)
+	log_opts: ingest.Log_Read_Options
+	has_logformat := false
+	for i := 3; i < len(args); i += 1 {
+		switch args[i] {
+		case "--logformat":
+			if has_logformat || i+1 >= len(args) {
+				fmt.eprintln("error: malformed or duplicate --logformat")
+				os.exit(1)
+			}
+			switch args[i+1] {
+			case "clf":      log_opts.format = .CLF
+			case "combined": log_opts.format = .Combined
+			case "logfmt":   log_opts.format = .Logfmt
+			case "syslog":   log_opts.format = .Syslog
+			case "app":      log_opts.format = .App
+			case "regex":    log_opts.format = .Regex
+			case:
+				fmt.eprintfln("error: unsupported log format %q", args[i+1])
+				os.exit(1)
+			}
+			log_opts.has_format = true
+			has_logformat = true
+			i += 1
+		case "--logpattern":
+			if i+1 >= len(args) {
+				fmt.eprintln("error: --logpattern requires a value")
+				os.exit(1)
+			}
+			log_opts.pattern = args[i+1]
+			i += 1
+		case "--strict":
+			log_opts.strict = true
+		}
+	}
+
+	table: snout_core.Table
+	if has_logformat ||
+	   strings.has_suffix(input_path, ".log") ||
+	   strings.has_suffix(input_path, ".access") ||
+	   strings.has_suffix(input_path, ".error") {
+		table_name := "stdin"
+		if stdin_tmp == "" {
+			table_name = table_name_from_path(input_path, log_ext_suffix(input_path))
+		}
+		load_err: snout_core.Error
+		table, load_err = ingest.read_log_table(input_path, table_name, log_opts)
+		if load_err != .None {
+			fmt.eprintfln("error: %s", snout_core.error_message(load_err))
+			os.exit(1)
+		}
+	} else {
+		table = load_table_or_exit(input_path)
+	}
 	defer snout_core.free_table(&table)
 
 	cursor := 3
@@ -186,6 +240,14 @@ run_group_command :: proc(args: []string) {
 			}
 			has_format = true
 			cursor += 2
+		case "--logformat", "--logpattern":
+			if cursor+1 >= len(args) {
+				fmt.eprintfln("error: %s requires a value", args[cursor])
+				os.exit(1)
+			}
+			cursor += 2
+		case "--strict":
+			cursor += 1
 		case:
 			fmt.eprintfln("error: unknown query option %q", args[cursor])
 			os.exit(1)

@@ -9,6 +9,8 @@ Log_Format :: enum {
 	Combined,
 	Logfmt,
 	Syslog,
+	App,
+	Bracketed, // [timestamp][thread][level] [...] message — Adobe UXP / IPC apps
 	Regex,
 }
 

@@ -1,5 +1,6 @@
 package tests
 
+import "core:strings"
 import "core:testing"
 import tablefmt "../terminal"
 
@@ -104,9 +105,32 @@ terminal_table_wraps_every_cell_to_the_same_row_height :: proc(t: ^testing.T) {
 	defer delete(rendered)
 
 	expected :=
-		"left                                                                              right\n" +
-		"--------------------------------------------------------------  -----------------------\n" +
-		"one two three four five six seven eight nine ten eleven twelve  a b c d e f g h i j k l\n" +
-		"thirteen                                                                          m n o\n"
+		"left                                                                                    right\n" +
+		"--------------------------------------------------------------  -----------------------------\n" +
+		"one two three four five six seven eight nine ten eleven twelve  a b c d e f g h i j k l m n o\n" +
+		"thirteen                                                                                     \n"
 	testing.expect_value(t, rendered, expected)
+}
+
+@(test)
+terminal_table_hard_wraps_long_tokens :: proc(t: ^testing.T) {
+	headers := [?]string{"level", "message", "count"}
+	cells := [?]string{
+		"WARN",
+		"https://securetoken.googleapis.com/v1/token?key=abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		"11",
+	}
+	alignments := [?]tablefmt.Alignment{.Left, .Left, .Right}
+
+	rendered, ok := tablefmt.render_table(headers[:], cells[:], alignments[:])
+	testing.expect(t, ok)
+	if !ok {
+		return
+	}
+	defer delete(rendered)
+
+	remaining := rendered
+	for line in strings.split_lines_iterator(&remaining) {
+		testing.expect(t, tablefmt.display_width(line) <= 82, "rendered row exceeds table width")
+	}
 }

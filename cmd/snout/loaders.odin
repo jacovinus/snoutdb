@@ -62,7 +62,7 @@ load_snout_or_exit :: proc(path: string) -> snout_core.Table {
 }
 
 // resolve_stdin_path buffers stdin to a temp file and returns its path with an
-// inferred extension (.jsonl if first non-empty line starts with '{', else .csv).
+// inferred extension based on the first non-empty line.
 // The caller is responsible for deleting the file when done.
 resolve_stdin_path :: proc() -> (path: string, ok: bool) {
 	buf := make([dynamic]u8, allocator = context.temp_allocator)
@@ -86,6 +86,12 @@ resolve_stdin_path :: proc() -> (path: string, ok: bool) {
 		}
 		if trimmed[0] == '{' {
 			ext = ".jsonl"
+		} else if ingest.is_combined_line(trimmed) ||
+		          ingest.is_clf_line(trimmed) ||
+		          ingest.is_syslog_line(trimmed) ||
+		          ingest.is_app_log_line(trimmed) ||
+		          ingest.is_logfmt_line(trimmed) {
+			ext = ".log"
 		}
 		break
 	}
@@ -119,7 +125,7 @@ log_ext_suffix :: proc(path: string) -> string {
 	return ".log"
 }
 
-// parse_log_opts parses [--format clf|combined|logfmt|syslog|regex] [--pattern "..."] [--strict]
+// parse_log_opts parses [--format clf|combined|logfmt|syslog|app|bracketed|regex] [--pattern "..."] [--strict]
 // from a slice of remaining CLI args.
 parse_log_opts :: proc(args: []string) -> ingest.Log_Read_Options {
 	opts: ingest.Log_Read_Options
@@ -129,11 +135,13 @@ parse_log_opts :: proc(args: []string) -> ingest.Log_Read_Options {
 		case "--format":
 			if i+1 < len(args) {
 				switch args[i+1] {
-				case "clf":      opts.format = .CLF
-				case "combined": opts.format = .Combined
-				case "logfmt":   opts.format = .Logfmt
-				case "syslog":   opts.format = .Syslog
-				case "regex":    opts.format = .Regex
+				case "clf":       opts.format = .CLF
+				case "combined":  opts.format = .Combined
+				case "logfmt":    opts.format = .Logfmt
+				case "syslog":    opts.format = .Syslog
+				case "app":       opts.format = .App
+				case "bracketed": opts.format = .Bracketed
+				case "regex":     opts.format = .Regex
 				}
 				opts.has_format = true
 				i += 2

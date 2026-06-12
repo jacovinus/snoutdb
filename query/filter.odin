@@ -13,6 +13,9 @@ parse_filter_operator :: proc(text: string) -> (Filter_Operator, bool) {
 	case "le":       return .Less_Equal, true
 	case "gt":       return .Greater, true
 	case "ge":       return .Greater_Equal, true
+	case "contains": return .Contains, true
+	case "not-contains": return .Not_Contains, true
+	case "icontains": return .IContains, true
 	case "is-null":  return .Is_Null, true
 	case "not-null": return .Is_Not_Null, true
 	}
@@ -66,6 +69,10 @@ make_filter_predicate :: proc(
 	if column.kind == .Bool &&
 	   operator != .Equal && operator != .Not_Equal &&
 	   operator != .Is_Null && operator != .Is_Not_Null {
+		return {}, .Unsupported_Filter_Operator
+	}
+	if (operator == .Contains || operator == .Not_Contains || operator == .IContains) &&
+	   column.kind != .String {
 		return {}, .Unsupported_Filter_Operator
 	}
 
@@ -171,6 +178,15 @@ row_matches :: proc(
 	comparison: int
 	switch column.kind {
 	case .String, .Timestamp:
+		if predicate.operator == .Contains {
+			return strings.contains(column.strings[row_index], predicate.value.string_value)
+		}
+		if predicate.operator == .Not_Contains {
+			return !strings.contains(column.strings[row_index], predicate.value.string_value)
+		}
+		if predicate.operator == .IContains {
+			return contains_ascii_fold(column.strings[row_index], predicate.value.string_value)
+		}
 		comparison = strings.compare(column.strings[row_index], predicate.value.string_value)
 	case .Int64:
 		value := column.int64s[row_index]
@@ -195,7 +211,38 @@ row_matches :: proc(
 	case .Less_Equal:    return comparison <= 0
 	case .Greater:       return comparison > 0
 	case .Greater_Equal: return comparison >= 0
+	case .Contains, .Not_Contains, .IContains: return false
 	case .Is_Null, .Is_Not_Null: return false
+	}
+	return false
+}
+
+contains_ascii_fold :: proc(value, needle: string) -> bool {
+	if needle == "" {
+		return true
+	}
+	if len(needle) > len(value) {
+		return false
+	}
+	for start in 0..=len(value)-len(needle) {
+		matches := true
+		for offset in 0..<len(needle) {
+			left := value[start+offset]
+			right := needle[offset]
+			if left >= 'A' && left <= 'Z' {
+				left += 'a'-'A'
+			}
+			if right >= 'A' && right <= 'Z' {
+				right += 'a'-'A'
+			}
+			if left != right {
+				matches = false
+				break
+			}
+		}
+		if matches {
+			return true
+		}
 	}
 	return false
 }
