@@ -1,5 +1,6 @@
 package hunt
 
+import "core:fmt"
 import "core:slice"
 import "core:strings"
 import snout_core "../core"
@@ -158,6 +159,121 @@ compute_frequent_patterns :: proc(
 	}
 	_ = report
 	return out
+}
+
+// compute_schema_overview builds the non-log equivalent of severity_summary:
+// row/column counts, role breakdown, time range (when any timestamp column has
+// one), top-N null columns, and dominant values for the top dimensions.
+//
+// Returns nil for log inputs (they use severity_summary + frequent patterns
+// instead) and for empty reports.
+compute_schema_overview :: proc(
+	report: ^sniff.Sniff_Report,
+	allocator := context.allocator,
+) -> ^Schema_Overview {
+	if report == nil || len(report.columns) == 0 { return nil }
+
+	so := new(Schema_Overview, allocator)
+	so.row_count    = report.row_count
+	so.column_count = len(report.columns)
+
+	// Role breakdown + best time range across timestamp columns.
+	min_ts := ""
+	max_ts := ""
+	for &col in report.columns {
+		switch col.role {
+		case .Timestamp:  so.timestamp_columns  += 1
+		case .Dimension:  so.dimension_columns  += 1
+		case .Metric:     so.metric_columns     += 1
+		case .Identifier: so.identifier_columns += 1
+		case .Unknown:    /* skip */
+		}
+		if col.role == .Timestamp && col.timestamp.valid {
+			if min_ts == "" || col.timestamp.min < min_ts { min_ts = col.timestamp.min }
+			if max_ts == "" || col.timestamp.max > max_ts { max_ts = col.timestamp.max }
+		}
+	}
+	if min_ts != "" {
+		so.time_range_start, _ = strings.clone(min_ts, allocator)
+		so.time_range_end,   _ = strings.clone(max_ts, allocator)
+	}
+
+	// Top-3 columns by null ratio (≥5% nulls only — below that is noise).
+	NULL_HIGHLIGHT_MIN_RATIO :: 0.05
+	NULL_HIGHLIGHT_MAX       :: 3
+	null_pool := make([dynamic]Null_Highlight, 0, NULL_HIGHLIGHT_MAX, context.temp_allocator)
+	for &col in report.columns {
+		if col.null_ratio < NULL_HIGHLIGHT_MIN_RATIO { continue }
+		append(&null_pool, Null_Highlight{
+			name = col.name, null_count = col.null_count, null_ratio = col.null_ratio,
+		})
+	}
+	slice.sort_by(null_pool[:], proc(a, b: Null_Highlight) -> bool {
+		if a.null_ratio != b.null_ratio { return a.null_ratio > b.null_ratio }
+		return a.name < b.name
+	})
+	keep := min(len(null_pool), NULL_HIGHLIGHT_MAX)
+	if keep > 0 {
+		nulls := make([]Null_Highlight, keep, allocator)
+		for i in 0..<keep {
+			n := null_pool[i]
+			name, _ := strings.clone(n.name, allocator)
+			nulls[i] = Null_Highlight{
+				name = name, null_count = n.null_count, null_ratio = n.null_ratio,
+			}
+		}
+		so.top_null_columns = nulls
+	}
+
+	// Top-3 dimensions by dominant share (so the user immediately sees the
+	// "obvious" buckets without scrolling to the findings).
+	DIM_HIGHLIGHT_MAX :: 3
+	dim_pool := make([dynamic]Dimension_Highlight, 0, 8, context.temp_allocator)
+	for &col in report.columns {
+		if col.role != .Dimension { continue }
+		if len(col.top_values) == 0 { continue }
+		if col.non_null_count <= 0 { continue }
+		top := col.top_values[0]
+		share := f64(top.count) / f64(col.non_null_count)
+		// Convert the top value to a flat string regardless of underlying type.
+		tv := profile_value_short(top.value)
+		append(&dim_pool, Dimension_Highlight{
+			name           = col.name,
+			top_value      = tv,
+			top_share      = share,
+			distinct_count = col.cardinality.distinct_count,
+		})
+	}
+	slice.sort_by(dim_pool[:], proc(a, b: Dimension_Highlight) -> bool {
+		if a.top_share != b.top_share { return a.top_share > b.top_share }
+		return a.name < b.name
+	})
+	keep_d := min(len(dim_pool), DIM_HIGHLIGHT_MAX)
+	if keep_d > 0 {
+		dims := make([]Dimension_Highlight, keep_d, allocator)
+		for i in 0..<keep_d {
+			d := dim_pool[i]
+			name,  _ := strings.clone(d.name, allocator)
+			value, _ := strings.clone(d.top_value, allocator)
+			dims[i] = Dimension_Highlight{
+				name = name, top_value = value,
+				top_share = d.top_share, distinct_count = d.distinct_count,
+			}
+		}
+		so.top_dimensions = dims
+	}
+
+	return so
+}
+
+@(private="file")
+profile_value_short :: proc(v: sniff.Profile_Value) -> string {
+	#partial switch v.kind {
+	case .String, .Timestamp: return v.string_value
+	case .Int64:              return fmt.tprintf("%d", v.int_value)
+	case .Bool:               return v.bool_value ? "true" : "false"
+	}
+	return ""
 }
 
 @(private="file")

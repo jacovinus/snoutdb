@@ -101,10 +101,19 @@ Temporal_Shift_Evidence :: struct {
 Top_Contributor_Evidence :: struct {
 	dimension:    string,
 	value:        string,
-	metric:       string,
+	metric:       string, // primary metric (highest share)
 	contribution: f64,
 	total:        f64,
 	share:        f64,
+	// Other metrics dominated by the same (dimension, value). Each entry pairs
+	// the metric name with its share so the renderer can summarise:
+	// "+7 metrics: bitrate_kbps (86%), concealed_packets (86%), …".
+	extra_metrics: []Metric_Share,
+}
+
+Metric_Share :: struct {
+	metric: string,
+	share:  f64,
 }
 
 Log_Pattern_Evidence :: struct {
@@ -232,12 +241,42 @@ Severity_Summary :: struct {
 	share: f64,
 }
 
+// Schema_Overview is the non-log equivalent of `severity_summary`. It gives the
+// user a one-glance summary of the file's shape before diving into findings.
+// Populated for CSV, JSONL, and `.snout` inputs (logs already show severity).
+Schema_Overview :: struct {
+	row_count:         int,
+	column_count:      int,
+	timestamp_columns: int,
+	dimension_columns: int,
+	metric_columns:    int,
+	identifier_columns:int,
+	time_range_start:  string, // ISO-8601 if any Timestamp column has a range
+	time_range_end:    string,
+	top_null_columns:  []Null_Highlight,    // columns with the highest null ratio
+	top_dimensions:    []Dimension_Highlight, // dominant values in dimension columns
+}
+
+Null_Highlight :: struct {
+	name:       string,
+	null_count: int,
+	null_ratio: f64,
+}
+
+Dimension_Highlight :: struct {
+	name:           string,
+	top_value:      string,
+	top_share:      f64,
+	distinct_count: int,
+}
+
 Hunt_Report :: struct {
 	table_name:        string,
 	row_count:         int,
 	findings:          []Finding,
 	severity_summary:  []Severity_Summary,
 	frequent_patterns: []Frequent_Pattern,
+	schema_overview:   ^Schema_Overview, // nil for log inputs
 	allocator:         runtime.Allocator,
 }
 
@@ -281,6 +320,19 @@ free_hunt_report :: proc(report: ^Hunt_Report) {
 	}
 	delete(report.frequent_patterns, allocator)
 	delete(report.severity_summary, allocator)
+	if report.schema_overview != nil {
+		so := report.schema_overview
+		delete(so.time_range_start, allocator)
+		delete(so.time_range_end, allocator)
+		for n in so.top_null_columns { delete(n.name, allocator) }
+		delete(so.top_null_columns, allocator)
+		for d in so.top_dimensions {
+			delete(d.name, allocator)
+			delete(d.top_value, allocator)
+		}
+		delete(so.top_dimensions, allocator)
+		free(so, allocator)
+	}
 	for &f in report.findings {
 		delete(f.title, allocator)
 		delete(f.summary, allocator)
@@ -307,6 +359,10 @@ free_hunt_report :: proc(report: ^Hunt_Report) {
 			delete(e.dimension, allocator)
 			delete(e.value, allocator)
 			delete(e.metric, allocator)
+			for ms in e.extra_metrics {
+				delete(ms.metric, allocator)
+			}
+			delete(e.extra_metrics, allocator)
 		case Log_Pattern_Evidence:
 			delete(e.original_level, allocator)
 			delete(e.message_template, allocator)

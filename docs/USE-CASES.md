@@ -11,12 +11,53 @@ important patterns before deciding which queries to write.
 
 ```bash
 ./snout hunt application.log
+```
+
+The compact report is the triage view. In one screen it answers:
+
+- **Severity distribution.** The overview bar and per-level counts show how
+  events are spread across critical, error, warn, info, and debug.
+- **Frequent context.** The most common message templates per level, with the
+  time range each one covers — useful for distinguishing day-long noise from
+  short windowed bursts.
+- **Ranked attention findings.** Each row carries a score, severity tag, a
+  one-line sparkline that locates the events on the file's timeline, an event
+  count, and the templated message.
+
+![Hunt compact triage view — severity stack, frequent patterns, and ranked findings with sparklines](assets/hunt-compact-overview.png)
+
+### What you see in --verbose
+
+Verbose mode keeps the same triage block at the top and then expands every
+finding with a full-width histogram, peak count and time, first/last match
+timestamps, representative samples, and a grouped reproduce footer:
+
+```bash
 ./snout hunt application.log --verbose
 ```
 
-The compact report gives an immediate severity distribution, frequent context,
-and ranked findings. Verbose mode expands them with temporal histograms, peak,
-first/last match, representative samples, and reproduction commands.
+![Hunt severity stack, frequent log patterns, and the first findings with histograms](assets/hunt-severity-and-critical-burst.png)
+
+### Reading individual findings
+
+Every finding answers four questions at once: *what* (templated message),
+*when* (sparkline + peak + first/last match), *how much* (event count and
+share), and *which sample* (a real message preserving variable parts). The
+sparkline distinguishes a steady scatter, a ramp window, and a sharp burst at
+a glance:
+
+![ERROR and WARN findings with distinctive temporal signatures](assets/hunt-error-and-warn-patterns.png)
+
+### Reproducing what Hunt found
+
+`--verbose` also raises the INFO-pattern filter so the most frequent
+informational templates surface alongside attention findings. At the end of
+the report the reproduce block is grouped by command — one entry per shared
+query rather than one line per finding:
+
+![INFO patterns surfaced by --verbose and the grouped reproduce footer](assets/hunt-info-patterns-and-reproduce.png)
+
+### Saving the report
 
 Save the investigation as Markdown or emit structured JSON:
 

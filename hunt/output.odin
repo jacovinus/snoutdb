@@ -233,7 +233,13 @@ render_markdown_evidence :: proc(writer: io.Writer, evidence: Evidence) {
 		fmt.wprintfln(writer, "- **Shift:** %s (%d) → %s (%d) · %.1fx", value.before_bucket, value.before_count, value.after_bucket, value.after_count, value.ratio)
 	case Top_Contributor_Evidence:
 		fmt.wprintfln(writer, "- **Dimension:** %s = %s", value.dimension, markdown_inline(value.value))
-		fmt.wprintfln(writer, "- **Contribution:** %.1f%% of %s total", value.share * 100.0, value.metric)
+		fmt.wprintfln(writer, "- **Primary metric:** %.1f%% of %s total", value.share * 100.0, value.metric)
+		if len(value.extra_metrics) > 0 {
+			fmt.wprintfln(writer, "- **Also dominates:**")
+			for ms in value.extra_metrics {
+				fmt.wprintfln(writer, "  - %s — %.0f%%", ms.metric, ms.share * 100.0)
+			}
+		}
 	case Log_Pattern_Evidence:
 	}
 }
@@ -268,12 +274,98 @@ render_table :: proc(
 
 	if len(report.severity_summary) > 0 {
 		render_severity_block(writer, report.severity_summary, mode)
+	} else if report.schema_overview != nil {
+		render_overview_block(writer, report.schema_overview, mode)
 	}
 	if len(report.frequent_patterns) > 0 {
 		render_frequent_block(writer, report.frequent_patterns, mode)
 	}
 	render_findings_block(writer, report.findings, mode, verbose)
 	return .None
+}
+
+// ── Overview (non-log inputs) ───────────────────────────────────────────────
+
+@(private="file")
+render_overview_block :: proc(writer: io.Writer, so: ^Schema_Overview, mode: Color_Mode) {
+	write_section_header(writer, "overview", "────────", mode)
+
+	// Line 1: row + column count with role breakdown.
+	role_summary := overview_role_summary(so)
+	fmt.wprint(writer, "  ")
+	write_bold_word(writer, "rows", mode)
+	fmt.wprintf(writer, " %s   ", format_number(so.row_count))
+	write_bold_word(writer, "columns", mode)
+	fmt.wprintf(writer, " %d  %s\n", so.column_count, role_summary)
+
+	if so.time_range_start != "" {
+		fmt.wprint(writer, "  ")
+		write_bold_word(writer, "time", mode)
+		fmt.wprintf(writer, " %s → %s\n", so.time_range_start, so.time_range_end)
+	}
+
+	if len(so.top_dimensions) > 0 {
+		fmt.wprintln(writer)
+		write_bold_word(writer, "  key dimensions", mode)
+		fmt.wprintln(writer)
+		for d in so.top_dimensions {
+			fmt.wprintf(writer, "  %-18s  top: %-16s  (%.0f%%",
+				d.name, d.top_value, d.top_share * 100.0)
+			if d.distinct_count > 0 {
+				fmt.wprintf(writer, ", %d distinct", d.distinct_count)
+			}
+			fmt.wprintln(writer, ")")
+		}
+	}
+
+	if len(so.top_null_columns) > 0 {
+		fmt.wprintln(writer)
+		write_bold_word(writer, "  missing data", mode)
+		fmt.wprintln(writer)
+		for n in so.top_null_columns {
+			fmt.wprintf(writer, "  %-18s  %d nulls (%.1f%%)\n",
+				n.name, n.null_count, n.null_ratio * 100.0)
+		}
+	}
+
+	fmt.wprintln(writer)
+}
+
+@(private="file")
+overview_role_summary :: proc(so: ^Schema_Overview) -> string {
+	parts := make([dynamic]string, 0, 4, context.temp_allocator)
+	if so.timestamp_columns > 0 {
+		append(&parts, fmt.tprintf("%d timestamp", so.timestamp_columns))
+	}
+	if so.dimension_columns > 0 {
+		append(&parts, fmt.tprintf("%d dimension", so.dimension_columns))
+	}
+	if so.metric_columns > 0 {
+		append(&parts, fmt.tprintf("%d metric", so.metric_columns))
+	}
+	if so.identifier_columns > 0 {
+		append(&parts, fmt.tprintf("%d identifier", so.identifier_columns))
+	}
+	if len(parts) == 0 { return "" }
+	body := strings.join(parts[:], " · ", context.temp_allocator)
+	return fmt.tprintf("(%s)", body)
+}
+
+@(private="file")
+format_number :: proc(n: int) -> string {
+	// Insert thousand separators so 50000 → "50,000".
+	if n < 1000 { return fmt.tprintf("%d", n) }
+	negative := n < 0
+	val := n if !negative else -n
+	digits := fmt.tprintf("%d", val)
+	out := strings.builder_make(context.temp_allocator)
+	if negative { strings.write_byte(&out, '-') }
+	remainder := len(digits) % 3
+	for i in 0..<len(digits) {
+		if i > 0 && (i - remainder) % 3 == 0 { strings.write_byte(&out, ',') }
+		strings.write_byte(&out, digits[i])
+	}
+	return strings.to_string(out)
 }
 
 // ── Severity ────────────────────────────────────────────────────────────────
@@ -615,7 +707,13 @@ timeline_axis :: proc(width: int) -> string {
 @(private="file")
 write_metadata_label :: proc(writer: io.Writer, label: string, mode: Color_Mode) {
 	fmt.wprint(writer, "  ")
-	write_bold_word(writer, pad_right(label, VERBOSE_METADATA_COLUMN - 2), mode)
+	// Guarantee at least one trailing space so labels longer than the column
+	// width never visually collide with the value.
+	padded := pad_right(label, VERBOSE_METADATA_COLUMN - 2)
+	if len(padded) == len(label) {
+		padded = strings.concatenate({label, " "}, context.temp_allocator)
+	}
+	write_bold_word(writer, padded, mode)
 }
 
 @(private="file")
@@ -1107,7 +1205,7 @@ write_evidence_lines :: proc(writer: io.Writer, e: Evidence, mode: Color_Mode) {
 		write_metadata_row(writer, "Dimension", fmt.tprintf("%s = %s", v.dimension, v.value), mode)
 		write_metadata_row(
 			writer,
-			"Contribution",
+			"Primary",
 			fmt.tprintf(
 				"%.0f%% of %s total (%.2f / %.2f)",
 				v.share * 100.0,
@@ -1117,6 +1215,20 @@ write_evidence_lines :: proc(writer: io.Writer, e: Evidence, mode: Color_Mode) {
 			),
 			mode,
 		)
+		if len(v.extra_metrics) > 0 {
+			b := strings.builder_make(context.temp_allocator)
+			max_inline := min(len(v.extra_metrics), 5)
+			for i in 0..<max_inline {
+				if i > 0 { strings.write_string(&b, ", ") }
+				ms := v.extra_metrics[i]
+				strings.write_string(&b, ms.metric)
+				strings.write_string(&b, fmt.tprintf(" (%.0f%%)", ms.share * 100.0))
+			}
+			if len(v.extra_metrics) > max_inline {
+				strings.write_string(&b, fmt.tprintf(", +%d more", len(v.extra_metrics) - max_inline))
+			}
+			write_metadata_row(writer, "Covers", strings.to_string(b), mode)
+		}
 	case Log_Pattern_Evidence:
 		if v.representative_message != v.message_template {
 			fmt.wprintfln(writer, "    sample: %s",
@@ -1289,9 +1401,16 @@ write_evidence_json :: proc(writer: io.Writer, e: Evidence) {
 			json_string(v.before_bucket), json_string(v.after_bucket),
 			v.before_count, v.after_count, v.ratio)
 	case Top_Contributor_Evidence:
-		fmt.wprintf(writer, `{{"dimension":%s,"value":%s,"metric":%s,"contribution":%.6f,"total":%.6f,"share":%.6f}}`,
+		fmt.wprintf(writer,
+			`{{"dimension":%s,"value":%s,"metric":%s,"contribution":%.6f,"total":%.6f,"share":%.6f,"extra_metrics":[`,
 			json_string(v.dimension), json_string(v.value), json_string(v.metric),
 			v.contribution, v.total, v.share)
+		for ms, i in v.extra_metrics {
+			if i > 0 { fmt.wprint(writer, ",") }
+			fmt.wprintf(writer, `{{"metric":%s,"share":%.6f}}`,
+				json_string(ms.metric), ms.share)
+		}
+		fmt.wprint(writer, "]}")
 	case Log_Pattern_Evidence:
 		fmt.wprintf(writer,
 			`{{"level":%s,"original_level":%s,"template":%s,"representative":%s,"fragment":%s,"matching_rows":%d,"total_rows":%d,"share":%.6f,"first_seen":%s,"last_seen":%s,"range_start":%s,"range_end":%s,"histogram":`,

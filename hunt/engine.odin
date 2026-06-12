@@ -59,9 +59,16 @@ run_engine :: proc(
 
 	severity:  []Severity_Summary
 	frequent:  []Frequent_Pattern
+	overview:  ^Schema_Overview
 	if config.show_frequent {
 		severity = compute_severity_summary(report, table, allocator)
 		frequent = compute_frequent_patterns(report, table, config.frequent_limit, allocator)
+	}
+	// Schema overview is the non-log counterpart of severity_summary — only
+	// emit it when no severity-aware summary was produced, so the user gets
+	// exactly one orientation block before the findings.
+	if len(severity) == 0 {
+		overview = compute_schema_overview(report, allocator)
 	}
 
 	return Hunt_Report{
@@ -70,6 +77,7 @@ run_engine :: proc(
 		findings          = ranked,
 		severity_summary  = severity,
 		frequent_patterns = frequent,
+		schema_overview   = overview,
 		allocator         = allocator,
 	}, .None
 }
