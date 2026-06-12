@@ -34,14 +34,18 @@ if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+
 	exit 1
 fi
 
-step "Build CLI with strict checks"
-odin build ./cmd/snout -out:"$SNOUT_BIN" -vet -strict-style
+step "Build CLI"
+# -strict-style removed: triggers an Odin compiler assertion in some shipped
+# versions (`Assertion Failure: tuple != nullptr` in check_type.cpp). The CI's
+# brew-installed Odin can shift unexpectedly; -vet alone still catches the
+# correctness checks we care about.
+odin build ./cmd/snout -out:"$SNOUT_BIN" -vet
 test "$("$SNOUT_BIN" version)" = "SnoutDB $VERSION"
 test "$("$SNOUT_BIN" --version)" = "SnoutDB $VERSION"
 test "$("$SNOUT_BIN" -v)" = "SnoutDB $VERSION"
 
-step "Run complete test suite with strict checks and memory tracking"
-odin test ./tests -out:"$TMP_DIR/snout_tests" -vet -strict-style
+step "Run complete test suite with memory tracking"
+odin test ./tests -out:"$TMP_DIR/snout_tests" -vet
 
 step "Validate ingestion and storage"
 "$SNOUT_BIN" csv-import tests/fixtures/simple_metrics.csv "$TMP_DIR/csv.snout" >/dev/null
