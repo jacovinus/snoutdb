@@ -1,7 +1,7 @@
 # SnoutDB
 
 [![CI](https://github.com/jacovinus/snoutdb/actions/workflows/ci.yml/badge.svg)](https://github.com/jacovinus/snoutdb/actions/workflows/ci.yml)
-![Version: v0.2.0](https://img.shields.io/badge/version-v0.2.0-4c6ef5)
+![Version: v0.2.1](https://img.shields.io/badge/version-v0.2.1-4c6ef5)
 ![Tests: 343 passing](https://img.shields.io/badge/tests-343_passing-2f9e44)
 ![License: AGPL v3](https://img.shields.io/badge/license-AGPL_v3-blue)
 ![Language: Odin](https://img.shields.io/badge/language-Odin-3882d2)
@@ -17,34 +17,41 @@ Point it at an unfamiliar CSV, JSONL, log, or `.snout` file:
 ./snout hunt application.log
 ```
 
-```text
-severity
-────────
-  overview  │EEEEEEWWWWWWIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIDDDDDD│
+![Hunt compact output — severity overview bar, frequent log patterns, and ranked findings each with a one-line temporal sparkline](docs/assets/hunt-compact-overview.png)
 
-  error      29   14.5%
-  warn       29   14.5%
-  info      114   57.0%
-  debug      28   14.0%
+### What Hunt returns
 
-attention (10 findings)
-────────────────────
-  [67]  ERROR   │___▁______▁_______▁______▁______│  (4×) auth token refreshed
-  [67]  ERROR   │__▁_______▁______▁______▁______▁│  (5×) cache miss
-```
+Every `hunt` run answers five questions at once, in a single page of output you
+can read in seconds:
 
-`hunt` profiles the input, summarizes severity and frequent patterns, detects
-noteworthy concentrations, outliers, missing data, temporal shifts, dominant
-contributors, and log-message patterns, then ranks the findings and prints
-commands that reproduce the evidence. `--verbose` adds full temporal
-histograms, peaks, first/last matches, samples, and grouped reproduction
-commands.
+1. **What kind of file is this?** A severity stack and per-level counts
+   summarise the distribution of events at a glance.
+2. **What is normal in here?** The *frequent patterns* block lists the most
+   common message templates per severity, with a time range so you know whether
+   they happened all day or only inside a window.
+3. **What should I look at first?** The *attention* block ranks findings by a
+   severity-aware score — errors, critical bursts, anomalous concentrations,
+   missing data, metric tails, time spikes, and dominant contributors all flow
+   into the same ranking.
+4. **When did each finding happen?** Every ranked finding ships with a
+   one-line sparkline showing where its events fall inside the file's full
+   timeline — distinguishing a sharp burst, a slow ramp, or a steady scatter
+   without leaving the page.
+5. **How do I reproduce the evidence?** Each finding comes with a shell-safe
+   SnoutDB command that re-runs the underlying slice of data, so the answer is
+   always one command away from being verified.
+
+`--verbose` expands each finding with a full-width histogram, peak count and
+time, first/last match timestamps, a representative sample (with `<uuid>`,
+`<n>`, URLs preserved), and a grouped reproduce footer:
 
 ```bash
 ./snout hunt application.log --verbose
 ./snout hunt application.log --format json
 ./snout hunt application.log --verbose -o incident-report.md
 ```
+
+![Hunt verbose output — severity overview bar, frequent log patterns, and the first attention findings with detailed temporal histograms](docs/assets/hunt-severity-and-critical-burst.png)
 
 `sniff` remains the lightweight schema and profiling command when you only need
 column roles, statistics, and query suggestions:
@@ -199,7 +206,7 @@ CSV in approximately 6.8 seconds on an Apple M4 Pro.
 
 ## Version
 
-Current version: `v0.2.0`.
+Current version: `v0.2.1`.
 
 SnoutDB is early-stage software. The CLI, C ABI, and `.snout` format may still
 change before `v1.0.0`.
@@ -403,7 +410,7 @@ chunk, every column has its own typed block:
 
 This structure prepares the format for optimizations such as skipping chunks
 whose min/max range cannot match a filter. The metadata is already stored, but
-query-time chunk skipping is **not yet implemented** in `v0.2.0`.
+query-time chunk skipping is **not yet implemented** in `v0.2.1`.
 
 ### When should you create one?
 
@@ -708,8 +715,24 @@ signals automatically:
 ./snout hunt dataset.snout
 ```
 
-The normal view provides a severity overview, frequent context, compact
-histograms, ranked findings, and a prompt to use the detailed view:
+The default (compact) view fits a triage decision on one screen — severity
+overview, frequent message templates per level, and a ranked list of attention
+findings where each row carries its own sparkline showing when the events
+happened inside the file's full timeline:
+
+![Hunt compact triage view — severity stack, frequent patterns, and findings with one-line sparklines](docs/assets/hunt-compact-overview.png)
+
+Each compact finding row is laid out so the most important signal is closest
+to the eye:
+
+```
+  [71]  ERROR   │___________________▁▇▁__________│  (35×)  cache miss key=session:<uuid>
+   │      │              │                        │       │
+   score  severity tag   sparkline over the      events   normalized message template
+                         file's full timeline    counted
+```
+
+Switch to `--verbose` when you have decided to investigate one of those rows:
 
 ```bash
 ./snout hunt application.log --verbose
@@ -724,6 +747,19 @@ Verbose mode includes:
 - first and last match;
 - bounded representative samples;
 - grouped commands to reproduce the evidence.
+
+Each finding shows when the events happened, how concentrated they are, and a
+sample with the variable parts (`<uuid>`, `<n>`, URLs) intact so the original
+context is preserved:
+
+![ERROR and WARN log_pattern findings — a steady scatter, a ramp window, and a sharp burst all visible in their sparklines](docs/assets/hunt-error-and-warn-patterns.png)
+
+`--verbose` also lifts the INFO-pattern filter so frequent informational
+templates surface alongside the attention findings. The reproduce block is
+grouped by command — one entry per shared query rather than a repeated line
+per finding:
+
+![INFO patterns from --verbose and the grouped reproduce footer covering multiple findings at once](docs/assets/hunt-info-patterns-and-reproduce.png)
 
 Useful options:
 
