@@ -30,6 +30,10 @@ inspect_log_file :: proc(
 		schema, err = inspect_fixed_log(path, table_name, combined_schema_template(), parse_clf_tokens, 11, resolved, allocator)
 	case .Syslog:
 		schema, err = inspect_fixed_log(path, table_name, syslog_schema_template(), parse_syslog_line, 5, resolved, allocator)
+	case .App:
+		schema, err = inspect_fixed_log(path, table_name, app_schema_template(), parse_app_log_line, 3, resolved, allocator)
+	case .Bracketed:
+		schema, err = inspect_fixed_log(path, table_name, bracketed_schema_template(), parse_bracketed_log_line, 4, resolved, allocator)
 	case .Logfmt:
 		schema, err = inspect_logfmt_log(path, table_name, resolved, allocator)
 	case .Regex:
@@ -57,6 +61,10 @@ populate_log_table :: proc(
 		return populate_fixed_log(path, schema, parse_clf_tokens, opts, allocator)
 	case .Syslog:
 		return populate_fixed_log(path, schema, parse_syslog_line, opts, allocator)
+	case .App:
+		return populate_fixed_log(path, schema, parse_app_log_line, opts, allocator)
+	case .Bracketed:
+		return populate_fixed_log(path, schema, parse_bracketed_log_line, opts, allocator)
 	case .Logfmt:
 		return populate_logfmt_log(path, schema, opts, allocator)
 	case .Regex:

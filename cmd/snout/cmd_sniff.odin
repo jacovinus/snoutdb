@@ -69,6 +69,7 @@ run_sniff_command :: proc(args: []string) {
 			case "combined": log_opts.format = .Combined
 			case "logfmt":   log_opts.format = .Logfmt
 			case "syslog":   log_opts.format = .Syslog
+			case "app":      log_opts.format = .App
 			case "regex":    log_opts.format = .Regex
 			case:
 				fmt.eprintfln("error: unsupported log format %q", args[cursor+1])
@@ -150,7 +151,13 @@ run_sniff_command :: proc(args: []string) {
 
 	report: sniff.Sniff_Report
 	profile_err: snout_core.Error
-	if strings.has_suffix(input_path, ".csv") {
+	if has_logformat {
+		log_table_name := "stdin"
+		if stdin_tmp_sniff == "" {
+			log_table_name = table_name_from_path(input_path, log_ext_suffix(input_path))
+		}
+		report, profile_err = sniff.profile_log_file(input_path, log_table_name, log_opts, config)
+	} else if strings.has_suffix(input_path, ".csv") {
 		table_name := table_name_from_path(input_path, ".csv")
 		report, profile_err = sniff.profile_csv_file(input_path, table_name, config)
 	} else if strings.has_suffix(input_path, ".jsonl") || strings.has_suffix(input_path, ".ndjson") {

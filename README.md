@@ -461,7 +461,7 @@ columns:
 **Reading from stdin:** pipe data in by passing `-f -`. SnoutDB auto-detects CSV vs JSONL from the first line. Log files can also be piped — use `log-import` to write them to a temp `.snout` file first, or pipe directly into `sniff`:
 
 ```bash
-# CSV desde stdin
+# Read CSV from stdin
 cat mydata.csv | ./snout -f - group=region -- count=rows
 ```
 ```
@@ -476,7 +476,7 @@ ap-north    110
 ```
 
 ```bash
-# Log desde stdin — perfil directo
+# Profile a log directly from stdin
 cat access.log | ./snout sniff -f -
 ```
 ```
@@ -491,7 +491,7 @@ timestamp Timestamp  Timestamp       0     12847  2026-06-11T00:00:03Z → 2026-
 ```
 
 ```bash
-# Log desde stdin — query: importar al vuelo y consultar
+# Import a log from stdin, then query it
 cat access.log | ./snout log-import - access_tmp.snout && \
   ./snout -f access_tmp.snout group=status -- count=rows --sort count=rows desc
 ```
@@ -933,6 +933,13 @@ ap-south          59.70    196
 ap-north          49.20    311
 ```
 
+```bash
+# Search inside log messages
+./snout -f warp.log group=level,message -- count=rows \
+  --where message icontains telemetry \
+  --sort count=rows desc
+```
+
 **Filter operators:**
 | Operator | Meaning |
 |----------|---------|
@@ -942,6 +949,9 @@ ap-north          49.20    311
 | `le`       | less than or equal |
 | `gt`       | greater than |
 | `ge`       | greater than or equal |
+| `contains` | string contains text (case-sensitive) |
+| `not-contains` | string does not contain text |
+| `icontains` | string contains text (ASCII case-insensitive) |
 | `is-null`  | value is missing |
 | `not-null` | value is present |
 
@@ -1503,6 +1513,7 @@ columns: 5
 - `combined` — CLF plus `referer` and `user_agent` columns
 - `logfmt` — `key=value` pairs (used by Logrus, Zap, etc.)
 - `syslog` — RFC 3164 (`Jun 11 10:00:01 host app[pid]: message`), with or without PRI prefix (`<134>`)
+- `app` — application logs in `YYYY-MM-DD HH:MM:SS [level] message` format
 - `regex` — custom format with `(?P<name>...)` named groups
 
 CLF timestamps are converted to ISO-8601 UTC automatically. Syslog timestamps use a `0000-MM-DD` year placeholder (RFC 3164 does not include a year).
@@ -1641,6 +1652,7 @@ You can safely redirect stdout to a file or pipe without capturing the timing li
 | Auto-explore and get query ideas (log) | `./snout sniff -f access.log` |
 | Sniff from stdin (auto-detects CSV/JSONL) | `cat file.csv \| ./snout sniff -f -` |
 | Query data from stdin | `cat file.csv \| ./snout -f - group=col -- count=rows` |
+| Query application logs from stdin | `cat app.log \| ./snout -f - group=level,message -- count=rows --logformat app` |
 | Count rows per group | `./snout -f file.csv group=col -- count=rows` |
 | Count log requests by status | `./snout -f access.snout group=status -- count=rows` |
 | Average per group | `./snout -f file.csv group=col -- avg=col2` |

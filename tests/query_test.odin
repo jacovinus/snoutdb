@@ -276,6 +276,101 @@ filters_are_typed_and_combined_with_and :: proc(t: ^testing.T) {
 }
 
 @(test)
+string_contains_filters_support_partial_and_case_insensitive_matches :: proc(t: ^testing.T) {
+	input := "{\"message\":\"Start to send telemetry events\",\"level\":\"INFO\"}\n" +
+	         "{\"message\":\"Telemetry upload failed\",\"level\":\"ERROR\"}\n" +
+	         "{\"message\":\"window resized\",\"level\":\"INFO\"}\n" +
+	         "{\"message\":null,\"level\":\"WARN\"}\n"
+	table, err := ingest.read_jsonl_string(input, "contains")
+	testing.expect_value(t, err, snout_core.Error.None)
+	if err != .None {
+		return
+	}
+	defer snout_core.free_table(&table)
+
+	contains, contains_err := query.make_filter_predicate(
+		&table,
+		"message",
+		.Contains,
+		"telemetry",
+	)
+	icontains, icontains_err := query.make_filter_predicate(
+		&table,
+		"message",
+		.IContains,
+		"TELEMETRY",
+	)
+	not_contains, not_contains_err := query.make_filter_predicate(
+		&table,
+		"message",
+		.Not_Contains,
+		"telemetry",
+	)
+	testing.expect_value(t, contains_err, snout_core.Error.None)
+	testing.expect_value(t, icontains_err, snout_core.Error.None)
+	testing.expect_value(t, not_contains_err, snout_core.Error.None)
+
+	contains_selection, contains_count, contains_selection_err :=
+		query.build_selection(&table, []query.Filter_Predicate{contains})
+	testing.expect_value(t, contains_selection_err, snout_core.Error.None)
+	if contains_selection_err == .None {
+		defer delete(contains_selection)
+		testing.expect_value(t, contains_count, 1)
+		testing.expect(t, contains_selection[0])
+	}
+
+	icontains_selection, icontains_count, icontains_selection_err :=
+		query.build_selection(&table, []query.Filter_Predicate{icontains})
+	testing.expect_value(t, icontains_selection_err, snout_core.Error.None)
+	if icontains_selection_err == .None {
+		defer delete(icontains_selection)
+		testing.expect_value(t, icontains_count, 2)
+		testing.expect(t, icontains_selection[0])
+		testing.expect(t, icontains_selection[1])
+	}
+
+	not_selection, not_count, not_selection_err :=
+		query.build_selection(&table, []query.Filter_Predicate{not_contains})
+	testing.expect_value(t, not_selection_err, snout_core.Error.None)
+	if not_selection_err == .None {
+		defer delete(not_selection)
+		testing.expect_value(t, not_count, 2)
+		testing.expect(t, not_selection[1])
+		testing.expect(t, not_selection[2])
+		testing.expect(t, !not_selection[3], "null strings should not match not-contains")
+	}
+}
+
+@(test)
+contains_filters_reject_non_string_columns :: proc(t: ^testing.T) {
+	input := "{\"message\":\"ok\",\"status\":200,\"at\":\"2026-01-01T00:00:00Z\"}\n"
+	table, err := ingest.read_jsonl_string(input, "contains_types")
+	testing.expect_value(t, err, snout_core.Error.None)
+	if err != .None {
+		return
+	}
+	defer snout_core.free_table(&table)
+
+	_, numeric_err := query.make_filter_predicate(&table, "status", .Contains, "20")
+	_, timestamp_err := query.make_filter_predicate(&table, "at", .IContains, "2026")
+	testing.expect_value(t, numeric_err, snout_core.Error.Unsupported_Filter_Operator)
+	testing.expect_value(t, timestamp_err, snout_core.Error.Unsupported_Filter_Operator)
+}
+
+@(test)
+contains_filter_operators_parse :: proc(t: ^testing.T) {
+	contains, contains_ok := query.parse_filter_operator("contains")
+	not_contains, not_contains_ok := query.parse_filter_operator("not-contains")
+	icontains, icontains_ok := query.parse_filter_operator("icontains")
+	testing.expect(t, contains_ok)
+	testing.expect(t, not_contains_ok)
+	testing.expect(t, icontains_ok)
+	testing.expect_value(t, contains, query.Filter_Operator.Contains)
+	testing.expect_value(t, not_contains, query.Filter_Operator.Not_Contains)
+	testing.expect_value(t, icontains, query.Filter_Operator.IContains)
+}
+
+@(test)
 query_validation_returns_specific_errors :: proc(t: ^testing.T) {
 	input := "{\"key\":\"a\",\"number\":1,\"ratio\":1.5,\"flag\":true}\n"
 	table, err := ingest.read_jsonl_string(input, "errors")

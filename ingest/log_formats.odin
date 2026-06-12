@@ -51,9 +51,30 @@ SYSLOG_SCHEMA_TEMPLATE := []Log_Column_Schema{
 	{name = "message",   kind = .String,    nullable = false},
 }
 
+@(private = "file")
+APP_SCHEMA_TEMPLATE := []Log_Column_Schema{
+	{name = "timestamp", kind = .Timestamp, nullable = false},
+	{name = "level",     kind = .String,    nullable = false},
+	{name = "message",   kind = .String,    nullable = false},
+}
+
+// Adobe UXP / IPC layout:
+//   [2025-05-25_22-34-19][0x32acf3000][Default] [console] [fc-1] message body
+// Three required leading brackets (timestamp, thread, level); everything after
+// them — including any further [tag] segments — is captured as the message.
+@(private = "file")
+BRACKETED_SCHEMA_TEMPLATE := []Log_Column_Schema{
+	{name = "timestamp", kind = .Timestamp, nullable = false},
+	{name = "thread",    kind = .String,    nullable = false},
+	{name = "level",     kind = .String,    nullable = false},
+	{name = "message",   kind = .String,    nullable = false},
+}
+
 clf_schema_template :: proc() -> []Log_Column_Schema { return CLF_SCHEMA_TEMPLATE }
 combined_schema_template :: proc() -> []Log_Column_Schema { return COMBINED_SCHEMA_TEMPLATE }
 syslog_schema_template :: proc() -> []Log_Column_Schema { return SYSLOG_SCHEMA_TEMPLATE }
+app_schema_template :: proc() -> []Log_Column_Schema { return APP_SCHEMA_TEMPLATE }
+bracketed_schema_template :: proc() -> []Log_Column_Schema { return BRACKETED_SCHEMA_TEMPLATE }
 
 // ---- Format detection -------------------------------------------------------
 
@@ -70,6 +91,8 @@ detect_log_format :: proc(
 	clf_count := 0
 	combined_count := 0
 	syslog_count := 0
+	app_count := 0
+	bracketed_count := 0
 	logfmt_count := 0
 	total := 0
 
@@ -83,12 +106,19 @@ detect_log_format :: proc(
 		}
 		total += 1
 
+		// Order matters: bracketed must be checked before app because both
+		// start with similar-looking bracketed timestamps but bracketed is
+		// stricter (three leading bracket groups, underscore separator).
 		if is_combined_line(line) {
 			combined_count += 1
 		} else if is_clf_line(line) {
 			clf_count += 1
+		} else if is_bracketed_log_line(line) {
+			bracketed_count += 1
 		} else if is_syslog_line(line) {
 			syslog_count += 1
+		} else if is_app_log_line(line) {
+			app_count += 1
 		} else if is_logfmt_line(line) {
 			logfmt_count += 1
 		}
@@ -106,8 +136,14 @@ detect_log_format :: proc(
 	if clf_count + combined_count >= threshold {
 		return .CLF, .None
 	}
+	if bracketed_count >= threshold {
+		return .Bracketed, .None
+	}
 	if syslog_count >= threshold {
 		return .Syslog, .None
+	}
+	if app_count >= threshold {
+		return .App, .None
 	}
 	if logfmt_count >= threshold {
 		return .Logfmt, .None
@@ -208,6 +244,20 @@ is_logfmt_line :: proc(line: string) -> bool {
 		}
 	}
 	return true
+}
+
+// is_app_log_line recognizes common application logs:
+// YYYY-MM-DD HH:MM:SS [level] message
+is_app_log_line :: proc(line: string) -> bool {
+	_, ok := parse_app_log_line(line, context.temp_allocator)
+	return ok
+}
+
+// is_bracketed_log_line recognizes Adobe UXP / IPC style logs:
+//   [YYYY-MM-DD_HH-MM-SS][thread][level] message
+is_bracketed_log_line :: proc(line: string) -> bool {
+	_, ok := parse_bracketed_log_line(line, context.temp_allocator)
+	return ok
 }
 
 // ---- CLF / Combined parsers -------------------------------------------------
@@ -394,6 +444,162 @@ parse_syslog_line :: proc(
 	return result[:], true
 }
 
+// ---- Application log parser ------------------------------------------------
+
+parse_app_log_line :: proc(
+	line: string,
+	alloc := context.temp_allocator,
+) -> (fields: []Log_Field, ok: bool) {
+	if len(line) < 23 {
+		return nil, false
+	}
+
+	if line[4] != '-' || line[7] != '-' ||
+	   line[13] != ':' || line[16] != ':' {
+		return nil, false
+	}
+	if !is_ascii_digits(line[0:4]) || !is_ascii_digits(line[5:7]) ||
+	   !is_ascii_digits(line[8:10]) || !is_ascii_digits(line[11:13]) ||
+	   !is_ascii_digits(line[14:16]) || !is_ascii_digits(line[17:19]) {
+		return nil, false
+	}
+
+	bracket_start := 20
+	has_utc_suffix := false
+	if line[10] == ' ' {
+		if line[19] != ' ' || line[20] != '[' {
+			return nil, false
+		}
+	} else if line[10] == 'T' {
+		if len(line) < 24 || line[19] != 'Z' || line[20] != ' ' || line[21] != '[' {
+			return nil, false
+		}
+		bracket_start = 21
+		has_utc_suffix = true
+	} else {
+		return nil, false
+	}
+
+	month, month_ok := strconv.parse_int(line[5:7])
+	day, day_ok := strconv.parse_int(line[8:10])
+	hour, hour_ok := strconv.parse_int(line[11:13])
+	minute, minute_ok := strconv.parse_int(line[14:16])
+	second, second_ok := strconv.parse_int(line[17:19])
+	if !month_ok || !day_ok || !hour_ok || !minute_ok || !second_ok ||
+	   month < 1 || month > 12 || day < 1 || day > 31 ||
+	   hour < 0 || hour > 23 || minute < 0 || minute > 59 ||
+	   second < 0 || second > 59 {
+		return nil, false
+	}
+
+	level_start := bracket_start + 1
+	level_end_relative := strings.index_byte(line[level_start:], ']')
+	if level_end_relative <= 0 {
+		return nil, false
+	}
+	level_end := level_start + level_end_relative
+	level := line[level_start:level_end]
+	for ch in level {
+		valid :=
+			(ch >= 'a' && ch <= 'z') ||
+			(ch >= 'A' && ch <= 'Z') ||
+			(ch >= '0' && ch <= '9') ||
+			ch == '_' ||
+			ch == '-'
+		if !valid {
+			return nil, false
+		}
+	}
+
+	ts_buf: [21]u8
+	timestamp := line[0:20]
+	if !has_utc_suffix {
+		timestamp = fmt.bprintf(ts_buf[:], "%sT%s", line[0:10], line[11:19])
+	}
+	ts, clone_err := strings.clone(timestamp, alloc)
+	if clone_err != nil {
+		return nil, false
+	}
+
+	message := strings.trim_left(line[level_end + 1:], " \t")
+	result := make([dynamic]Log_Field, 0, alloc)
+	append(&result, Log_Field{name = "timestamp", value = ts})
+	append(&result, Log_Field{name = "level", value = level})
+	append(&result, Log_Field{name = "message", value = message})
+	return result[:], true
+}
+
+// ---- Bracketed parser (Adobe UXP / IPC) ------------------------------------
+
+// parse_bracketed_log_line accepts lines of the form
+//   [YYYY-MM-DD_HH-MM-SS][thread][level] [extra] [...] message body
+// Returns four fields: timestamp (ISO-8601), thread (raw), level (raw),
+// message (everything after the third closing bracket, trimmed).
+parse_bracketed_log_line :: proc(
+	line: string,
+	alloc := context.temp_allocator,
+) -> (fields: []Log_Field, ok: bool) {
+	// Minimum length: "[2025-05-25_22-34-19][a][b]" = 26 chars.
+	if len(line) < 26 || line[0] != '[' { return nil, false }
+
+	// First bracket = timestamp.
+	end1 := strings.index_byte(line, ']')
+	if end1 <= 0 { return nil, false }
+	ts_raw := line[1:end1]
+	ts_iso, ts_ok := bracketed_ts_to_iso(ts_raw, alloc)
+	if !ts_ok { return nil, false }
+
+	rest := line[end1 + 1:]
+	if len(rest) == 0 || rest[0] != '[' { return nil, false }
+
+	// Second bracket = thread / process id.
+	end2 := strings.index_byte(rest, ']')
+	if end2 <= 0 { return nil, false }
+	thread := rest[1:end2]
+	if len(thread) == 0 { return nil, false }
+	rest = rest[end2 + 1:]
+	if len(rest) == 0 || rest[0] != '[' { return nil, false }
+
+	// Third bracket = severity / category label.
+	end3 := strings.index_byte(rest, ']')
+	if end3 <= 0 { return nil, false }
+	level := rest[1:end3]
+	if len(level) == 0 { return nil, false }
+	for r in level {
+		ascii_alpha :=
+			(r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') ||
+			(r >= '0' && r <= '9') || r == '_' || r == '-' || r == ' '
+		if !ascii_alpha { return nil, false }
+	}
+
+	// Whatever follows is the message body. Strip leading whitespace.
+	message := strings.trim_left(rest[end3 + 1:], " \t")
+
+	result := make([dynamic]Log_Field, 0, alloc)
+	append(&result, Log_Field{name = "timestamp", value = ts_iso})
+	append(&result, Log_Field{name = "thread",    value = thread})
+	append(&result, Log_Field{name = "level",     value = level})
+	append(&result, Log_Field{name = "message",   value = message})
+	return result[:], true
+}
+
+// bracketed_ts_to_iso converts "YYYY-MM-DD_HH-MM-SS" → "YYYY-MM-DDTHH:MM:SSZ".
+@(private = "file")
+bracketed_ts_to_iso :: proc(s: string, alloc := context.temp_allocator) -> (string, bool) {
+	if len(s) != 19 { return "", false }
+	if s[4]  != '-' || s[7]  != '-' || s[10] != '_' ||
+	   s[13] != '-' || s[16] != '-' { return "", false }
+	if !is_ascii_digits(s[0:4])  || !is_ascii_digits(s[5:7])  ||
+	   !is_ascii_digits(s[8:10]) || !is_ascii_digits(s[11:13]) ||
+	   !is_ascii_digits(s[14:16]) || !is_ascii_digits(s[17:19]) {
+		return "", false
+	}
+	out := fmt.aprintf("%s-%s-%sT%s:%s:%sZ",
+		s[0:4], s[5:7], s[8:10], s[11:13], s[14:16], s[17:19],
+		allocator = alloc)
+	return out, true
+}
+
 // ---- Logfmt parser ----------------------------------------------------------
 
 parse_logfmt_line :: proc(
@@ -535,6 +741,18 @@ scan_log_token :: proc(s: string) -> (token: string, rest: string, ok: bool) {
 		return "", "", false
 	}
 	return s[:end], s[end:], true
+}
+
+is_ascii_digits :: proc(s: string) -> bool {
+	if s == "" {
+		return false
+	}
+	for ch in s {
+		if ch < '0' || ch > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 // scan_log_quoted parses a double-quoted string at s[0]=='"'.

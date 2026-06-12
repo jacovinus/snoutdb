@@ -45,6 +45,9 @@ Filter_Operator :: enum {
 	Less_Equal,
 	Greater,
 	Greater_Equal,
+	Contains,
+	Not_Contains,
+	IContains,
 	Is_Null,
 	Is_Not_Null,
 }

@@ -276,6 +276,48 @@ detect_syslog_format :: proc(t: ^testing.T) {
 	testing.expect_value(t, format, ingest.Log_Format.Syslog)
 }
 
+@(test)
+detect_app_format :: proc(t: ^testing.T) {
+	format, err := ingest.detect_log_format("tests/fixtures/bracketed_app.log")
+	testing.expect_value(t, err, snout_core.Error.None)
+	testing.expect_value(t, format, ingest.Log_Format.App)
+}
+
+@(test)
+app_log_schema_and_values :: proc(t: ^testing.T) {
+	opts := ingest.Log_Read_Options{format = .App, has_format = true}
+	table, err := ingest.read_log_table("tests/fixtures/bracketed_app.log", "app", opts)
+	defer snout_core.free_table(&table)
+	testing.expect_value(t, err, snout_core.Error.None)
+	testing.expect_value(t, table.row_count, 5)
+	testing.expect_value(t, len(table.columns), 3)
+
+	ts_col, ts_found := snout_core.get_column(&table, "timestamp")
+	testing.expect(t, ts_found, "timestamp column missing")
+	if ts_found {
+		testing.expect_value(t, ts_col.strings[0], "2026-06-12T00:50:00")
+	}
+
+	level_col, level_found := snout_core.get_column(&table, "level")
+	testing.expect(t, level_found, "level column missing")
+	if level_found {
+		testing.expect_value(t, level_col.strings[2], "warn")
+	}
+
+	message_col, message_found := snout_core.get_column(&table, "message")
+	testing.expect(t, message_found, "message column missing")
+	if message_found {
+		testing.expect_value(t, message_col.strings[1], "[CCD] Killing 1 PTY process tree(s) on quit")
+	}
+
+	if ts_found {
+		testing.expect_value(t, ts_col.strings[4], "2026-06-12T07:24:47Z")
+	}
+	if level_found {
+		testing.expect_value(t, level_col.strings[4], "WARN")
+	}
+}
+
 // ---- Non-strict parse error tests ------------------------------------------
 
 @(test)

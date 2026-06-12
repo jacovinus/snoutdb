@@ -34,6 +34,7 @@ SnoutDB turns messy raw data into valuable local metrics.
 | RFC-0008 | Odin Style Guide | ✅ Reference |
 | RFC-0009 | Storage Engine v2 | ✅ Implemented — TASK-0011 (v2 format) + TASK-0012 (dictionary encoding) |
 | RFC-0010 | Roadmap | ✅ Up to date |
+| RFC-0011 | Hunt Analytics, Severity, and Configuration | 📝 Proposed — TASK-0019 |
 | SPEC-0014 | Log Ingestion | ✅ Implemented — TASK-0015 (CLF/Combined/Logfmt/Syslog/Regex, auto-detect) |
 
 **Tests:** 329 passing with `-vet -strict-style` · **Last updated:** 2026-06-11

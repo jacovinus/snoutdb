@@ -119,6 +119,10 @@ profile_log_file :: proc(
 			fields, parse_ok = ingest.parse_clf_tokens(line, context.temp_allocator)
 		case .Syslog:
 			fields, parse_ok = ingest.parse_syslog_line(line, context.temp_allocator)
+		case .App:
+			fields, parse_ok = ingest.parse_app_log_line(line, context.temp_allocator)
+		case .Bracketed:
+			fields, parse_ok = ingest.parse_bracketed_log_line(line, context.temp_allocator)
 		case .Logfmt:
 			fields, parse_ok = ingest.parse_logfmt_line(line, context.temp_allocator)
 		case .Regex:
