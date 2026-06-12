@@ -2,7 +2,16 @@
 
 ## Status
 
-Proposed
+Partially implemented in v0.2.0.
+
+Implemented: severity normalization, frequent context, log message templates,
+severity-aware findings, deterministic ranking, shell-safe reproduction
+commands, terminal color modes, compact and verbose charts, JSON/JSONL output,
+and TXT/Markdown export.
+
+Deferred: global/project TOML configuration, configurable weights and colors,
+and persistent historical baselines. Sections describing those features remain
+design proposals and are not part of the v0.2.0 CLI.
 
 ## Summary
 

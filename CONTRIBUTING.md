@@ -38,8 +38,9 @@ Run the complete pre-release validation before requesting review:
 ./scripts/validate-release.sh
 ```
 
-The validation covers the CLI, ingestion formats, storage, sniff, query,
-transform, merge, rollup, the C ABI, and available language examples.
+The validation covers the CLI, ingestion formats, storage, sniff, Hunt and its
+report exports, query, transform, merge, rollup, the C ABI, and available
+language examples.
 
 ## Repository Structure
 
@@ -49,6 +50,7 @@ transform, merge, rollup, the C ABI, and available language examples.
 | `ingest/` | CSV, JSONL, and log readers |
 | `storage/` | `.snout` reader, writer, and format |
 | `sniff/` | Profiling, roles, statistics, and suggestions |
+| `hunt/` | Automatic analyzers, ranking, evidence, terminal reports, and exports |
 | `query/`, `exec/` | Filtering, grouping, sorting, and aggregates |
 | `transform/` | Column transformations |
 | `merge/` | Append, consolidate, compact, and rollup |
@@ -133,9 +135,13 @@ Run:
 odin test ./tests -out:tests/snout_tests -vet -strict-style
 ```
 
-Changes to ingestion, storage, sniff, query execution, merge, or other hot
-paths should include or update a benchmark. Report before/after measurements
-and the hardware or environment used.
+Changes to ingestion, storage, sniff, Hunt analysis, query execution, merge, or
+other hot paths should include or update a benchmark. Report before/after
+measurements and the hardware or environment used.
+
+Hunt changes should cover deterministic ranking, color-disabled output,
+structured output, and any affected compact/verbose report layout. Export
+changes must verify that TXT and Markdown files contain no ANSI sequences.
 
 ## Documentation
 
@@ -146,6 +152,7 @@ Update documentation when changing:
 - the `.snout` file format;
 - C ABI functions or ownership;
 - performance characteristics;
+- Hunt analyzers, ranking, report fields, or export formats;
 - completed or planned features.
 
 Keep `README.md`, `ARCHITECTURE.md`, `CHANGELOG.md`, and relevant RFC/spec

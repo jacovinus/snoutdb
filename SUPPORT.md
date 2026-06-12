@@ -6,6 +6,7 @@ Use GitHub Discussions when it is enabled for:
 
 - installation and build questions;
 - help choosing commands or workflows;
+- help interpreting Hunt findings and reproduction commands;
 - questions about `.snout` files;
 - C ABI integration help;
 - general design discussion.
@@ -24,8 +25,13 @@ Use the bug report template for reproducible defects. Include:
 - minimal input or fixture;
 - actual and expected output.
 
+For Hunt issues, also include whether the problem affects compact, `--verbose`,
+JSON/JSONL, TXT, or Markdown output. Prefer a reduced synthetic fixture over a
+production report.
+
 Do not attach confidential production data. Reduce examples to the smallest
-safe reproduction.
+safe reproduction. Hunt exports may contain input-derived samples and should be
+reviewed or redacted before sharing.
 
 ## Feature Requests
 

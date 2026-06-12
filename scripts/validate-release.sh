@@ -58,6 +58,29 @@ python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))["version"] == 1
 	--sort count=rows desc >"$TMP_DIR/query.txt"
 grep -q '/checkout' "$TMP_DIR/query.txt"
 
+step "Validate Hunt reports and exports"
+"$SNOUT_BIN" hunt tests/fixtures/app.log --color never \
+	>"$TMP_DIR/hunt.txt"
+grep -q '^severity$' "$TMP_DIR/hunt.txt"
+grep -q '^attention (' "$TMP_DIR/hunt.txt"
+"$SNOUT_BIN" hunt tests/fixtures/app.log --verbose --color never \
+	>"$TMP_DIR/hunt-verbose.txt"
+grep -q '^  Activity' "$TMP_DIR/hunt-verbose.txt"
+grep -q '^reproduce$' "$TMP_DIR/hunt-verbose.txt"
+"$SNOUT_BIN" hunt tests/fixtures/app.log --format json \
+	>"$TMP_DIR/hunt.json"
+python3 -c 'import json,sys; data=json.load(open(sys.argv[1])); assert data["schema_version"] == 1; assert data["findings"]' \
+	"$TMP_DIR/hunt.json"
+"$SNOUT_BIN" hunt tests/fixtures/app.log -o "$TMP_DIR/hunt-export.txt" \
+	>/dev/null
+"$SNOUT_BIN" hunt tests/fixtures/app.log --verbose \
+	-o "$TMP_DIR/hunt-export.md" >/dev/null
+grep -q '^# Snout hunt report$' "$TMP_DIR/hunt-export.md"
+if LC_ALL=C grep -q $'\033' "$TMP_DIR/hunt-export.txt" "$TMP_DIR/hunt-export.md"; then
+	printf 'error: Hunt exports contain ANSI escape sequences\n' >&2
+	exit 1
+fi
+
 step "Validate transform, merge, and rollup"
 "$SNOUT_BIN" transform "$TMP_DIR/csv.snout" "$TMP_DIR/transformed.snout" \
 	rename=endpoint:path

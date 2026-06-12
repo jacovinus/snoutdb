@@ -35,6 +35,9 @@ odin build ./cmd/snout -out:"$SNOUT_BIN" -o:speed
 printf '\n==> Profiling an unfamiliar CSV\n\n'
 "$SNOUT_BIN" sniff -f "$INPUT_PATH" --top 3 --suggestions 2
 
+printf '\n==> Hunting for noteworthy application-log patterns\n\n'
+"$SNOUT_BIN" hunt tests/fixtures/app.log --color never
+
 printf '\n==> Finding slow or failing requests by region\n\n'
 "$SNOUT_BIN" -f "$INPUT_PATH" group=region -- \
 	avg=latency_ms p95=latency_ms count=rows \

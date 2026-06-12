@@ -44,9 +44,9 @@ Review in this order:
 6. Performance evidence.
 7. Documentation.
 
-Changes to storage, ingestion, query execution, merge, or the C ABI should
-receive additional scrutiny because they affect persisted data, large inputs,
-or external integrations.
+Changes to storage, ingestion, Hunt ranking/output, query execution, merge, or
+the C ABI should receive additional scrutiny because they affect persisted
+data, large inputs, user-visible reports, or external integrations.
 
 ## Labels
 
@@ -61,6 +61,7 @@ Recommended labels:
 | `storage` | `.snout` format and persistence |
 | `ingestion` | CSV, JSONL, and log input |
 | `query` | Filtering, grouping, sorting, aggregates |
+| `hunt` | Automatic analyzers, ranking, and report output |
 | `c-api` | C ABI and language bindings |
 | `breaking-change` | Compatibility impact before v1.0 |
 | `good first issue` | Focused task with clear acceptance criteria |
@@ -116,9 +117,9 @@ contributors can recreate benchmark and test data when needed.
 
 Recommended GitHub metadata:
 
-- Description: `Local columnar analytics for CSV, JSONL, logs, and .snout files`
+- Description: `Local Hunt analytics and columnar exploration for CSV, JSONL, logs, and .snout files`
 - Topics: `odin`, `columnar`, `analytics`, `csv`, `jsonl`, `logs`, `cli`,
-  `embedded-database`
+  `log-analysis`, `anomaly-detection`, `embedded-database`
 - Website: project documentation or release page when available
 
 Keep the repository license set to AGPL-3.0 and ensure GitHub recognizes

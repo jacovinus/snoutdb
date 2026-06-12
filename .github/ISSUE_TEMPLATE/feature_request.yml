@@ -34,6 +34,7 @@ body:
         - JSONL ingestion
         - Log ingestion
         - Sniff
+        - Hunt and reports
         - Query and aggregates
         - Transform
         - Merge and rollup

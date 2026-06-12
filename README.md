@@ -1,49 +1,98 @@
 # SnoutDB
 
 [![CI](https://github.com/jacovinus/snoutdb/actions/workflows/ci.yml/badge.svg)](https://github.com/jacovinus/snoutdb/actions/workflows/ci.yml)
-![Version: v0.1.0](https://img.shields.io/badge/version-v0.1.0-4c6ef5)
-![Tests: 329 passing](https://img.shields.io/badge/tests-329_passing-2f9e44)
+![Version: v0.2.0](https://img.shields.io/badge/version-v0.2.0-4c6ef5)
+![Tests: 343 passing](https://img.shields.io/badge/tests-343_passing-2f9e44)
 ![License: AGPL v3](https://img.shields.io/badge/license-AGPL_v3-blue)
 ![Language: Odin](https://img.shields.io/badge/language-Odin-3882d2)
 
-> **From an unfamiliar file to a useful query in one command.**
+> **From an unfamiliar file to ranked findings and reproducible queries.**
 
 Most data tools are excellent once you know the schema and the question.
 SnoutDB targets the step before that.
 
-Point it at an unfamiliar CSV, JSONL, or log file. `sniff` infers types,
-classifies columns as timestamps, identifiers, dimensions, or metrics, profiles
-their values, and prints valid SnoutDB commands to investigate next.
+Point it at an unfamiliar CSV, JSONL, log, or `.snout` file:
 
 ```bash
-./snout sniff -f requests.csv
+./snout hunt application.log
 ```
 
 ```text
-roles
------
-timestamps:  1
-dimensions:  2
-metrics:     3
+severity
+────────
+  overview  │EEEEEEWWWWWWIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIDDDDDD│
 
-column      type       role       distinct  details
-----------  ---------  ---------  --------  ---------------------------------
-region      String     Dimension         2  top: eu-west (3), us-east (3)
-latency_ms  Int64      Metric            6  min=27 mean=169.83 max=441
+  error      29   14.5%
+  warn       29   14.5%
+  info      114   57.0%
+  debug      28   14.0%
 
-suggested queries
------------------
-1. compare latency_ms across region
-   ./snout -f requests.csv group=region -- avg=latency_ms count=rows \
-     --sort avg=latency_ms desc --limit 10
+attention (10 findings)
+────────────────────
+  [67]  ERROR   │___▁______▁_______▁______▁______│  (4×) auth token refreshed
+  [67]  ERROR   │__▁_______▁______▁______▁______▁│  (5×) cache miss
+```
+
+`hunt` profiles the input, summarizes severity and frequent patterns, detects
+noteworthy concentrations, outliers, missing data, temporal shifts, dominant
+contributors, and log-message patterns, then ranks the findings and prints
+commands that reproduce the evidence. `--verbose` adds full temporal
+histograms, peaks, first/last matches, samples, and grouped reproduction
+commands.
+
+```bash
+./snout hunt application.log --verbose
+./snout hunt application.log --format json
+./snout hunt application.log --verbose -o incident-report.md
+```
+
+`sniff` remains the lightweight schema and profiling command when you only need
+column roles, statistics, and query suggestions:
+
+```bash
+./snout sniff -f requests.csv
 ```
 
 This is not a claim that SnoutDB replaces DuckDB, Miller, qsv, VisiData, or
 `jq`. It is a focused reconnaissance tool for the moment when a file lands in
 front of you and you do not yet know what matters inside it.
 
+## Hunt: Automatic Local Analysis
+
+Hunt is SnoutDB's primary discovery workflow. It is deterministic, explainable,
+and runs locally without an account, network service, data upload, telemetry,
+or an LLM dependency.
+
+| Capability | What Hunt reports |
+|---|---|
+| Severity overview | Normalized `CRITICAL`, `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`, and unknown levels |
+| Frequent context | Common message templates with counts and time ranges |
+| Attention ranking | Severity-aware, deterministic ordering of the strongest findings |
+| Generic analytics | Concentration, error hotspots, metric outliers, null anomalies, temporal shifts, and top contributors |
+| Log analytics | Message normalization, representative samples, temporal histograms, peaks, and first/last matches |
+| Reproduction | Shell-safe SnoutDB commands for investigating the underlying evidence |
+| Structured output | Stable JSON and JSONL without ANSI escape sequences |
+| Reports | Color-free `.txt` or structured `.md` export with `-o` / `--output` |
+
+The compact report is designed for quick triage. The verbose report is designed
+for investigation:
+
+```bash
+./snout hunt app.log
+./snout hunt app.log --verbose
+./snout hunt app.log --limit 20 --min-score 70
+./snout hunt app.log --verbose -o hunt-report.md
+```
+
+Hunt accepts CSV, JSONL/NDJSON, supported log files, and `.snout` files. It does
+not currently accept stdin; import piped data to `.snout` first. Exported
+reports can contain samples derived from the input, so review them before
+sharing outside the environment where the data is authorized for use.
+
 ## The Specific Advantage
 
+- **It identifies what deserves attention.** Hunt separates common background
+  activity from ranked findings and preserves the evidence behind each result.
 - **It proposes the first useful questions.** Type inference alone tells you
   that a column is numeric. SnoutDB also decides whether it looks like a metric,
   dimension, identifier, or timestamp and uses that role to generate queries.
@@ -83,8 +132,9 @@ cd snoutdb
 ```
 
 The script builds SnoutDB, creates a temporary six-row dataset, runs `sniff`,
-executes a filtered percentile query, and creates a `.snout` snapshot. It uses
-no downloaded dataset or package-manager dependency.
+runs Hunt against a bundled application-log fixture, executes a filtered
+percentile query, and creates a `.snout` snapshot. It uses no downloaded
+dataset or package-manager dependency.
 
 ```text
 column      type       role       nulls  distinct  details
@@ -106,6 +156,10 @@ suggested queries
 - Percentiles are exact and retain values for each aggregate group.
 - `.snout` stores chunk statistics, but query-time chunk skipping is not yet
   implemented.
+- Hunt currently materializes supported inputs as a typed table and does not
+  accept stdin.
+- Hunt configuration files and historical baselines are not yet implemented.
+- Findings are evidence-based analytical signals, not claims of root cause.
 
 See [benchmarks/README.md](benchmarks/README.md) for reproducible measurements.
 The current development baseline profiles a generated 5-million-row, 751 MiB
@@ -113,6 +167,7 @@ CSV in approximately 6.8 seconds on an Apple M4 Pro.
 
 ## Contents
 
+- [Hunt: automatic local analysis](#hunt-automatic-local-analysis)
 - [The specific advantage](#the-specific-advantage)
 - [Choose the right tool](#choose-the-right-tool)
 - [Try it in one minute](#try-it-in-one-minute)
@@ -121,10 +176,12 @@ CSV in approximately 6.8 seconds on an Apple M4 Pro.
 - [How it works](#how-it-works)
 - [What is a `.snout` file?](#what-is-a-snout-file)
 - [Community](#community)
+- [License and data handling](#license-and-data-handling)
 - [Build](#build)
 - [Step 1 — Look at your data](#step-1--look-at-your-data)
 - [Step 2 — Get statistics on a column](#step-2--get-statistics-on-a-column)
 - [Step 3 — Explore an unfamiliar file (sniff)](#step-3--explore-an-unfamiliar-file-sniff)
+- [Hunt — Discover what deserves attention](#hunt--discover-what-deserves-attention)
 - [Step 4 — Ask questions about your data](#step-4--ask-questions-about-your-data)
 - [Step 5 — Save your data as a .snout file](#step-5--save-your-data-as-a-snout-file)
 - [Step 6 — Combine multiple files](#step-6--combine-multiple-files)
@@ -142,7 +199,7 @@ CSV in approximately 6.8 seconds on an Apple M4 Pro.
 
 ## Version
 
-Current version: `v0.1.0`.
+Current version: `v0.2.0`.
 
 SnoutDB is early-stage software. The CLI, C ABI, and `.snout` format may still
 change before `v1.0.0`.
@@ -168,7 +225,7 @@ flowchart LR
     subgraph Inputs
         CSV["CSV"]
         JSONL["JSONL / NDJSON"]
-        LOG["Logs<br/>CLF, Combined, logfmt,<br/>syslog, regex"]
+        LOG["Logs<br/>CLF, Combined, logfmt,<br/>syslog, app, bracketed, regex"]
         SNOUT[".snout"]
         STDIN["stdin"]
     end
@@ -177,6 +234,7 @@ flowchart LR
         INGEST["Ingest<br/>scan + infer schema"]
         CORE["Core table<br/>typed column slices"]
         SNIFF["Sniff<br/>profile + suggestions"]
+        HUNT["Hunt<br/>analyze + rank + reproduce"]
         QUERY["Query<br/>filter + group + sort"]
         TRANSFORM["Transform<br/>reshape columns"]
         MERGE["Merge<br/>append + consolidate + rollup"]
@@ -186,6 +244,7 @@ flowchart LR
     subgraph Outputs
         TERMINAL["Terminal table"]
         DATA["CSV / JSON / JSONL"]
+        REPORT["TXT / Markdown report"]
         FILE[".snout file"]
         ABI["C ABI<br/>Python, Go"]
     end
@@ -199,6 +258,7 @@ flowchart LR
     INGEST -.->|"streaming profile"| SNIFF
     STORAGE <--> CORE
     CORE --> SNIFF
+    CORE --> HUNT
     CORE --> QUERY
     CORE --> TRANSFORM
     CORE --> MERGE
@@ -206,6 +266,9 @@ flowchart LR
     MERGE --> STORAGE
     SNIFF --> TERMINAL
     SNIFF --> DATA
+    HUNT --> TERMINAL
+    HUNT --> DATA
+    HUNT --> REPORT
     QUERY --> TERMINAL
     QUERY --> DATA
     STORAGE --> FILE
@@ -266,6 +329,7 @@ flowchart LR
 | Read data | `ingest`, `storage` | Stream CSV, JSONL, logs, or read `.snout` |
 | Represent data | `core` | Typed structure-of-arrays tables with explicit ownership |
 | Understand data | `sniff` | Cardinality, roles, statistics, outliers, suggestions |
+| Discover findings | `hunt` | Severity, patterns, anomalies, ranking, evidence, reproduction |
 | Analyze data | `query`, `exec` | Filters, groups, sorting, counts, averages, percentiles |
 | Reshape data | `transform` | Rename, cast, derive, bucket, truncate, extract |
 | Combine data | `merge` | Append, consolidate, compact, and roll up |
@@ -335,11 +399,11 @@ chunk, every column has its own typed block:
 - the encoded column values;
 - a null count;
 - numeric minimum and maximum values;
-- an encoding marker (`Plain` or `Dictionary` in `v0.1.0`).
+- an encoding marker (`Plain` or `Dictionary`).
 
 This structure prepares the format for optimizations such as skipping chunks
 whose min/max range cannot match a filter. The metadata is already stored, but
-query-time chunk skipping is **not yet implemented** in `v0.1.0`.
+query-time chunk skipping is **not yet implemented** in `v0.2.0`.
 
 ### When should you create one?
 
@@ -384,6 +448,21 @@ include tests; hot-path changes should include benchmark evidence.
 
 ---
 
+## License And Data Handling
+
+SnoutDB is distributed under the
+[GNU Affero General Public License v3](LICENSE). The license text is the
+authoritative source for redistribution and modification terms; this summary
+is not legal advice. The experimental C ABI is part of the same AGPL-licensed
+project and is not distributed under a separate permissive exception.
+
+SnoutDB runs locally and does not include an account system, hosted service,
+data upload, or telemetry. Hunt reports may contain input-derived values,
+message samples, timestamps, paths, and reproduction commands. Treat exports
+as potentially sensitive and review or redact them before sharing.
+
+---
+
 ## Build
 
 ### 1. Install Odin
@@ -417,7 +496,8 @@ odin build ./cabi -build-mode:shared -out:libsnout
 odin test ./tests -out:tests/snout_tests
 ```
 
-All 329 tests should pass in under a second. Tests must run from the repo root — fixture paths are relative to it (`tests/fixtures/`).
+All 343 tests should pass in under a second. Tests must run from the repo root
+because fixture paths are relative to `tests/fixtures/`.
 
 ---
 
@@ -613,6 +693,55 @@ Options:
 - `--top 5` — show the 5 most common values per text column (default: 10)
 - `--suggestions 3` — limit to 3 suggested queries
 - `--format json` — output as JSON for piping to other tools
+
+---
+
+## Hunt — Discover what deserves attention
+
+Use `hunt` when you want SnoutDB to move beyond profiling and rank the strongest
+signals automatically:
+
+```bash
+./snout hunt mydata.csv
+./snout hunt events.jsonl
+./snout hunt application.log
+./snout hunt dataset.snout
+```
+
+The normal view provides a severity overview, frequent context, compact
+histograms, ranked findings, and a prompt to use the detailed view:
+
+```bash
+./snout hunt application.log --verbose
+```
+
+Verbose mode includes:
+
+- findings ordered by severity;
+- full-width temporal histograms;
+- event count and share;
+- peak count and time;
+- first and last match;
+- bounded representative samples;
+- grouped commands to reproduce the evidence.
+
+Useful options:
+
+| Option | Meaning |
+|---|---|
+| `--limit <n>` | Maximum ranked findings; `0` means no cap |
+| `--min-score <0..100>` | Minimum score required for a finding |
+| `--verbose` | Detailed evidence, INFO patterns, histograms, and reproduction commands |
+| `--color auto\|always\|never` | ANSI color policy for terminal output |
+| `--format table\|json\|jsonl` | Human-readable or structured output |
+| `-o report.txt` | Save a color-free text report |
+| `-o report.md` | Save a structured Markdown report |
+| `--logformat <name>` | Override log format detection |
+| `--logpattern <pattern>` | Named-group pattern used with `--logformat regex` |
+| `--strict` | Fail on malformed log records |
+
+`-o` uses the file extension to choose TXT or Markdown and cannot be combined
+with `--format`.
 
 ---
 
@@ -1381,6 +1510,14 @@ timestamp             endpoint      count  p95_bytes
 SnoutDB auto-detects the format of `.log`, `.access`, and `.error` files. You only need `--format` when the file extension is ambiguous or when using a custom regex pattern:
 
 ```bash
+# Start with an automatic ranked investigation
+./snout hunt application.log
+
+# Expand every finding and save a shareable Markdown report
+./snout hunt application.log --verbose -o application-hunt.md
+```
+
+```bash
 # Schema inspection — format is auto-detected from content
 ./snout log-info access.log
 ```
@@ -1514,6 +1651,7 @@ columns: 5
 - `logfmt` — `key=value` pairs (used by Logrus, Zap, etc.)
 - `syslog` — RFC 3164 (`Jun 11 10:00:01 host app[pid]: message`), with or without PRI prefix (`<134>`)
 - `app` — application logs in `YYYY-MM-DD HH:MM:SS [level] message` format
+- `bracketed` — application logs with bracketed levels and mixed ISO timestamps
 - `regex` — custom format with `(?P<name>...)` named groups
 
 CLF timestamps are converted to ISO-8601 UTC automatically. Syslog timestamps use a `0000-MM-DD` year placeholder (RFC 3164 does not include a year).
@@ -1650,6 +1788,11 @@ You can safely redirect stdout to a file or pipe without capturing the timing li
 | Stats on one column (log) | `./snout log-import f.log f.snout && ./snout stats f.snout bytes` |
 | Auto-explore and get query ideas (CSV) | `./snout sniff -f file.csv` |
 | Auto-explore and get query ideas (log) | `./snout sniff -f access.log` |
+| Automatically rank findings | `./snout hunt file.log` |
+| Inspect full Hunt evidence | `./snout hunt file.log --verbose` |
+| Export a Markdown Hunt report | `./snout hunt file.log --verbose -o report.md` |
+| Export a text Hunt report | `./snout hunt file.log -o report.txt` |
+| Emit Hunt JSON | `./snout hunt file.log --format json` |
 | Sniff from stdin (auto-detects CSV/JSONL) | `cat file.csv \| ./snout sniff -f -` |
 | Query data from stdin | `cat file.csv \| ./snout -f - group=col -- count=rows` |
 | Query application logs from stdin | `cat app.log \| ./snout -f - group=level,message -- count=rows --logformat app` |

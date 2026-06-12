@@ -46,3 +46,22 @@ These are targets, not service-level guarantees.
 Reports are especially useful for malformed input handling, integer overflow,
 memory safety, `.snout` validation, path handling, C ABI ownership, and denial
 of service through excessive resource consumption.
+
+Hunt-specific security surfaces include:
+
+- terminal-control or ANSI injection through input values;
+- Markdown or text report injection;
+- shell quoting in generated reproduction commands;
+- path handling for `-o` / `--output`;
+- excessive memory or CPU use caused by high-cardinality inputs.
+
+## Local Processing And Reports
+
+SnoutDB does not require an account, network service, data upload, or telemetry.
+Analysis runs in the local process.
+
+Hunt reports may include message templates, representative samples, values,
+paths, timestamps, and reproduction commands derived from the input. Treat
+exported TXT, Markdown, JSON, and JSONL reports as potentially sensitive data.
+Review and redact them before sharing, attaching them to issues, or publishing
+them.
