@@ -2,7 +2,7 @@
 
 A tiny embedded columnar database for metrics, logs, telemetry, and local analytics.
 
-**Current version:** `v0.1.0` (early-stage; public interfaces may change before v1.0.0)
+**Current version:** `v0.2.0` (early-stage; public interfaces may change before v1.0.0)
 
 ## Tagline
 SnoutDB turns messy raw data into valuable local metrics.
@@ -14,6 +14,7 @@ SnoutDB turns messy raw data into valuable local metrics.
 - Merge & consolidation across files with schema alignment
 - Rollups (aggregate during merge)
 - Sniff reports — column roles, top-N values, outlier detection (σ / 3σ rule), query suggestions
+- Hunt reports — severity, frequent patterns, ranked findings, histograms, reproducible commands, TXT/Markdown export
 - `count_distinct` aggregate
 - Transforms: rename, cast, derive, bucket, date_trunc, regex_extract, json_extract
 - Embedded C ABI (Python and Go examples)
@@ -34,10 +35,10 @@ SnoutDB turns messy raw data into valuable local metrics.
 | RFC-0008 | Odin Style Guide | ✅ Reference |
 | RFC-0009 | Storage Engine v2 | ✅ Implemented — TASK-0011 (v2 format) + TASK-0012 (dictionary encoding) |
 | RFC-0010 | Roadmap | ✅ Up to date |
-| RFC-0011 | Hunt Analytics, Severity, and Configuration | 📝 Proposed — TASK-0019 |
-| SPEC-0014 | Log Ingestion | ✅ Implemented — TASK-0015 (CLF/Combined/Logfmt/Syslog/Regex, auto-detect) |
+| RFC-0011 | Hunt Analytics, Severity, and Configuration | ✅ Core analytics implemented; file-based configuration deferred |
+| SPEC-0014 | Log Ingestion | ✅ Implemented — CLF/Combined/Logfmt/Syslog/App/Bracketed/Regex, auto-detect |
 
-**Tests:** 329 passing with `-vet -strict-style` · **Last updated:** 2026-06-11
+**Tests:** 343 passing with `-vet -strict-style` · **Last updated:** 2026-06-12
 
 ---
 

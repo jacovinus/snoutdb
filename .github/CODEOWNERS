@@ -11,6 +11,7 @@
 # Architecture, persistence, and public interfaces.
 /ARCHITECTURE.md @jacovinus
 /docs/ @jacovinus
+/hunt/ @jacovinus
 /storage/ @jacovinus
 /cabi/ @jacovinus
 /include/ @jacovinus

@@ -8,7 +8,7 @@ supported platforms, benchmark results, and links immediately before posting.
 ### Suggested title
 
 ```text
-Show HN: SnoutDB – Turn an unfamiliar CSV, JSONL, or log into queries
+Show HN: SnoutDB – Hunt through unfamiliar logs and datasets locally
 ```
 
 ### Suggested first comment
@@ -17,37 +17,41 @@ Show HN: SnoutDB – Turn an unfamiliar CSV, JSONL, or log into queries
 Hi HN,
 
 Most analytics tools assume you already know the schema and what you want to
-ask. I built SnoutDB for the ten minutes before that.
+ask. I built SnoutDB for the investigation before that.
 
-Run `snout sniff -f <file>` on an unfamiliar CSV, JSONL, or log. It infers
-types, classifies columns as timestamps, identifiers, dimensions, or metrics,
-profiles their values, and prints executable commands for useful next queries.
+The main workflow in v0.2.0 is:
 
-For example, if it recognizes `region` as a dimension and `latency_ms` as a
-metric, it can propose:
+    snout hunt application.log
 
-    ./snout -f requests.csv group=region -- avg=latency_ms count=rows \
-      --sort avg=latency_ms desc --limit 10
+Hunt summarizes severity and frequent patterns, ranks findings, shows temporal
+histograms, and prints commands that reproduce the evidence. `--verbose` adds
+peaks, first/last matches, representative samples, and detailed reproduction
+commands. Reports can be exported directly:
+
+    snout hunt application.log --verbose -o report.md
+
+For lightweight schema discovery, `snout sniff -f <file>` still classifies
+columns, profiles values, and suggests useful queries.
 
 The honest comparison is that DuckDB is much more capable once you know what to
 ask. Miller and qsv are more mature for established command-line data
 pipelines, and VisiData is better for interactive exploration. SnoutDB's
-specific bet is that an automatic, scriptable reconnaissance pass can shorten
-the path from "what is this file?" to a useful investigation.
+specific bet is that an automatic, explainable reconnaissance pass can shorten
+the path from "what is this file?" to evidence worth investigating.
 
 After discovery, SnoutDB can query the raw file directly or persist it as a
 typed, chunked `.snout` snapshot for repeated queries, transformations, merges,
 and rollups. The implementation is written in Odin and also exposes an
 experimental C ABI.
 
-Current status: v0.1.0, 329 tests, macOS CI. The CLI, C ABI and file format are
+Current status: v0.2.0, 343 tests, macOS CI. The CLI, C ABI and file format are
 still pre-1.0. A reproducible 5M-row CSV benchmark and the current limitations
 are documented in the repository.
 
 The question I would especially value feedback on is:
 
-Does `sniff` propose a useful first investigation for the operational files you
-actually work with, or are its role classifications and suggestions too naive?
+Does Hunt surface evidence that helps with the operational files you actually
+work with, or does its ranking still miss what matters?
 
 Repository: https://github.com/jacovinus/snoutdb
 ```
@@ -66,7 +70,7 @@ Repository: https://github.com/jacovinus/snoutdb
 ### Suggested post
 
 ```text
-📁 Someone sends you a CSV.
+📁 Someone sends you a log or dataset.
 
 No documentation.
 Unclear columns.
@@ -75,33 +79,29 @@ And one simple question: “What is actually in here?”
 
 That is why I built SnoutDB. 🐽
 
-SnoutDB investigates unfamiliar CSV, JSONL, and log files before you know what
-query to write.
+SnoutDB investigates unfamiliar CSV, JSONL, log, and `.snout` files before you
+know what query to write.
 
 Run:
 
-snout sniff -f requests.csv
+snout hunt application.log
 
 It will:
 
-🔎 infer the schema
-🏷️ identify timestamps, dimensions, metrics, and IDs
-📊 profile values and distributions
-💡 suggest useful queries
+🔎 summarize severity and frequent patterns
+📊 visualize activity over time
+⚠️ rank findings that deserve attention
+💡 preserve evidence and reproduction commands
 ⚡ print commands you can run immediately
 
-For example, SnoutDB may recognize region as a dimension and latency_ms as a
-metric, then suggest comparing latency across regions.
+For example, SnoutDB can identify repeated error templates, show when they
+occurred, and print the command needed to investigate them.
 
 No server. No account. No data upload.
 
 Just point it at the file and start investigating.
 
-📁 UNKNOWN FILE
-        ↓
-🔎 SNIFF
-        ↓
-💡 USEFUL FIRST QUERY
+📁 UNKNOWN FILE → 🔎 HUNT → ⚠️ RANKED EVIDENCE
 
 Is it a replacement for DuckDB? No.
 
@@ -110,7 +110,7 @@ broad analytical power.
 
 SnoutDB is for the step before that.
 
-It is open source, written in Odin, and v0.1.0 is ready to try:
+It is open source, written in Odin, and v0.2.0 is ready to try:
 
 👉 https://github.com/jacovinus/snoutdb
 
@@ -133,14 +133,14 @@ That is why I built SnoutDB. 🐽
 
 Run:
 
-snout sniff -f requests.csv
+snout hunt application.log
 
-🔎 Schema inference
-🏷️ Column role detection
-📊 Automatic profiling
-💡 Executable query suggestions
+🔎 Severity and pattern summaries
+📊 Temporal histograms
+⚠️ Ranked findings
+💡 Reproducible investigation commands
 
-📁 UNKNOWN FILE → 💡 USEFUL FIRST QUERY
+📁 UNKNOWN FILE → ⚠️ RANKED EVIDENCE
 
 Open source, written in Odin, and ready to try:
 
@@ -166,9 +166,9 @@ Open source, written in Odin, and ready to try:
 
 For LinkedIn, use one image rather than a screenshot collage:
 
-1. Terminal screenshot showing `snout sniff` and its suggestions.
+1. Terminal screenshot showing `snout hunt --verbose`.
 2. A clean architecture diagram exported from the README Mermaid chart.
 3. A simple card with: “Unknown file → useful query” and the repository URL.
 
-Avoid leading with benchmark numbers alone. The product story is understanding
-an unfamiliar local dataset quickly.
+Avoid leading with benchmark numbers alone. The product story is identifying
+what deserves attention in an unfamiliar local file.

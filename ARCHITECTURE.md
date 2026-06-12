@@ -2,14 +2,18 @@
 
 ## Overview
 
-SnoutDB is a layered, single-binary columnar analytics tool. Data flows in one direction: **ingest → core → storage → query → exec → output**. Each layer is a separate Odin package with no circular dependencies.
+SnoutDB is a layered, single-binary columnar analytics tool. Data flows from
+ingestion into typed columns, then into profiling, automatic Hunt analysis,
+explicit queries, transformation, persistence, or rendering. Each layer is a
+separate Odin package with no circular dependencies.
 
 ```
-cmd/snout/          — CLI entry point (6 files, package main)
+cmd/snout/          — CLI entry point and command handlers
 core/               — shared types: Table, Column, Column_Type, Error enum
 ingest/             — CSV, JSONL, and log readers; schema inference
 storage/            — .snout file format reader/writer
 sniff/              — automatic data profiling and query suggestions
+hunt/               — automatic analyzers, ranking, evidence, reports, reproduction
 query/              — filter (WHERE), group_by, sort — operate on Table structs
 exec/               — aggregations: count, sum, avg, min, max, percentiles, error_rate
 merge/              — append, consolidate, compact, rollup across .snout files
@@ -30,6 +34,7 @@ cmd/snout
     ├── ingest      → core
     ├── storage     → core
     ├── sniff       → core, ingest, query
+    ├── hunt        → core, sniff, query, exec
     ├── query       → core
     ├── exec        → core
     ├── merge       → core, query
@@ -43,7 +48,7 @@ No package imports `cmd/snout`. `core` imports nothing in this repo. The depende
 
 ## cmd/snout — CLI layer
 
-The CLI is split into six files, all in `package main`:
+The CLI is split by command responsibility, all in `package main`:
 
 | File | Responsibility |
 |---|---|
@@ -51,6 +56,7 @@ The CLI is split into six files, all in `package main`:
 | `cmd_dispatch.odin` | One `run_X()` proc per command: `csv-info`, `csv-import`, `log-import`, `rollup`, etc. |
 | `cmd_query.odin` | `run_group_command()` — the `-f file group=col -- agg=col` pipeline + `Pending_Sort` |
 | `cmd_sniff.odin` | `run_sniff_command()` — the `sniff -f file` pipeline with all sniff options |
+| `cmd_hunt.odin` | `run_hunt_command()` — Hunt loading, options, analysis, terminal/JSON output, and TXT/Markdown export |
 | `loaders.odin` | `load_*_or_exit()`, `resolve_stdin_path()`, `parse_log_opts()`, path utilities |
 | `display.odin` | `print_table_info()`, `print_numeric_stats()`, `print_written()`, `print_processing_time()` |
 
@@ -82,7 +88,11 @@ The CLI is split into six files, all in `package main`:
 
 ### Log files
 
-`inspect_log_file` + `read_log_table` support five formats: CLF, Combined, Logfmt, Syslog, Regex. Format is auto-detected from file content when `--format` is not specified. CLF timestamps are converted to ISO-8601 UTC. Syslog timestamps use a `0000-MM-DD` year placeholder (RFC 3164 has no year).
+`inspect_log_file` + `read_log_table` support CLF, Combined, Logfmt, Syslog,
+App, Bracketed, and Regex formats. Format is auto-detected from file content
+when an override is not specified. CLF timestamps are converted to ISO-8601
+UTC. Syslog timestamps use a `0000-MM-DD` year placeholder because RFC 3164 has
+no year.
 
 `profile_log_file` (sniff path) streams log lines through the same column accumulator infrastructure.
 
@@ -92,7 +102,7 @@ The CLI is split into six files, all in `package main`:
 
 Single-file columnar format: `[header][metadata][chunks…][dictionaries][statistics][footer]`. Chunk size is 64K rows (65,536). Each chunk carries per-column null_count, min, and max statistics for future chunk-skip optimization.
 
-Supported encodings in v0.1.0: Plain and Dictionary. Dictionary encoding is
+Supported encodings: Plain and Dictionary. Dictionary encoding is
 applied automatically to String and Timestamp columns when it is smaller than
 plain encoding.
 
@@ -114,6 +124,58 @@ Key internals:
 - **`build_suggestions`** generates ranked executable query commands based on classified column roles.
 
 `--max-distinct` bounds exact cardinality tracking. Above the limit, `cardinality_exact = false` and only a lower bound is reported.
+
+---
+
+## hunt — automatic discovery and ranking
+
+`hunt/` consumes a `Sniff_Report`, the corresponding typed `core.Table`, and a
+`Hunt_Config`. The command currently materializes supported inputs before
+analysis; unlike `sniff`, it is not a bounded-memory streaming path.
+
+```text
+input
+  ↓
+typed core.Table + Sniff_Report
+  ↓
+candidate planner
+  ↓
+independent analyzers
+  ↓
+deduplication + deterministic ranking
+  ↓
+table / verbose / JSON / JSONL / TXT / Markdown
+```
+
+The analyzer set includes:
+
+- concentration;
+- error hotspots;
+- metric outliers;
+- null anomalies;
+- temporal shifts;
+- top contributors;
+- severity summaries, frequent log patterns, and severity-aware message
+  patterns.
+
+Log messages are normalized into deterministic templates while preserving a
+representative original sample. Findings use a typed `Evidence` union and own
+their allocated strings through `Hunt_Report`; callers must use
+`free_hunt_report`.
+
+The ranker removes duplicate findings, applies the configured score threshold,
+limits the result set, and uses explicit tie-breakers. Verbose log findings are
+ordered by normalized severity and reserve space for useful informational
+patterns.
+
+`hunt/output.odin` owns Hunt-specific rendering. Compact output uses small
+bottom-aligned histograms; verbose output adds full temporal axes, peaks,
+first/last matches, samples, and grouped reproduction commands. Structured
+JSON/JSONL and exported TXT/Markdown reports never contain ANSI sequences.
+
+Reproduction strings are built by `hunt/reproduce.odin`, which shell-quotes
+arguments and retains log-format overrides when required. They reproduce the
+core evidence and are marked exact or approximate.
 
 ---
 
@@ -155,6 +217,9 @@ Available ops: `Rename`, `Drop`, `Cast`, `Derive` (binary arithmetic: +, -, *, /
 
 `write_sniff_report` renders a `Sniff_Report` as table or JSON. The table format shows one row per column with role, null count, distinct count, and a details string (top-N values for Dimensions, min/mean/max/σ/outliers for Metrics, timestamp range for Timestamps).
 
+Hunt reports are rendered inside `hunt/` because their evidence union, severity
+styles, temporal charts, and reproduction grouping are domain-specific.
+
 ---
 
 ## C ABI (libsnout)
@@ -167,5 +232,5 @@ before v1.0.0. Build with:
 ```
 
 The header is `include/snoutdb.h`. Ready-to-run examples are in `examples/` for
-Python (ctypes) and Go (cgo). The ABI imports CSV, JSONL, and
-`.snout` files; log ingestion remains a CLI operation in v0.1.0.
+Python (ctypes) and Go (cgo). The ABI imports CSV, JSONL, and `.snout` files;
+log ingestion and Hunt remain CLI operations in v0.2.0.

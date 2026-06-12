@@ -4,6 +4,32 @@ Practical workflows showing how SnoutDB solves common data problems. Each case s
 
 ---
 
+## Start an investigation with Hunt
+
+**Situation:** You received an application log and need to identify the most
+important patterns before deciding which queries to write.
+
+```bash
+./snout hunt application.log
+./snout hunt application.log --verbose
+```
+
+The compact report gives an immediate severity distribution, frequent context,
+and ranked findings. Verbose mode expands them with temporal histograms, peak,
+first/last match, representative samples, and reproduction commands.
+
+Save the investigation as Markdown or emit structured JSON:
+
+```bash
+./snout hunt application.log --verbose -o application-hunt.md
+./snout hunt application.log --format json > application-hunt.json
+```
+
+Hunt runs locally and does not upload data. Exported reports can contain values
+and samples derived from the input, so review them before sharing.
+
+---
+
 ## 1. Find oversized responses and error-heavy endpoints
 
 **Situation:** Your API is transferring more data than expected and returning
@@ -215,6 +241,14 @@ path                   sum_count
 ## 4. Investigate an application error spike
 
 **Situation:** Your error monitoring shows a spike in errors at 14:32. You have logfmt app logs with `level`, `service`, `error`, and `latency_ms` fields.
+
+Start with Hunt to rank the strongest signals and obtain reproduction commands:
+
+```bash
+./snout hunt app.log --verbose
+```
+
+Then use explicit queries for the breakdown you need:
 
 ```bash
 ./snout log-import app.log app.snout
@@ -628,7 +662,7 @@ gateway               0.010   2341
 
 **Situation:** Your Go service receives CSV uploads and needs to return a data quality report (column types, null rates, outliers) without a database.
 
-The v0.1.0 C ABI is experimental. It exposes table loading, schema/value
+The v0.2.0 C ABI is experimental. It exposes table loading, schema/value
 access, and grouped queries. Full sniff reports are currently produced by the
 CLI.
 
